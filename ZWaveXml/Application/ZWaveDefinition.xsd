@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+SPDX-License-Identifier: BSD-3-Clause
+SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="ZWaveDefinition">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="BasicDevices" minOccurs="0" maxOccurs="1" form="qualified">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="BasicDevice" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+					<xs:key name="BasicDevicesKeyRule">
+						<xs:selector xpath="BasicDevice"/>
+						<xs:field xpath="@Key"/>
+					</xs:key>
+				</xs:element>
+				<xs:element name="GenericDevices" minOccurs="0" maxOccurs="1" form="qualified">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="GenericDevice" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:key name="GenericDevicesKeyRule">
+						<xs:selector xpath="GenericDevice"/>
+						<xs:field xpath="@Key"/>
+					</xs:key>
+				</xs:element>
+				<xs:element name="CommandClasses" minOccurs="0" maxOccurs="1" form="qualified">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="CommandClass" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:key name="CommandClassesKeyRule">
+						<xs:selector xpath="CommandClass"/>
+						<xs:field xpath="@Key"/>
+						<xs:field xpath="@Version"/>
+					</xs:key>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Version" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<!-- **** BasicDevice *********************************************************************** -->
+	<xs:element name="BasicDevice">
+		<xs:complexType>
+			<xs:attribute name="Key" type="zwKey" use="required" />
+			<xs:attribute name="Name" type="xs:ID" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+			<xs:attribute name="Comment" type="xs:string" use="optional" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- **** GenericDevice *********************************************************************** -->
+	<xs:element name="GenericDevice">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SpecificDevice" maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="Key" type="zwKey" use="required" />
+			<xs:attribute name="Name" type="xs:ID" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+			<xs:attribute name="Comment" type="xs:string" use="optional" />
+		</xs:complexType>
+		<xs:key name="SpecificDevicesKeyRule">
+			<xs:selector xpath="SpecificDevice"/>
+			<xs:field xpath="@Key"/>
+			<xs:field xpath="@ScopeKey"/>
+		</xs:key>
+	</xs:element>
+
+	<!-- **** SpecificDevice *********************************************************************** -->
+	<xs:element name="SpecificDevice">
+		<xs:complexType>
+			<xs:attribute name="Key" type="zwKey" use="required" />
+			<xs:attribute name="ScopeKey" type="zwKey" use="required" />
+			<xs:attribute name="Name" type="xs:ID" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+			<xs:attribute name="Comment" type="xs:string" use="optional" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- **** CommandClass *********************************************************************** -->
+	<xs:element name="CommandClass">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Command" maxOccurs="unbounded" minOccurs="0"/>
+				<xs:element ref="DefineSet" maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="Key" type="zwKey" use="required" />
+			<xs:attribute name="Bits" type="xs:unsignedByte" use="optional" />
+			<xs:attribute name="Name" type="xs:NCName" use="required" />
+			<xs:attribute name="Version" type="xs:unsignedByte" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+			<xs:attribute name="Comment" type="xs:string" use="optional" />
+		</xs:complexType>
+		<xs:key name="DefinesNameRule">
+			<xs:selector xpath="DefineSet"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+		<xs:key name="CommandsKeyRule">
+			<xs:selector xpath="Command"/>
+			<xs:field xpath="@Key"/>
+		</xs:key>
+		<xs:key name="CommandsNameRule">
+			<xs:selector xpath="Command"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+	</xs:element>
+
+	<!-- **** Command *********************************************************************** -->
+	<xs:element name="Command">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Param" maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="Key" type="zwKey" use="required" />
+			<xs:attribute name="Bits" type="xs:unsignedByte" use="optional" />
+			<xs:attribute name="Name" type="xs:NCName" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+			<xs:attribute name="SupportMode" type="zwSupportModes" use="optional" default="APP"/>
+			<xs:attribute name="Comment" type="xs:string" use="optional" />
+		</xs:complexType>
+		<xs:key name="ParamsOrderRule">
+			<xs:selector xpath="Param"/>
+			<xs:field xpath="@Order"/>
+		</xs:key>
+		<xs:key name="ParamsNameRule">
+			<xs:selector xpath="Param"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+	</xs:element>
+
+	<!-- **** Param *********************************************************************** -->
+	<xs:element name="Param">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Param" maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="Order" type="xs:unsignedByte" use="required" />
+			<xs:attribute name="Name" type="xs:NCName" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+			<xs:attribute name="Type" type="zwParamType" use="required" />
+			<xs:attribute name="OptionalReference" type="xs:NCName" use="optional" />
+			<xs:attribute name="PrimaryReference" type="xs:NCName" use="optional" />
+			<xs:attribute name="MoreToFollowReference" type="xs:NCName" use="optional" />
+			<xs:attribute name="Size" type="xs:unsignedByte" use="optional" />
+			<xs:attribute name="SizeChange" type="xs:byte" use="optional" />
+			<xs:attribute name="SizeReference" type="xs:NCName" use="optional" />
+			<xs:attribute name="Bits" type="xs:unsignedByte" use="required" />
+			<xs:attribute name="DefaultValue" type="xs:hexBinary" use="optional" />
+			<xs:attribute name="Comment" type="xs:string" use="optional" />
+			<xs:attribute name="Defines" type="xs:NCName" use="optional" />
+			<xs:attribute name="SkipField" type="xs:boolean" use="optional" />
+		</xs:complexType>
+		<xs:key name="ParamsOrderRule2">
+			<xs:selector xpath="Param"/>
+			<xs:field xpath="@Order"/>
+		</xs:key>
+		<xs:key name="ParamsNameRule2">
+			<xs:selector xpath="Param"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+
+	</xs:element>
+
+	<!-- **** Define *********************************************************************** -->
+	<xs:element name="Define">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref ="Define" maxOccurs="unbounded" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="Key" type="zwKey" use="required" />
+			<xs:attribute name="Name" type="xs:NCName" use="required" />
+			<xs:attribute name="Text" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- **** DefineSet *********************************************************************** -->
+	<xs:element name="DefineSet">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref ="Define"  maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="Name" type="xs:NCName" use="required" />
+			<xs:attribute name="Type" type="zwDefineSetType" use="required" />
+		</xs:complexType>
+		<xs:key name="DefineSetNameRule">
+			<xs:selector xpath="Define"/>
+			<xs:field xpath="@Name"/>
+		</xs:key>
+		<xs:key name="DefineSetKeyRule">
+			<xs:selector xpath="Define"/>
+			<xs:field xpath="@Key"/>
+		</xs:key>
+	</xs:element>
+
+	<!-- *** TYPES ************************************************************************** -->
+	<xs:simpleType name="zwKey">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="0x[0-9A-Fa-f]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="zwCmd">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9A-Fa-f]{2}\([0-9]{1,2}\)(:[0-9A-Fa-f]{2})?)" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="zwParamType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="HEX"/>
+			<xs:enumeration value="BOOLEAN"/>
+			<xs:enumeration value="CHAR"/>
+			<xs:enumeration value="NUMBER"/>
+			<xs:enumeration value="NUMBER_SIGNED"/>
+			<xs:enumeration value="NODE_NUMBER"/>
+			<xs:enumeration value="BITMASK"/>
+			<xs:enumeration value="MARKER"/>
+			<xs:enumeration value="BAS_DEV_REF"/>
+			<xs:enumeration value="GEN_DEV_REF"/>
+			<xs:enumeration value="SPEC_DEV_REF"/>
+			<xs:enumeration value="CMD_CLASS_REF"/>
+			<xs:enumeration value="CMD_REF"/>
+			<xs:enumeration value="CMD_DATA"/>
+			<xs:enumeration value="CMD_ENCAP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="zwDefineSetType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Unknown"/>
+			<xs:enumeration value="Partial"/>
+			<xs:enumeration value="Full"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="zwSupportModes">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="APP"/>
+			<xs:enumeration value="TX"/>
+			<xs:enumeration value="RX"/>
+			<xs:enumeration value="TX_RX"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

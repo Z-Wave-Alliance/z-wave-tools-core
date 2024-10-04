@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZWaveTests</RootNamespace>
+    <AssemblyName>ZWaveTests</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="netstandard" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationClientTests.cs" />
+    <Compile Include="ApplicationLayerTests.cs" />
+    <Compile Include="CommandClassesProperties\ByteSpecifiedStructTests.cs" />
+    <Compile Include="CommandClassesProperties\MixedPropertiesTests.cs" />
+    <Compile Include="CommandClassesProperties\SimplePropertiesTests.cs" />
+    <Compile Include="CommandClassesProperties\StructPropertiesTests.cs" />
+    <Compile Include="CommandClassesProperties\VgPropertiesTests.cs" />
+    <Compile Include="CustomDataFrameTests.cs" />
+    <Compile Include="FakeAction.cs" />
+    <Compile Include="FakeApplicationLayer.cs" />
+    <Compile Include="FakeCustomDataFrame.cs" />
+    <Compile Include="FakeDataFrame.cs" />
+    <Compile Include="FakeTransportClient.cs" />
+    <Compile Include="FrameBufferBlockTests.cs" />
+    <Compile Include="Security\MpanContainerTests.cs" />
+    <Compile Include="Security\MpanTableTests.cs" />
+    <Compile Include="Security\SecurityS2UtilsTests.cs" />
+    <Compile Include="Security\SpanContainerTests.cs" />
+    <Compile Include="Security\SpanTableTests.cs" />
+    <Compile Include="TcpClientTransportClientTests.cs" />
+    <Compile Include="SerialPortTransportClientTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionClientTests.cs" />
+    <Compile Include="SessionLayer\QueueTests.cs" />
+    <Compile Include="StorageAttachmentTests.cs" />
+    <Compile Include="StorageHeaderTests.cs" />
+    <Compile Include="TimeoutManagerTests.cs" />
+    <Compile Include="TransportClientBaseTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utils\Utils.csproj">
+      <Project>{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZWave\ZWave.csproj">
+      <Project>{B214D482-57EB-42BE-AEC7-D64850F56514}</Project>
+      <Name>ZWave</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Castle.Core">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Moq">
+      <Version>4.20.72</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit">
+      <Version>3.12.0</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter">
+      <Version>4.6.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

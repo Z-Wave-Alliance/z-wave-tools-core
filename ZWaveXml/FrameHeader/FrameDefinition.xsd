@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+SPDX-License-Identifier: BSD-3-Clause
+SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+-->
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="FrameDefinition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="RadioFrequency" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="LongRangeConfig" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="BaseHeader" maxOccurs="unbounded" />
+        <xs:element ref="Header" maxOccurs="unbounded" />
+        <xs:element ref="DefineSet" maxOccurs="unbounded" />
+        <xs:element ref="HeaderFilter" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** BASEHEADER *********************************************************************** -->
+  <xs:element name="BaseHeader">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Param" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element type="ItemReference" name="HomeId" />
+        <xs:element type="ItemReference" name="Source" />
+        <xs:element type="ItemReference" name="Destination" />
+        <xs:element type="ItemReference" name="SequenceNumber" />
+        <xs:element type="ItemReference" name="HeaderType" />
+        <xs:element type="ItemReference" name="IsLTX" />
+      </xs:sequence>
+      <xs:attribute name="Key" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="Name" type="xs:ID" use="required" />
+      <xs:attribute name="Text" type="xs:string" use="required" />
+      <xs:attribute name="Comment" type="xs:string" use="optional" />
+    </xs:complexType>
+    <xs:key name="BaseParamsOrderRule">
+      <xs:selector xpath="Param"/>
+      <xs:field xpath="@Order"/>
+    </xs:key>
+    <xs:key name="BaseParamsNameRule">
+      <xs:selector xpath="Param"/>
+      <xs:field xpath="@Name"/>
+    </xs:key>
+  </xs:element>
+
+  <!-- **** HEADER *********************************************************************** -->
+  <xs:element name="Header">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Param" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Validation" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element type="ComplexReference" name="Destination"/>
+        <xs:element type="ItemReference" name="Hops" nillable="true" />
+        <xs:element type="ListReference" name="Repeaters" nillable="true" />
+      </xs:sequence>
+      <xs:attribute name="Key" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="Name" type="xs:ID" use="required" />
+      <xs:attribute name="Text" type="xs:string" use="required" />
+      <xs:attribute name="IsAck" type="xs:boolean" use="required" />
+      <xs:attribute name="IsRouted" type="xs:boolean" use="required" />
+      <xs:attribute name="IsError" type="xs:boolean" use="required" />
+      <xs:attribute name="IsMulticast" type="xs:boolean" use="required" />
+      <xs:attribute name="BaseHeaderKey" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="Comment" type="xs:string" use="optional" />
+    </xs:complexType>
+    <xs:key name="ParamsOrderRule">
+      <xs:selector xpath="Param"/>
+      <xs:field xpath="@Order"/>
+    </xs:key>
+    <xs:key name="ParamsNameRule">
+      <xs:selector xpath="Param"/>
+      <xs:field xpath="@Name"/>
+    </xs:key>
+  </xs:element>
+
+
+  <!-- **** VALIDATION *********************************************************************** -->
+  <xs:element name="Validation">
+    <xs:complexType>
+      <xs:attribute name="ParamName" type="xs:NCName" use="required" />
+      <xs:attribute name="ParamHexValue" type="zwKey" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** PARAM *********************************************************************** -->
+  <xs:element name="Param">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Param" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="Order" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="Name" type="xs:NCName" use="required" />
+      <xs:attribute name="Text" type="xs:string" use="required" />
+      <xs:attribute name="Type" type="zwParamType" use="required" />
+      <xs:attribute name="ValidValue" type="zwKey" use="optional" />
+      <xs:attribute name="OptRef" type="xs:NCName" use="optional" />
+      <xs:attribute name="Size" type="xs:unsignedByte" use="optional" />
+      <xs:attribute name="SizeRef" type="xs:NCName" use="optional" />
+      <xs:attribute name="SizeCorrection" type="xs:byte" use="optional" />
+      <xs:attribute name="Bits" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="Comment" type="xs:string" use="optional" />
+      <xs:attribute name="Defines" type="xs:NCName" use="optional" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** RADIO_FREQUENCY *********************************************************************** -->
+  <xs:element name="RadioFrequency">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:NCName" use="required"/>
+      <xs:attribute name="Code" type="xs:unsignedByte" use="required"/>
+      <xs:attribute name="BaseHeader" type="xs:unsignedByte" use="required"/>
+      <xs:attribute name="Text" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** LONG_RANGE_CONFIG *********************************************************************** -->
+  <xs:element name="LongRangeConfig">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:NCName" use="required"/>
+      <xs:attribute name="Code" type="xs:unsignedByte" use="required"/>
+      <xs:attribute name="BaseHeader" type="xs:unsignedByte" use="required"/>
+      <xs:attribute name="Text" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** DEFINE *********************************************************************** -->
+  <xs:element name="Define">
+    <xs:complexType>
+      <xs:attribute name="Key" type="zwKey" use="required" />
+      <xs:attribute name="Name" type="xs:NCName" use="required" />
+      <xs:attribute name="Text" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** DEFINE SET *********************************************************************** -->
+  <xs:element name="DefineSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref ="Define"  maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="Name" type="xs:NCName" use="required" />
+    </xs:complexType>
+    <xs:key name="define_set_name_rule">
+      <xs:selector xpath="define"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:key name="define_set_key_rule">
+      <xs:selector xpath="define"/>
+      <xs:field xpath="@key"/>
+    </xs:key>
+  </xs:element>
+
+  <!-- **** FILTER *********************************************************************** -->
+  <xs:element name="HeaderFilter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="HeaderCodes" minOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="HeaderCode" type="xs:unsignedByte" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Order" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="Text" type="xs:NCName" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- *** TYPES ************************************************************************** -->
+  <xs:simpleType name="zwKey">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="0x[0-9A-Fa-f]{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="zwParamType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="BOOLEAN"/>
+      <xs:enumeration value="CHAR"/>
+      <xs:enumeration value="HEX"/>
+      <xs:enumeration value="NUMBER"/>
+      <xs:enumeration value="NUMBER_SIGNED"/>
+      <xs:enumeration value="NODE_NUMBER"/>
+      <xs:enumeration value="BITMASK"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- **** ITEM_REFERENCE *********************************************************************** -->
+  <xs:complexType name="ItemReference">
+    <xs:attribute name="Ref" type="xs:NCName" use="required" />
+  </xs:complexType>
+
+  <!-- **** LIST_REFERENCE *********************************************************************** -->
+  <xs:complexType name="ListReference">
+    <xs:attribute name="Ref" type="xs:NCName" use="required" />
+    <xs:attribute name="SizeRef" type="xs:NCName" use="required" />
+    <xs:attribute name="IsBitmask" type="xs:boolean" use="required" />
+    <xs:attribute name="SizeCorrection" type="xs:byte" use="required" />
+  </xs:complexType>
+
+  <!-- **** COMPLEX_REFERENCE *********************************************************************** -->
+  <xs:complexType name="ComplexReference">
+    <xs:choice>
+      <xs:element name="Destination" type="ItemReference"/>
+      <xs:element name="Destinations" type="ListReference"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:schema>

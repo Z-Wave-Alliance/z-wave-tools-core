@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ZWaveZnifferApplication</AssemblyName>
+    <TargetFrameworks>net6.0;net48</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+  	<ProjectReference Include="..\Utils\Utils_netcore.csproj" />
+    <ProjectReference Include="..\ZWave\ZWave_netcore.csproj" />
+    <ProjectReference Include="..\ZWaveXml\ZWaveXml_netcore.csproj" />
+  </ItemGroup>
+</Project>

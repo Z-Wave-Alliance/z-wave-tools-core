@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{950D51C9-06CE-45A3-A5B6-4953362E8C5E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZWave.ProgrammerApplication</RootNamespace>
+    <AssemblyName>ZWaveProgrammerApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Devices\Programmer.cs" />
+    <Compile Include="Enums\NVRData.cs" />
+    <Compile Include="Operations\CheckStateOperation.cs" />
+    <Compile Include="Operations\SpiFwAssertResetNOperation.cs" />
+    <Compile Include="Operations\SpiFwGetVersionOperation.cs" />
+    <Compile Include="Operations\SpiFwInitOperation.cs" />
+    <Compile Include="Operations\SpiFwDeassertResetNOperation.cs" />
+    <Compile Include="Operations\SpiFwToggleSckOperation.cs" />
+    <Compile Include="Operations\ReadFlashOperation.cs" />
+    <Compile Include="Operations\WriteFlashSectorOperation.cs" />
+    <Compile Include="Operations\ReadSramOperation.cs" />
+    <Compile Include="Operations\WriteSramOperation.cs" />
+    <Compile Include="Operations\DisableEooSModeOperation.cs" />
+    <Compile Include="Operations\EnableEooSModeOperation.cs" />
+    <Compile Include="Operations\RunCrcCheckOperation.cs" />
+    <Compile Include="Operations\EraseSectorOperation.cs" />
+    <Compile Include="Operations\EraseChipOperation.cs" />
+    <Compile Include="Operations\SetLockBitsOperation.cs" />
+    <Compile Include="Operations\ReadLockBitsOperation.cs" />
+    <Compile Include="Operations\ReadLockBitsByteOperation.cs" />
+    <Compile Include="Operations\SetLockBitsByteOperation.cs" />
+    <Compile Include="Operations\SetNvrOperation.cs" />
+    <Compile Include="Operations\ReadNvrOperation.cs" />
+    <Compile Include="Operations\SetNvrByteOperation.cs" />
+    <Compile Include="Operations\SyncByteOperation.cs" />
+    <Compile Include="Operations\SendDataTestOperation.cs" />
+    <Compile Include="Operations\ReadNvrByteOperation.cs" />
+    <Compile Include="Operations\EnableBasicApmOperation.cs" />
+    <Compile Include="Operations\EnableInterfaceOperation.cs" />
+    <Compile Include="Operations\EnableZnifferApmOperation.cs" />
+    <Compile Include="Operations\ReadSignatureByteOperation.cs" />
+    <Compile Include="Operations\ResetChipOperation.cs" />
+    <Compile Include="DataFrame.cs" />
+    <Compile Include="Enums\Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Enums\CommandTypes.cs" />
+    <Compile Include="Enums\EepromSizes.cs" />
+    <Compile Include="Enums\FlashProgrammingStatuses.cs" />
+    <Compile Include="Enums\LedStates.cs" />
+    <Compile Include="Enums\LedTypes.cs" />
+    <Compile Include="Enums\MemoryLayout.cs" />
+    <Compile Include="Enums\NVMTypes.cs" />
+    <Compile Include="Enums\WritePageStatuses.cs" />
+    <Compile Include="Enums\WriteRfOptionsStatuses.cs" />
+    <Compile Include="Enums\FrameReceiveStates.cs" />
+    <Compile Include="Enums\HeaderTypes.cs" />
+    <Compile Include="ProgrammerApiOperation.cs" />
+    <Compile Include="ProgrammerApplicationLayer.cs" />
+    <Compile Include="ProgrammerFrameClient.cs" />
+    <Compile Include="ProgrammerFrameLayer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZWave\ZWave.csproj">
+      <Project>{B214D482-57EB-42BE-AEC7-D64850F56514}</Project>
+      <Name>ZWave</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ProgrammerApplication</AssemblyName>
+    <TargetFrameworks>net6.0;net48</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils_netcore.csproj" />
+    <ProjectReference Include="..\ZWave\ZWave_netcore.csproj" />
+  </ItemGroup>
+</Project>

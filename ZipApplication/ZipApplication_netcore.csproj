@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>ZWaveZipApplication</AssemblyName>
+		<TargetFrameworks>net6.0;net48</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+		<Content Include="..\lib\ZipTransport\win\ziptrans64.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
+		<Content Include="..\lib\ZipTransport\win\ziptrans32.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'debian-arm'">
+		<Content Include="..\lib\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+		<Content Include="..\lib\ZipTransport\linux\libziptrans64.so" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
+		<Content Include="..\lib\ZipTransport\osx\libziptrans64.dylib" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
+		<Content Include="..\lib\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="SSH.NET" Version="2020.0.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Utils\Utils_netcore.csproj" />
+		<ProjectReference Include="..\ZWave\ZWave_netcore.csproj" />
+		<ProjectReference Include="..\ZWaveXml\ZWaveXml_netcore.csproj" />
+	</ItemGroup>
+</Project>

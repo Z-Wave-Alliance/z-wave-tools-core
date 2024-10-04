@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Utils</RootNamespace>
+    <AssemblyName>Utils</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseWin32DeviceClass.cs" />
+    <Compile Include="BiDictionary.cs" />
+    <Compile Include="BigInteger.cs" />
+    <Compile Include="BitArray256.cs" />
+    <Compile Include="BitArray8.cs" />
+    <Compile Include="BitMatrix.cs" />
+    <Compile Include="CommandsComparator.cs" />
+    <Compile Include="DevicesSourceConfig.cs" />
+    <Compile Include="EnumDescriptionTypeConverter.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="Events\EventArgs.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
+    <Compile Include="FileAccessMonitor.cs" />
+    <Compile Include="IgnoreCaseEqualityComparer.cs" />
+    <Compile Include="LazyDictionary.cs" />
+    <Compile Include="NotifierFindingExpressionVisitor.cs" />
+    <Compile Include="HexFileHelper.cs" />
+    <Compile Include="IDataSource.cs" />
+    <Compile Include="Int128.cs" />
+    <Compile Include="OrderComparer.cs" />
+    <Compile Include="ProcessProxy.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Threading\ConsumerThread.cs" />
+    <Compile Include="UI\DialogSettings.cs" />
+    <Compile Include="UI\Interfaces\IAboutModel.cs" />
+    <Compile Include="UI\Interfaces\IAppLogModel.cs" />
+    <Compile Include="UI\Interfaces\ILogModel.cs" />
+    <Compile Include="UI\Interfaces\ILogService.cs" />
+    <Compile Include="UI\Interfaces\IUserInput.cs" />
+    <Compile Include="UI\Interfaces\ISelectableItem.cs" />
+    <Compile Include="UI\Interfaces\IUserInputDialog.cs" />
+    <Compile Include="UI\Logging\LogRawData.cs" />
+    <Compile Include="UI\Logging\LogSettings.cs" />
+    <Compile Include="UI\NotifyCommandData.cs" />
+    <Compile Include="UI\Wrappers\SelectableItem.cs" />
+    <Compile Include="WinBased\SerialPortMontiorHelper.cs" />
+    <Compile Include="WinBased\ComputerSystemHardwareHelper.cs" />
+    <Compile Include="SizeLimitedTable.cs" />
+    <Compile Include="Threading\ConcurrentLinkedList.cs" />
+    <Compile Include="Threading\ConcurrentList.cs" />
+    <Compile Include="Threading\ConsumerQueue.cs" />
+    <Compile Include="Threading\ConcurrentQueue.cs" />
+    <Compile Include="Threading\IConsumerQueue.cs" />
+    <Compile Include="Threading\Signal.cs" />
+    <Compile Include="Threading\SignalOnce.cs" />
+    <Compile Include="BitReader.cs" />
+    <Compile Include="BoolFlag.cs" />
+    <Compile Include="ByteIndex.cs" />
+    <Compile Include="CommandLineParser.cs" />
+    <Compile Include="Extensions\EnumerableExt.cs" />
+    <Compile Include="Extensions\ValueExt.cs" />
+    <Compile Include="Extensions\RefTypeExt.cs" />
+    <Compile Include="Extensions\RNGCryptoServiceProviderExt.cs" />
+    <Compile Include="Extensions\ShouldBeNotNullExtension.cs" />
+    <Compile Include="Extentions.cs" />
+    <Compile Include="IntRef.cs" />
+    <Compile Include="Pair.cs" />
+    <Compile Include="Tools.cs" />
+    <Compile Include="StringStorage.cs" />
+    <Compile Include="ExpressionVisitor.cs" />
+    <Compile Include="UI\Logging\LogPacket.cs" />
+    <Compile Include="UI\Interfaces\IDialog.cs" />
+    <Compile Include="UI\ValueEntity.cs" />
+    <Compile Include="UI\Wrappers\ISelectable.cs" />
+    <Compile Include="UI\Wrappers\FolderItem.cs" />
+    <Compile Include="UI\Threading\ActionDispatcher.cs" />
+    <Compile Include="UI\EntityBase.cs" />
+    <Compile Include="UI\Enums\Dyes.cs" />
+    <Compile Include="UI\Enums\LogIndents.cs" />
+    <Compile Include="UI\Enums\LogLevels.cs" />
+    <Compile Include="UI\IDispatch.cs" />
+    <Compile Include="UI\Bind\ICorrectRule.cs" />
+    <Compile Include="UI\Bind\ISubscribe.cs" />
+    <Compile Include="UI\Bind\ISubscribeCollection.cs" />
+    <Compile Include="UI\Bind\ISubscribeCollectionFactory.cs" />
+    <Compile Include="UI\DirectDispatcher.cs" />
+    <Compile Include="UI\UListFactory.cs" />
+    <Compile Include="UI\UList.cs" />
+    <Compile Include="Win32PnPEntityClass.cs" />
+    <Compile Include="Win32SerialPortClass.cs" />
+    <Compile Include="XmlUtility.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
