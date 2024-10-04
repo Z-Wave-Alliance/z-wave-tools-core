@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # SPDX-FileCopyrightText: 2024 Z-Wave Alliance
 # Demo copied from https://docs.github.com/en/actions/quickstart
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Build and Test Z-Wave Tools Core
 
 on:
   pull_request:
@@ -15,17 +14,42 @@ on:
   workflow_dispatch:
 
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+  build-and-test-z-wave-tools-core:
+    runs-on: windows-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Add MSBuild.exe to Path
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Add VSTest.Console.exe to Path
+        uses: darenm/Setup-VSTest@v1.2
+
+      - name: Restore NuGet Packages for Z-Wave Tools Core Solution
+        run: msbuild $env:Solution_Path -restore -verbosity:minimal
+
+      - name: Build Z-Wave Tools Core Solution in Release
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          msbuild $env:Solution_Path -property:Platform=$env:TargetPlatform -property:Configuration=$env:Configuration -verbosity:minimal
+        env:
+          Configuration: Release
+          Solution_Path: "ZWaveDll.sln"
+          TargetPlatform: "Any CPU"
+
+      - name: Build Z-Wave Tools Core Solution in Debug
+        run: |
+          msbuild $env:Solution_Path -p:Platform=$env:TargetPlatform -p:Configuration=$env:Configuration -verbosity:minimal
+        env:
+          Configuration: Debug
+          Solution_Path: "ZWaveDll.sln"
+          TargetPlatform: "Any CPU"
+
+      - name: Run NUnit Tests
+        run: |
+          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\BasicApplicationTests\bin\Debug\BasicApplicationTests.dll
+          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\UtilsTests\bin\Debug\UtilsTests.dll
+          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZnifferApplicationTests\bin\Debug\ZnifferApplicationTests.dll
+          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZWaveTests\bin\Debug\ZWaveTests.dll
+        env:
+          LOGGER_ARGS: "console;verbosity=minimal"
