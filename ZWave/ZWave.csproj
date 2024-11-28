@@ -11,6 +11,8 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -488,11 +490,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\lib\CryptoLibraryS2\win\s2crypto32.dll">
+    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto32.dll">
       <Link>s2crypto32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\lib\CryptoLibraryS2\win\s2crypto64.dll">
+    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto64.dll">
       <Link>s2crypto64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
