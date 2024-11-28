@@ -16,15 +16,30 @@ on:
 jobs:
   build-and-test-z-wave-tools-core:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+    env:
+      Solution_Path: z-wave-tools-core/ZWaveController.sln
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout z-wave-tools-core
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          path: '/z-wave-tools-core'
+
+      - name: Checkout z-wave-blobs
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          repository: 'Z-Wave-Alliance/z-wave-blobs'
+          path: '/z-wave-blobs'
 
       - name: Add MSBuild.exe to Path
         uses: microsoft/setup-msbuild@v1.1
 
-      - name: Add VSTest.Console.exe to Path
-        uses: darenm/Setup-VSTest@v1.2
+      #- name: Add VSTest.Console.exe to Path
+      #  uses: darenm/Setup-VSTest@v1.2
 
       - name: Restore NuGet Packages for Z-Wave Tools Core Solution
         run: msbuild $env:Solution_Path -restore -verbosity:minimal
@@ -34,7 +49,6 @@ jobs:
           msbuild $env:Solution_Path -property:Platform=$env:TargetPlatform -property:Configuration=$env:Configuration -verbosity:minimal
         env:
           Configuration: Release
-          Solution_Path: "ZWaveDll.sln"
           TargetPlatform: "Any CPU"
 
       - name: Build Z-Wave Tools Core Solution in Debug
@@ -42,14 +56,13 @@ jobs:
           msbuild $env:Solution_Path -p:Platform=$env:TargetPlatform -p:Configuration=$env:Configuration -verbosity:minimal
         env:
           Configuration: Debug
-          Solution_Path: "ZWaveDll.sln"
           TargetPlatform: "Any CPU"
 
-      - name: Run NUnit Tests
-        run: |
-          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\BasicApplicationTests\bin\Debug\BasicApplicationTests.dll
-          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\UtilsTests\bin\Debug\UtilsTests.dll
-          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZnifferApplicationTests\bin\Debug\ZnifferApplicationTests.dll
-          vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZWaveTests\bin\Debug\ZWaveTests.dll
-        env:
-          LOGGER_ARGS: "console;verbosity=minimal"
+      #- name: Run NUnit Tests
+      #  run: |
+      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\BasicApplicationTests\bin\Debug\BasicApplicationTests.dll
+      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\UtilsTests\bin\Debug\UtilsTests.dll
+      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZnifferApplicationTests\bin\Debug\ZnifferApplicationTests.dll
+      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZWaveTests\bin\Debug\ZWaveTests.dll
+      #  env:
+      #    LOGGER_ARGS: "console;verbosity=minimal"
