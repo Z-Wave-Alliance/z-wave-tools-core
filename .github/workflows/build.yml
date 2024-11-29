@@ -43,7 +43,6 @@ jobs:
       - name: Checkout z-wave-tools-core
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_ZWAVE_ACCESS_TOKEN }}
           path: 'z-wave-tools-core'
 
       # TODO: https://github.com/Z-Wave-Alliance/z-wave-tools-core/issues/5
