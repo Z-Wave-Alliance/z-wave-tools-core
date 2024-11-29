@@ -105,6 +105,7 @@
     <Folder Include="Enums\" />
   </ItemGroup>
   <ItemGroup>
+    <!-- TODO: https://github.com/Z-Wave-Alliance/z-wave-blobs/issues/9 -->
     <Content Include="..\..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans32.dll">
       <Link>ziptrans32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

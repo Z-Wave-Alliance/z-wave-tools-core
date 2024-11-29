@@ -32,24 +32,26 @@ jobs:
 
   build-and-test-z-wave-tools-core:
     runs-on: windows-latest
+    env:
+      Configuration: Release
+      TargetPlatform: "Any CPU"
+      Solution_Path: ${{ github.workspace}}\z-wave-tools-core\ZWaveDll.sln  
     defaults:
       run:
         shell: powershell
-    env:
-      Solution_Path: z-wave-tools-core/ZWaveController.sln
     steps:
       - name: Checkout z-wave-tools-core
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_ZWAVE_ACCESS_TOKEN }}
-          path: '/z-wave-tools-core'
+          path: 'z-wave-tools-core'
 
       - name: Checkout z-wave-blobs
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_ZWAVE_ACCESS_TOKEN }}
           repository: 'Z-Wave-Alliance/z-wave-blobs'
-          path: '/z-wave-blobs'
+          path: 'z-wave-blobs'
 
       - name: Add MSBuild.exe to Path
         uses: microsoft/setup-msbuild@v1.1
@@ -58,21 +60,20 @@ jobs:
       #  uses: darenm/Setup-VSTest@v1.2
 
       - name: Restore NuGet Packages for Z-Wave Tools Core Solution
-        run: msbuild $env:Solution_Path -restore -verbosity:minimal
+        run: |
+          MSBuild.exe ${{env.Solution_Path}} -restore -verbosity:minimal
 
       - name: Build Z-Wave Tools Core Solution in Release
-        run: |
-          msbuild $env:Solution_Path -property:Platform=$env:TargetPlatform -property:Configuration=$env:Configuration -verbosity:minimal
         env:
           Configuration: Release
-          TargetPlatform: "Any CPU"
+        run: |
+          MSBuild.exe ${{env.Solution_Path}} -property:Platform="${{env.TargetPlatform}}" -property:Configuration=${{env.Configuration}} -verbosity:minimal
 
       - name: Build Z-Wave Tools Core Solution in Debug
-        run: |
-          msbuild $env:Solution_Path -p:Platform=$env:TargetPlatform -p:Configuration=$env:Configuration -verbosity:minimal
         env:
-          Configuration: Debug
-          TargetPlatform: "Any CPU"
+            Configuration: Debug
+        run: |
+          MSBuild.exe ${{env.Solution_Path}} -property:Platform="${{env.TargetPlatform}}" -property:Configuration=${{env.Configuration}} -verbosity:minimal
 
       #- name: Run NUnit Tests
       #  run: |
