@@ -4,7 +4,10 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
 SPDX-FileCopyrightText: 2023 Z-Wave-Alliance <https://z-wavealliance.org/>
 -->
 # Z-Wave Tools Core
- This repository contains the essential common tools to build; [z-wave-pc-controller]( https://github.com/Z-Wave-Alliance/z-wave-pc-controller), [z-wave-pc-zniffer]( https://github.com/Z-Wave-Alliance/z-wave-pc-zniffer) and [z-wave-xml-tools]( https://github.com/Z-Wave-Alliance/z-wave-xml-tools).
+ This repository contains the essential common tools to build:
+ - https://github.com/Z-Wave-Alliance/z-wave-pc-controller
+ - https://github.com/Z-Wave-Alliance/z-wave-pc-zniffer
+ - https://github.com/Z-Wave-Alliance/z-wave-xml-tools
  
  This repository is currently dependent on [z-wave-blobs](https://github.com/Z-Wave-Alliance/z-wave-blobs), which contains a set of pre-compiled files. Going forward, it is intended to evolve Z-Wave Tools Core and the tools related projects away from Z-Wave Blobs.
 
