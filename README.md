@@ -1,7 +1,7 @@
 <!---
 SPDX-License-Identifier: BSD-3-Clause
 SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-SPDX-FileCopyrightText: 2023 Z-Wave-Alliance <https://z-wavealliance.org/>
+SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org/>
 -->
 # Z-Wave Tools Core
  This repository contains the essential common tools to build:
