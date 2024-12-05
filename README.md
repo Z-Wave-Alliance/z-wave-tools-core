@@ -9,7 +9,9 @@ SPDX-FileCopyrightText: 2023 Z-Wave-Alliance <https://z-wavealliance.org/>
  - https://github.com/Z-Wave-Alliance/z-wave-pc-zniffer
  - https://github.com/Z-Wave-Alliance/z-wave-xml-tools
  
- This repository is currently dependent on [z-wave-blobs](https://github.com/Z-Wave-Alliance/z-wave-blobs), which contains a set of pre-compiled files. Going forward, it is intended to evolve Z-Wave Tools Core and the tools related projects away from Z-Wave Blobs.
+ This repository is currently dependent on [z-wave-blobs](https://github.com/Z-Wave-Alliance/z-wave-blobs), which contains a set of pre-compiled files. Going forward, it is intended to evolve Z-Wave Tools Core and the tools related projects [away from Z-Wave Blobs](https://github.com/Z-Wave-Alliance/z-wave-pc-zniffer/issues/6) .
+ 
+OSWG encourages users to avoid duplicating files and introduce a dependency to z-wave-tools-core, and create an issue to [track the propagation of blobs](https://github.com/Z-Wave-Alliance/z-wave-blobs/issues/5).
 
 ## Directory Structure
 The proposed structure of the tools project is as follows:
