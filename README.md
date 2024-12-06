@@ -42,7 +42,7 @@ The structure of the tools project is as follows:
 Notice that this structure needs to be kept for the build step stated below.
 
 ## Building 
-Z-Wave-tools core can only be built from windows at the moment, find below some build steps, assuming that the location is the root derctory specified avobe:
+Z-Wave-tools core can only be built from Windows at the moment. Find below some build steps, assuming that the location is the root directory specified above:
 ```
 del -r */*/bin 
 del -r */*/obj
