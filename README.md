@@ -14,7 +14,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org/>
 OSWG encourages users to avoid duplicating files and introduce a dependency to z-wave-tools-core, and create an issue to [track the propagation of blobs](https://github.com/Z-Wave-Alliance/z-wave-blobs/issues/5).
 
 ## Directory Structure
-The proposed structure of the tools project is as follows:
+The structure of the tools project is as follows:
 
 ```
 /root 
