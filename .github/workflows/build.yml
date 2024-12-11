@@ -51,6 +51,7 @@ jobs:
           token: ${{ secrets.GH_ZWAVE_ACCESS_TOKEN }}
           repository: 'Z-Wave-Alliance/z-wave-blobs'
           path: 'z-wave-blobs'
+          ref: 'v0.1.0'
 
       - name: Add MSBuild.exe to Path
         uses: microsoft/setup-msbuild@v1.1
