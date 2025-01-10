@@ -1,8 +1,8 @@
 # News
 
-**Full Changelog**: https://github.com/Z-Wave-Alliance/z-wave-tools-core/commits/v0.0.0
-
 ## 25.1.0
+
+**Full Changelog**: https://github.com/Z-Wave-Alliance/z-wave-tools-core/commits/v25.1.0
 
 ### Added
 
