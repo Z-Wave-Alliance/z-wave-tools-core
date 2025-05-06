@@ -1,0 +1,69 @@
+using System;
+using ZWave;
+
+namespace ZWaveTests
+{
+    class FakeAction : ActionBase
+    {
+        readonly int _timeoutMs;
+        readonly IActionItem[] _actionItems;
+        readonly Action<StartActionUnit, ActionBase> _onStart;
+        public FakeAction()
+           : base(true)
+        {
+        }
+
+        public FakeAction(bool isExclusive, Action<StartActionUnit, ActionBase> onStart, int timeoutMs, params IActionItem[] actionItems)
+            : base(isExclusive)
+        {
+            _timeoutMs = timeoutMs;
+            _actionItems = actionItems;
+            _onStart = onStart;
+        }
+
+        protected override void CreateWorkflow()
+        {
+            ActionUnits.Add(new StartActionUnit(OnStart, _timeoutMs, _actionItems));
+        }
+
+        private void OnStart(StartActionUnit unit)
+        {
+            if (_onStart != null)
+            {
+                _onStart(unit, this);
+            }
+        }
+
+        protected override void CreateInstance()
+        {
+        }
+    }
+
+    class AnotherFakeAction : ActionBase
+    {
+        readonly int _timeoutMs;
+        readonly IActionItem[] _actionItems;
+        readonly Action<StartActionUnit> _onStart;
+        public AnotherFakeAction()
+           : base(true)
+        {
+        }
+
+        public AnotherFakeAction(bool isExclusive, Action<StartActionUnit> onStart, int timeoutMs, params IActionItem[] actionItems)
+            : base(isExclusive)
+        {
+            _timeoutMs = timeoutMs;
+            _actionItems = actionItems;
+            _onStart = onStart;
+        }
+
+        protected override void CreateWorkflow()
+        {
+            ActionUnits.Add(new StartActionUnit(_onStart, _timeoutMs, _actionItems));
+        }
+
+        protected override void CreateInstance()
+        {
+        }
+    }
+}

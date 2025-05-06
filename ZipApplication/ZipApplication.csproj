@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8ACFB772-98F3-48FE-85AE-3F06DA2EA60B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZWave.ZipApplication</RootNamespace>
+    <AssemblyName>ZWaveZipApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandClasses\FirmwareUpdateMDSupport.cs" />
+    <Compile Include="CommandClasses\NetworkManagementProxySupport.cs" />
+    <Compile Include="CommandClasses\NetworkManagementInclusionSupport.cs" />
+    <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Data\DataFrame.cs" />
+    <Compile Include="Data\ZipFrame.cs" />
+    <Compile Include="Devices\ZipController.cs" />
+    <Compile Include="Dtls1ClientTransportListener.cs" />
+    <Compile Include="LibZwaveIpTransportClient.cs" />
+    <Compile Include="Dtls1ClientTransportClient.cs" />
+    <Compile Include="LibZwaveIpTransportLayer.cs" />
+    <Compile Include="Dtls1ClientTransportLayer.cs" />
+    <Compile Include="DtlsClient.cs" />
+    <Compile Include="DtlsListener.cs" />
+    <Compile Include="IDtlsClient.cs" />
+    <Compile Include="IDtlsListener.cs" />
+    <Compile Include="Operations\AddNodeOperation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Operations\ControllerChangeOperation.cs" />
+    <Compile Include="Operations\RequestNodeNeighborUpdateOperation.cs" />
+    <Compile Include="Operations\GetCachedNodeInfoOperation.cs" />
+    <Compile Include="Operations\GetVersionOperation.cs" />
+    <Compile Include="Operations\GetNodeListOperation.cs" />
+    <Compile Include="Operations\NoiseDataOperation.cs" />
+    <Compile Include="Operations\ExpectDataOperation.cs" />
+    <Compile Include="Operations\RemoveNodeOperation.cs" />
+    <Compile Include="Operations\RequestDataOperation.cs" />
+    <Compile Include="Operations\GetIdOperation.cs" />
+    <Compile Include="Operations\RequestNetworkUpdateOperation.cs" />
+    <Compile Include="Operations\ResponseDataOperation.cs" />
+    <Compile Include="Operations\SetDefaultOperation.cs" />
+    <Compile Include="Operations\SetLearnModeOperation.cs" />
+    <Compile Include="SubstituteManager.cs" />
+    <Compile Include="Devices\ZipDevice.cs" />
+    <Compile Include="Operations\GetIpAddressOperation.cs" />
+    <Compile Include="Operations\SendDataOperation.cs" />
+    <Compile Include="Unsolicited\IUnsolicitedClientsFactory.cs" />
+    <Compile Include="Unsolicited\UnsolicitedClient.cs" />
+    <Compile Include="Unsolicited\IUnsolicitedClient.cs" />
+    <Compile Include="Unsolicited\IUnsolicitedReceiveClient.cs" />
+    <Compile Include="Unsolicited\IUnsolicitedResponseClient.cs" />
+    <Compile Include="Unsolicited\UnsolicitedDestinationConfigurator.cs" />
+    <Compile Include="Unsolicited\UnsolicitedDestinationHandler.cs" />
+    <Compile Include="ZipApiHandler.cs" />
+    <Compile Include="ZipApiMessage.cs" />
+    <Compile Include="ZipApiOperation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZipApplicationLayer.cs" />
+    <Compile Include="ZipControllerDiscoverService.cs" />
+    <Compile Include="ZipFrameClient.cs" />
+    <Compile Include="ZipFrameLayer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZWaveXml\ZWaveXml.csproj">
+      <Project>{FEB030F9-A44A-4C72-9C28-C8FA186995FB}</Project>
+      <Name>ZWaveXml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZWave\ZWave.csproj">
+      <Project>{B214D482-57EB-42BE-AEC7-D64850F56514}</Project>
+      <Name>ZWave</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans32.dll">
+      <Link>ziptrans32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans64.dll">
+      <Link>ziptrans64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Renci.SshNet.Async">
+      <Version>1.4.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

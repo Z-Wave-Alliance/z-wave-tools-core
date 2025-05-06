@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+SPDX-License-Identifier: BSD-3-Clause
+SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" >
+
+  <!-- **** NetworkKey ***************************************************** -->
+  <xs:element name="NetworkKey">
+    <xs:complexType>
+      <xs:attribute name="Class" type="xs:unsignedByte" use="required"/>
+      <xs:attribute name="Value" type="xs:hexBinary" use="required"/>
+      <xs:attribute name="TestValue" type="xs:hexBinary" use="required"/>
+      <xs:attribute name="IsEnabled" type="xs:boolean" use="optional" default="true"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** TestParametersS2Settings ************************************************* -->
+  <xs:element name="TestParametersS2Settings">
+    <xs:complexType>
+      <xs:attribute name="IsEnabled" type="xs:boolean" use="optional" default="true"/>
+      <xs:attribute name="ParameterType" type="xs:string" use="required"/>
+      <xs:attribute name="Value" type="xs:hexBinary" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** TestFrameS2Settings ************************************************* -->
+  <xs:element name="TestFrameS2Settings">
+    <xs:complexType>
+      <xs:attribute name="IsEnabled" type="xs:boolean" use="optional" default="true"/>
+      <xs:attribute name="FrameType" type="xs:string" use="required"/>
+      <xs:attribute name="Delay" type="xs:int" use="optional"/>
+      <xs:attribute name="IsEncrypted" type="xs:boolean" use="optional"/>
+      <xs:attribute name="IsMulticast" type="xs:boolean" use="optional"/>
+      <xs:attribute name="IsBroadcast" type="xs:boolean" use="optional"/>
+      <xs:attribute name="Command" type="xs:hexBinary" use="optional"/>
+      <xs:attribute name="NetworkKey" type="xs:hexBinary" use="optional"/>
+      <xs:attribute name="IsTemp" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** TestExtensionS2Settings ************************************************* -->
+  <xs:element name="TestExtensionS2Settings">
+    <xs:complexType>
+      <xs:attribute name="IsEnabled" type="xs:boolean" use="optional" default="true"/>
+      <xs:attribute name="Action" type="xs:string" use="optional" default="Add"/>
+      <xs:attribute name="ExtensionType" type="xs:string" use="required"/>
+      <xs:attribute name="MessageType" type="xs:string" use="required"/>
+      <xs:attribute name="IsEncrypted" type="xs:boolean" use="optional"/>
+      <xs:attribute name="Value" type="xs:hexBinary" use="optional"/>
+      <xs:attribute name="NumOfUsage" type="xs:int" use="optional"/>
+      <xs:attribute name="IsMoreToFollow" type="xs:boolean" use="optional"/>
+      <xs:attribute name="IsCritical" type="xs:boolean" use="optional"/>
+      <xs:attribute name="ExtensionLength" type="xs:unsignedByte" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** Node *********************************************************** -->
+  <xs:element name="Node">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SecurityExtension" type="SecurityExtension" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="Id" type="xs:unsignedShort" use="required"/>
+      <xs:attribute name="EndPointId" type="xs:unsignedByte" use="optional"/>
+      <xs:attribute name="NodeInfo" type="xs:hexBinary" use="required"/>
+      <xs:attribute name="IsVirtual" type="xs:boolean" use="optional"/>
+      <xs:attribute name="RoleType" type="xs:unsignedByte" use="optional"/>
+	    <xs:attribute name="NodeType" type="xs:unsignedByte" use="optional"/>
+	    <xs:attribute name="CommandClasses" type="xs:hexBinary" use="required"/>
+      <xs:attribute name="IsWakeupIntervalSet" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- **** SecurityExtension ********************************************** -->
+  <xs:complexType name="SecurityExtension">
+    <xs:attribute name="Keys" type="xs:string" use="required"/>
+    <xs:attribute name="CommandClasses" type="xs:hexBinary" use="required"/>
+  </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{86C06ABF-0920-4B7A-BA16-A0C76CEF5C27}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BasicApplicationTests</RootNamespace>
+    <AssemblyName>BasicApplicationTests</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Crc16Encap\SendDataCrc16EncapTests.cs" />
+    <Compile Include="Devices\NetworkViewPointTests.cs" />
+    <Compile Include="FakeAction.cs" />
+    <Compile Include="FrameLogRecord.cs" />
+    <Compile Include="FramesLoggerProvider.cs" />
+    <Compile Include="RequestNodeInfo\NodeInfoTests.cs" />
+    <Compile Include="Security\EmulatedTests.cs" />
+    <Compile Include="Security\ExtensionsTests.cs" />
+    <Compile Include="Security\InclusionS0Tests.cs" />
+    <Compile Include="Security\InclusionControllerTests.cs" />
+    <Compile Include="Security\InclusionS2Tests.cs" />
+    <Compile Include="Security\SecurityS2CryptoProviderTests.cs" />
+    <Compile Include="Security\SecurityTestSettingsServiceTests.cs" />
+    <Compile Include="TestBase.cs" />
+    <Compile Include="Security\SendingDataMulticastS2BridgeTests.cs" />
+    <Compile Include="Security\SendingDataMulticastS2Tests.cs" />
+    <Compile Include="Security\SendingDataS0Tests.cs" />
+    <Compile Include="Security\SendingDataS2Tests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetupFixture.cs" />
+    <Compile Include="Supervision\SendDataSupervisionTests.cs" />
+    <Compile Include="ThreadCheck.cs" />
+    <Compile Include="TransportService\DataProvider.cs" />
+    <Compile Include="TransportService\SegmentsContainerTests.cs" />
+    <Compile Include="TransportService\TransportServiceTests.cs" />
+    <Compile Include="XModem\FakeXModemTransportClient.cs" />
+    <Compile Include="XModem\XModemFrameClientTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utils\Utils.csproj">
+      <Project>{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZWave\ZWave.csproj">
+      <Project>{B214D482-57EB-42BE-AEC7-D64850F56514}</Project>
+      <Name>ZWave</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BasicApplication\BasicApplication.csproj">
+      <Project>{2E351174-ED53-4E8A-A065-3E15A7E228B5}</Project>
+      <Name>BasicApplication</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NUnit">
+      <Version>3.13.3</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter">
+      <Version>4.2.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

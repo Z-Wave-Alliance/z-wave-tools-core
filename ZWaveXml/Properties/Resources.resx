@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>About {0}</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="ByteBits" xml:space="preserve">
+    <value>Bits</value>
+  </data>
+  <data name="ByteBitsText" xml:space="preserve">
+    <value>Bit {0}: {1}</value>
+  </data>
+  <data name="ByteSelBits" xml:space="preserve">
+    <value>Bit fields</value>
+  </data>
+  <data name="ByteSelConst" xml:space="preserve">
+    <value>Constants</value>
+  </data>
+  <data name="ByteSelFlags" xml:space="preserve">
+    <value>Has flags</value>
+  </data>
+  <data name="ByteSelValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="ByteValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="DeleteBasDev" xml:space="preserve">
+    <value>Delete Basic Device '{0}'?</value>
+  </data>
+  <data name="DeleteBasDevCap" xml:space="preserve">
+    <value>Delete Basic Device</value>
+  </data>
+  <data name="DeleteCC" xml:space="preserve">
+    <value>Delete Command Class '{0}' and all its Command and Parameters?</value>
+  </data>
+  <data name="DeleteCCCap" xml:space="preserve">
+    <value>Delete Command Class</value>
+  </data>
+  <data name="DeleteCmd" xml:space="preserve">
+    <value>Delete Command '{0}' and all its Parameters?</value>
+  </data>
+  <data name="DeleteCmdCap" xml:space="preserve">
+    <value>Delete Command</value>
+  </data>
+  <data name="DeleteGenDev" xml:space="preserve">
+    <value>Delete Generic Device '{0}' and all its Specific Devices?</value>
+  </data>
+  <data name="DeleteGenDevCap" xml:space="preserve">
+    <value>Delete Generic Device</value>
+  </data>
+  <data name="DeleteParam" xml:space="preserve">
+    <value>Delete Parameter?</value>
+  </data>
+  <data name="DeleteParamCant1" xml:space="preserve">
+    <value>Can't delete this Parameter! It contains size information.</value>
+  </data>
+  <data name="DeleteParamCant2" xml:space="preserve">
+    <value>Can't delete this Parameter! It contains multi array first dimension information.</value>
+  </data>
+  <data name="DeleteParamCap" xml:space="preserve">
+    <value>Delete Parameter</value>
+  </data>
+  <data name="DeleteSpecDev" xml:space="preserve">
+    <value>Delete Specific Device '{0}'?</value>
+  </data>
+  <data name="DeleteSpecDevCap" xml:space="preserve">
+    <value>Delete Specific Device</value>
+  </data>
+  <data name="DeleteVariantGroup" xml:space="preserve">
+    <value>Delete Variant Group '{0}' and all its Parameters?</value>
+  </data>
+  <data name="DeleteVariantGroupCap" xml:space="preserve">
+    <value>Delete Variant Group</value>
+  </data>
+  <data name="DlgAddBasDev" xml:space="preserve">
+    <value>Add Basic Device</value>
+    <comment>Caption for Add Basic Device dialog</comment>
+  </data>
+  <data name="DlgAddCmd" xml:space="preserve">
+    <value>Add Command</value>
+    <comment>Caption for Add Command dialog</comment>
+  </data>
+  <data name="DlgAddCmdClass" xml:space="preserve">
+    <value>Add Command Class</value>
+    <comment>Caption for Add Command Class dialog</comment>
+  </data>
+  <data name="DlgAddCmdData" xml:space="preserve">
+    <value>Add Command Data</value>
+    <comment>Caption for Add Command Data dialog</comment>
+  </data>
+  <data name="DlgAddGenDev" xml:space="preserve">
+    <value>Add Generic Device</value>
+    <comment>Caption for Add Generic Device dialog</comment>
+  </data>
+  <data name="DlgAddParm" xml:space="preserve">
+    <value>Add Parameter</value>
+  </data>
+  <data name="DlgAddSpecDev" xml:space="preserve">
+    <value>Add Specific Device</value>
+    <comment>Caption for Add Specific Device dialog</comment>
+  </data>
+  <data name="DlgEditBasDev" xml:space="preserve">
+    <value>Edit Basic Device</value>
+    <comment>Caption for Edit Basic Device dialog</comment>
+  </data>
+  <data name="DlgEditCmd" xml:space="preserve">
+    <value>Edit Command</value>
+    <comment>Caption for Edit Command dialog</comment>
+  </data>
+  <data name="DlgEditCmdClass" xml:space="preserve">
+    <value>Edit Command Class</value>
+    <comment>Caption for Edit Command Class dialog</comment>
+  </data>
+  <data name="DlgEditCmdData" xml:space="preserve">
+    <value>Edit Command Data</value>
+    <comment>Caption for Edit Command Data dialog</comment>
+  </data>
+  <data name="DlgEditGenDev" xml:space="preserve">
+    <value>Edit Generic Device</value>
+    <comment>Caption for Edit Generic Device dialog</comment>
+  </data>
+  <data name="DlgEditParm" xml:space="preserve">
+    <value>Edit Parameter</value>
+  </data>
+  <data name="DlgEditSpecDev" xml:space="preserve">
+    <value>Edit Specific Device</value>
+    <comment>Caption for Edit Specific Device dialog</comment>
+  </data>
+  <data name="EditorBasDev" xml:space="preserve">
+    <value>Basic Device:{0}{1} = 0x{2:x2}</value>
+    <comment>Shown text for basic devices</comment>
+  </data>
+  <data name="EditorBit" xml:space="preserve">
+    <value>Bit {0}:{1}{2}</value>
+    <comment>Bitfield</comment>
+  </data>
+  <data name="EditorClass" xml:space="preserve">
+    <value>Command Class:{0}{1} = 0x{2:X2}</value>
+    <comment>Shown text for Command Class</comment>
+  </data>
+  <data name="EditorCommand" xml:space="preserve">
+    <value>Command:{0}{1} = 0x{2:X2}</value>
+    <comment>Shown text for command</comment>
+  </data>
+  <data name="EditorData" xml:space="preserve">
+    <value>Parameters:</value>
+    <comment>Shown text if data</comment>
+  </data>
+  <data name="EditorEnum" xml:space="preserve">
+    <value>0x{0:X2} = {1}</value>
+    <comment>Enum or const value</comment>
+  </data>
+  <data name="EditorGenDev" xml:space="preserve">
+    <value>Generic Device:{0}{1} = 0x{2:X2}</value>
+    <comment>Shown text for generic devices</comment>
+  </data>
+  <data name="EditorMultiArray" xml:space="preserve">
+    <value>(multi array: first dimension info in BYTE {0})</value>
+  </data>
+  <data name="EditorSizeInfo" xml:space="preserve">
+    <value>(size info in BYTE {0}, bits {1})</value>
+  </data>
+  <data name="EditorSizeInfo2" xml:space="preserve">
+    <value>(size is determined by message length)</value>
+  </data>
+  <data name="EditorSpecDev" xml:space="preserve">
+    <value>Specific Device:{0}{1} = 0x{2:X2}</value>
+    <comment>Shown text for specific devices</comment>
+  </data>
+  <data name="EditorTreeParam" xml:space="preserve">
+    <value>BYTE {0}:{1}{2}</value>
+    <comment>Text for command paramter</comment>
+  </data>
+  <data name="EditorTreeVariantGroup" xml:space="preserve">
+    <value>VARIANT_GROUP</value>
+    <comment>Text for command variant group of parameters</comment>
+  </data>
+  <data name="EditorVersion" xml:space="preserve">
+    <value>Version:{0}{1}</value>
+    <comment>Shown text for version</comment>
+  </data>
+  <data name="ErrorAdd" xml:space="preserve">
+    <value>Error Adding</value>
+  </data>
+  <data name="ErrorNoAvailableSpace" xml:space="preserve">
+    <value>No available space</value>
+  </data>
+  <data name="FileChanged" xml:space="preserve">
+    <value>'{0}' has changed. Save changes?</value>
+    <comment>Save changes dialog</comment>
+  </data>
+  <data name="FileChangedCap" xml:space="preserve">
+    <value>Save Changes?</value>
+  </data>
+  <data name="FileOpenFilter" xml:space="preserve">
+    <value>XML files (*.xml)|*.xml|All files (*.*)|*.*</value>
+    <comment>For open file dialogbox</comment>
+  </data>
+  <data name="FileOpenTitle" xml:space="preserve">
+    <value>Open Z-Wave XML File</value>
+  </data>
+  <data name="FileSaveTitle" xml:space="preserve">
+    <value>Save Z-Wave XML File</value>
+  </data>
+  <data name="FindDialog_Close" xml:space="preserve">
+    <value>&amp;Close</value>
+  </data>
+  <data name="FindDialog_FindNext" xml:space="preserve">
+    <value>&amp;Find Next</value>
+  </data>
+  <data name="InvalidNameUsed" xml:space="preserve">
+    <value>The entered name is already in use.</value>
+  </data>
+  <data name="InvalidValueMinMax" xml:space="preserve">
+    <value>The entered value is illegal. Must be between 0x{0:X2} and ox{1:X2}</value>
+  </data>
+  <data name="InvalidValueUsed" xml:space="preserve">
+    <value>The entered value is already in use.</value>
+  </data>
+  <data name="LenSelFixed" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="LenSelVarKey" xml:space="preserve">
+    <value>Length determined by size parameter</value>
+  </data>
+  <data name="LenSelVarMes" xml:space="preserve">
+    <value>Length determined by message</value>
+  </data>
+  <data name="MainForm_CHGenerationError_Title" xml:space="preserve">
+    <value>C Header Generation Error</value>
+  </data>
+  <data name="MainForm_Created" xml:space="preserve">
+    <value>created</value>
+  </data>
+  <data name="MainForm_CSGenerationError_Title" xml:space="preserve">
+    <value>CS Generation Error</value>
+  </data>
+  <data name="MainForm_GenerateCHInfo" xml:space="preserve">
+    <value>{0} has been {1} in the C header output folder.</value>
+  </data>
+  <data name="MainForm_GenerateCSInfo" xml:space="preserve">
+    <value>{0} has been {1} in the C# output folder.</value>
+  </data>
+  <data name="MainForm_Line" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="MainForm_Overwritten" xml:space="preserve">
+    <value>overwritten</value>
+  </data>
+  <data name="MainForm_XMLSchemaMissing" xml:space="preserve">
+    <value>XML Schema missing</value>
+  </data>
+  <data name="OpenErrorBasDev" xml:space="preserve">
+    <value>Basic Device is missing key or name in: {0}</value>
+  </data>
+  <data name="OpenErrorBasDevExists" xml:space="preserve">
+    <value>Duplicate found of Basic Device '{0}'</value>
+  </data>
+  <data name="OpenErrorBitError" xml:space="preserve">
+    <value>A bit error is found in Parameter {0} in '{1} - {2}'</value>
+  </data>
+  <data name="OpenErrorCC" xml:space="preserve">
+    <value>Command Class is missing key or name in: {0}</value>
+  </data>
+  <data name="OpenErrorCCExists" xml:space="preserve">
+    <value>Duplicate found of Command Class '{0}'</value>
+  </data>
+  <data name="OpenErrorCmd" xml:space="preserve">
+    <value>Command is missing key or name in: {0}</value>
+  </data>
+  <data name="OpenErrorCmdExists" xml:space="preserve">
+    <value>Duplicate found of Command '{0}' in '{1}'</value>
+  </data>
+  <data name="OpenErrorCmdWrongXML" xml:space="preserve">
+    <value>Wrong XML tag '{0}' found in Command Class '{1}</value>
+  </data>
+  <data name="OpenErrorGenDev" xml:space="preserve">
+    <value>Generic Device is missing key or name in: {0}</value>
+  </data>
+  <data name="OpenErrorGenDevExists" xml:space="preserve">
+    <value>Duplicate found of Generic Device '{0}'</value>
+  </data>
+  <data name="OpenErrorParam" xml:space="preserve">
+    <value>Parameter is missing key or type in: {0}</value>
+  </data>
+  <data name="OpenErrorParamWrongXML" xml:space="preserve">
+    <value>Wrong XML tag '{0}' found in Command '{1}' in '{2}'</value>
+  </data>
+  <data name="OpenErrorSpecDev" xml:space="preserve">
+    <value>Specific Device is missing key or name in: {0}</value>
+  </data>
+  <data name="OpenErrorSpecDevExists" xml:space="preserve">
+    <value>Duplicate found of Specific Device '{0}' in '{1}'</value>
+  </data>
+  <data name="OpenErrorSpecDevWrongXML" xml:space="preserve">
+    <value>Wrong XML tag '{0}' found in Generic Device '{1}</value>
+  </data>
+  <data name="OpenErrorWrongField" xml:space="preserve">
+    <value>Wrong or missing field(s) for Parameter {0} in '{1} - {2}'</value>
+  </data>
+  <data name="OpenWarningRenumber" xml:space="preserve">
+    <value>Parameters of Command '{0}' in '{1}' has been renumbered</value>
+  </data>
+  <data name="OpenWarningVarGroup" xml:space="preserve">
+    <value>Support for '{0}' found in '{1}' in '{2}' is not implemented </value>
+  </data>
+  <data name="OptionsDialog_ErrorBoxCaption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="OptionsDialog_InvalidDefaultCHeaderFile" xml:space="preserve">
+    <value>Invalid Default C Header File Name</value>
+  </data>
+  <data name="OptionsDialog_InvalidDefaultCSharpFile" xml:space="preserve">
+    <value>Invalid Default C# File Name</value>
+  </data>
+  <data name="OptionsDialog_SelectCHeaderTempalte_Filter" xml:space="preserve">
+    <value>C header files (*.h)|*.h</value>
+  </data>
+  <data name="OptionsDialog_SelectCHeaderTemplate_Title" xml:space="preserve">
+    <value>Select C header template file</value>
+  </data>
+  <data name="OptionsDialog_SelectCSharpTemplate_Filter" xml:space="preserve">
+    <value>C# files (*.cs)|*.cs</value>
+  </data>
+  <data name="OptionsDialog_SelectCSharpTemplate_Title" xml:space="preserve">
+    <value>Select C# template file</value>
+  </data>
+  <data name="OptionsDialog_SelectXmlSchema_Filter" xml:space="preserve">
+    <value>XML Schema (*.xsd)|*.xsd</value>
+  </data>
+  <data name="OptionsDialog_SelectXmlSchema_Title" xml:space="preserve">
+    <value>Select XML Schema to be used for validation</value>
+  </data>
+  <data name="ParamType1" xml:space="preserve">
+    <value>1 Byte</value>
+  </data>
+  <data name="ParamType2" xml:space="preserve">
+    <value>2 Bytes</value>
+  </data>
+  <data name="ParamType3" xml:space="preserve">
+    <value>3 Bytes</value>
+  </data>
+  <data name="ParamType4" xml:space="preserve">
+    <value>4 Bytes</value>
+  </data>
+  <data name="ParamType5" xml:space="preserve">
+    <value>Bitmask</value>
+  </data>
+  <data name="ParamType6" xml:space="preserve">
+    <value>Array of Bytes</value>
+  </data>
+  <data name="ParmIsAscii" xml:space="preserve">
+    <value>Show ascii</value>
+  </data>
+  <data name="ParmShowHex" xml:space="preserve">
+    <value>Show hexadecimal</value>
+  </data>
+  <data name="ReadOnlyCap" xml:space="preserve">
+    <value>Change Read Only Attribute?</value>
+  </data>
+  <data name="ReadOnlyOff" xml:space="preserve">
+    <value>Remove read only from '{0}'?</value>
+  </data>
+  <data name="ReadOnlyOn" xml:space="preserve">
+    <value>Make '{0}' read only?</value>
+  </data>
+  <data name="SizeMaskBits" xml:space="preserve">
+    <value>Length bits</value>
+  </data>
+  <data name="SizeParm" xml:space="preserve">
+    <value>BYTE {0}: {1}</value>
+  </data>
+  <data name="SizeValue" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="SPECIFIC_TYPE_NOT_USED" xml:space="preserve">
+    <value>SPECIFIC_TYPE_NOT_USED</value>
+  </data>
+  <data name="StdTextBasDev" xml:space="preserve">
+    <value>Basic Type </value>
+  </data>
+  <data name="StdTextCmdClass" xml:space="preserve">
+    <value>Command Class </value>
+  </data>
+  <data name="StdTextGenDev" xml:space="preserve">
+    <value>Generic Type </value>
+  </data>
+  <data name="StdTextSpecDev" xml:space="preserve">
+    <value>Specific Type </value>
+  </data>
+  <data name="SystemLog_Action_AddBas" xml:space="preserve">
+    <value>Add Basic Device</value>
+  </data>
+  <data name="SystemLog_Action_AddCC" xml:space="preserve">
+    <value>Add Command Class</value>
+  </data>
+  <data name="SystemLog_Action_AddCmd" xml:space="preserve">
+    <value>Add Command</value>
+  </data>
+  <data name="SystemLog_Action_AddGen" xml:space="preserve">
+    <value>Add Generic Device</value>
+  </data>
+  <data name="SystemLog_Action_AddNewVersion" xml:space="preserve">
+    <value>Add Command Class Version</value>
+  </data>
+  <data name="SystemLog_Action_AddParm" xml:space="preserve">
+    <value>Add Parameter</value>
+  </data>
+  <data name="SystemLog_Action_AddSpec" xml:space="preserve">
+    <value>Add Specific Device</value>
+  </data>
+  <data name="SystemLog_Action_CHeaderCodeGeneration" xml:space="preserve">
+    <value>C Header Code Generation</value>
+  </data>
+  <data name="SystemLog_Action_CodeGeneration" xml:space="preserve">
+    <value>Code Generation</value>
+  </data>
+  <data name="SystemLog_Action_CSharpCodeGeneration" xml:space="preserve">
+    <value>C# Code Generation</value>
+  </data>
+  <data name="SystemLog_Action_EditAllVersionsCC" xml:space="preserve">
+    <value>Edit All Command Class Versions for Class</value>
+  </data>
+  <data name="SystemLog_Action_EditAllVersionsCmd" xml:space="preserve">
+    <value>Edit All Command Class Versions for Command</value>
+  </data>
+  <data name="SystemLog_Action_EditBas" xml:space="preserve">
+    <value>Edit Basic Device</value>
+  </data>
+  <data name="SystemLog_Action_EditCC" xml:space="preserve">
+    <value>Edit Command Class</value>
+  </data>
+  <data name="SystemLog_Action_EditCmd" xml:space="preserve">
+    <value>Edit Command</value>
+  </data>
+  <data name="SystemLog_Action_EditGen" xml:space="preserve">
+    <value>Edit Generic Device</value>
+  </data>
+  <data name="SystemLog_Action_EditParm" xml:space="preserve">
+    <value>Edit Parameter</value>
+  </data>
+  <data name="SystemLog_Action_EditSpec" xml:space="preserve">
+    <value>Edit Specific Device</value>
+  </data>
+  <data name="SystemLog_Action_FileNew" xml:space="preserve">
+    <value>New File</value>
+  </data>
+  <data name="SystemLog_Action_FileOpen" xml:space="preserve">
+    <value>File Open</value>
+  </data>
+  <data name="SystemLog_Action_FileSave" xml:space="preserve">
+    <value>File Save</value>
+  </data>
+  <data name="SystemLog_Action_RemoveBas" xml:space="preserve">
+    <value>Remove Basic Device</value>
+  </data>
+  <data name="SystemLog_Action_RemoveCC" xml:space="preserve">
+    <value>Remove Command Class</value>
+  </data>
+  <data name="SystemLog_Action_RemoveCmd" xml:space="preserve">
+    <value>Remove Command</value>
+  </data>
+  <data name="SystemLog_Action_RemoveGen" xml:space="preserve">
+    <value>Remove Generic Device</value>
+  </data>
+  <data name="SystemLog_Action_RemoveParm" xml:space="preserve">
+    <value>Remove Parameter</value>
+  </data>
+  <data name="SystemLog_Action_RemoveSpec" xml:space="preserve">
+    <value>Remove Specific Device</value>
+  </data>
+  <data name="SystemLog_Action_ResetReadOnly" xml:space="preserve">
+    <value>Reset Read Only</value>
+  </data>
+  <data name="SystemLog_Action_SetReadOnly" xml:space="preserve">
+    <value>Set Read Only</value>
+  </data>
+  <data name="SystemLog_Action_XMLValidation" xml:space="preserve">
+    <value>XML Validation</value>
+  </data>
+  <data name="SystemLog_Category_Error" xml:space="preserve">
+    <value>[E]</value>
+  </data>
+  <data name="SystemLog_Category_Info" xml:space="preserve">
+    <value>[I]</value>
+  </data>
+  <data name="SystemLog_Category_Warning" xml:space="preserve">
+    <value>[W]</value>
+  </data>
+  <data name="SystemLog_Unknown_Action" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="SystemLog_Unknown_Category" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="TreeNodeBasicDevice" xml:space="preserve">
+    <value>Basic Device Classes</value>
+    <comment>Text for Basic Device Classes tree node</comment>
+  </data>
+  <data name="TreeNodeClass" xml:space="preserve">
+    <value>Command Classes</value>
+    <comment>Text for Command Classes tree node</comment>
+  </data>
+  <data name="TreeNodeDevice" xml:space="preserve">
+    <value>Device Classes</value>
+    <comment>Text for Device Classes tree node</comment>
+  </data>
+  <data name="TreeTextClass" xml:space="preserve">
+    <value>{0}, version {1}</value>
+    <comment>Tree text for Command Class</comment>
+  </data>
+  <data name="WindowCaption" xml:space="preserve">
+    <value>{0}{1}Z-Wave XML Editor</value>
+    <comment>Caption for Editor window</comment>
+  </data>
+</root>

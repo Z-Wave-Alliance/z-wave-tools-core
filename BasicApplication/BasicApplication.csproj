@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2E351174-ED53-4E8A-A065-3E15A7E228B5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZWave.BasicApplication</RootNamespace>
+    <AssemblyName>ZWaveBasicApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandClasses\ConfigurationSupport.cs" />
+    <Compile Include="CommandClasses\FirmwareUpdateMdSupportXModem.cs" />
+    <Compile Include="CommandClasses\FirmwareUpdateMdSupportBasic.cs" />
+    <Compile Include="CommandClasses\TimeParametersSupport.cs" />
+    <Compile Include="CommandClasses\TimeSupport.cs" />
+    <Compile Include="CommandClasses\ManufacturerSpecificSupport.cs" />
+    <Compile Include="CommandClasses\SwitchBinary.cs" />
+    <Compile Include="DelayedResponseOperation.cs" />
+    <Compile Include="ApiAchOperation.cs" />
+    <Compile Include="BasicApplicationLayer.cs" />
+    <Compile Include="BasicFrameClient.cs" />
+    <Compile Include="BasicFrameLayer.cs" />
+    <Compile Include="CommandClasses\AssociationSupport.cs" />
+    <Compile Include="CommandClasses\FirmwareUpdateMdSupport.cs" />
+    <Compile Include="CommandClasses\BasicSupport.cs" />
+    <Compile Include="CommandClasses\AssociationGroupInfoSupport.cs" />
+    <Compile Include="CommandClasses\InclusionControllerSupport.cs" />
+    <Compile Include="CommandClasses\MultiChannelAssociationSupport.cs" />
+    <Compile Include="CommandClasses\VersionSupport.cs" />
+    <Compile Include="CommandClasses\WakeupSupport.cs" />
+    <Compile Include="CommandClasses\PowerLevelSupport.cs" />
+    <Compile Include="Configuration\SecuritySettings.cs">
+      <DependentUpon>SecuritySettings.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\SecuritySettingsExt.cs" />
+    <Compile Include="Devices\TestInterfaceDevice.cs" />
+    <Compile Include="Devices\XModemDevice.cs" />
+    <Compile Include="EmulatedLink\BasicLinkModuleMemory.cs" />
+    <Compile Include="EmulatedLink\BasicLinkTransportClient.cs" />
+    <Compile Include="EmulatedLink\BasicLinkTransportLayer.cs" />
+    <Compile Include="Enums\AddRemoveNodeStatuses.cs" />
+    <Compile Include="CommandClasses\MultiChannelSupport.cs" />
+    <Compile Include="Enums\DcdcModes.cs" />
+    <Compile Include="Enums\LongRangeChannels.cs" />
+    <Compile Include="Enums\MaxLrTxPowerModes.cs" />
+    <Compile Include="Enums\RfRegions.cs" />
+    <Compile Include="Enums\RoutingSchemes.cs" />
+    <Compile Include="Enums\SetupNodeLifelineSettings.cs" />
+    <Compile Include="Enums\XModemHeaderTypes.cs" />
+    <Compile Include="Enums\XModemRecieverTransmisionStatuses.cs" />
+    <Compile Include="Enums\XModemRunOptions.cs" />
+    <Compile Include="ISendDataAction.cs" />
+    <Compile Include="MultiChannel\MultiChannelManager.cs" />
+    <Compile Include="Operations\ApplicationGetUserInputOperation.cs" />
+    <Compile Include="Operations\ClearNetworkStatsOperation.cs" />
+    <Compile Include="Operations\ClearTxTimersOperation.cs" />
+    <Compile Include="Operations\GetDcdcModeOperation.cs" />
+    <Compile Include="Operations\GetSupportedSetupSubCommandsOperation.cs" />
+    <Compile Include="Operations\GetDefaultTxPowerLevel16BitOperation.cs" />
+    <Compile Include="Operations\GetDefaultTxPowerLevelOperation.cs" />
+    <Compile Include="Operations\GetRadioPTIOperation .cs" />
+    <Compile Include="Operations\GetMaxLRPayloadSizeOperation.cs" />
+    <Compile Include="Operations\GetLRChannelOperation.cs" />
+    <Compile Include="Operations\InitiateShutdownOperation.cs" />
+    <Compile Include="Operations\RequestNodeNeighborDiscoveryOperation.cs" />
+    <Compile Include="Operations\SerialApiGetLRNodesOperation.cs" />
+    <Compile Include="Operations\GetMaxLrTxPowerOperation.cs" />
+    <Compile Include="Operations\EnableRadioPTIOperation .cs" />
+    <Compile Include="Operations\SetDefaultTxPowerLevel16BitOperation.cs" />
+    <Compile Include="Operations\SetMaxLrTxPowerOperation.cs" />
+    <Compile Include="Operations\SerialApiSetNodeIdBaseTypeOperation.cs" />
+    <Compile Include="Operations\GetMaxPayloadSizeOperation.cs" />
+    <Compile Include="Operations\ApplicationUserInputOperation.cs" />
+    <Compile Include="Operations\FirmwareUpdateNvmGetNewImageOperation.cs" />
+    <Compile Include="Operations\FirmwareUpdateNvmIsValidCrc16Operation.cs" />
+    <Compile Include="Operations\FirmwareUpdateNvmUpdateCrc16Operation.cs" />
+    <Compile Include="Operations\GetNetworkStatsOperation.cs" />
+    <Compile Include="Operations\GetRfRegionOperation.cs" />
+    <Compile Include="Operations\GetSecurityS2PublicDSKOperation.cs" />
+    <Compile Include="Operations\GetTxTimerOperation.cs" />
+    <Compile Include="Operations\ListenDataOperation.cs" />
+    <Compile Include="Operations\ExpectZWOperation.cs" />
+    <Compile Include="Operations\ListenDebugDataOperation.cs" />
+    <Compile Include="Operations\PowerMgmtCancelOperation.cs" />
+    <Compile Include="Operations\PowerMgmtStayAwakeOperation.cs" />
+    <Compile Include="Operations\RequestZWOperation.cs" />
+    <Compile Include="Operations\SendDataMultiExOperation.cs" />
+    <Compile Include="Operations\SetDcdcModeOperation.cs" />
+    <Compile Include="Operations\SetDefaultTxPowerLevelOperation.cs" />
+    <Compile Include="Operations\SetListenBeforeTalkThresholdOperation.cs" />
+    <Compile Include="Operations\SetMaxInclusionRequestIntervalsOperation.cs" />
+    <Compile Include="Operations\SetLRChannelOperation.cs" />
+    <Compile Include="Operations\SetRfRegionOperation.cs" />
+    <Compile Include="Operations\SetSecurityBypassOperation.cs" />
+    <Compile Include="Operations\SetSecurityInclusionRequestedAuthenticationOperation.cs" />
+    <Compile Include="Operations\SetSecurityInclusionRequestedKeysOperation.cs" />
+    <Compile Include="Operations\WaitForLearnModeOperation.cs" />
+    <Compile Include="Operations\WriteZWOperation.cs" />
+    <Compile Include="Security\Enums\ExtensionAppliedActions.cs" />
+    <Compile Include="Security\Enums\MessageTypes.cs" />
+    <Compile Include="Security\Services\ISecurityTestSettingsService.cs" />
+    <Compile Include="Security\Operations\InclusionControllerSecureSupport.cs" />
+    <Compile Include="Operations\TestInterfaceSendDataOperation.cs" />
+    <Compile Include="Crc16Encap\Crc16EncapManager.cs" />
+    <Compile Include="Enums\RequestedKeys.cs" />
+    <Compile Include="Enums\FirmwareUpdateNvmFunctionality.cs" />
+    <Compile Include="Enums\NvmBackupRestoreStatuses.cs" />
+    <Compile Include="Enums\SetSucReturnValues.cs" />
+    <Compile Include="Enums\VirtualDeviceLearnModes.cs" />
+    <Compile Include="Operations\AssignPriorityReturnRouteOperation.cs" />
+    <Compile Include="Operations\AssignPrioritySUCReturnRouteOperation.cs" />
+    <Compile Include="Operations\ApplicationNodeInformationCmdClassesOperation.cs" />
+    <Compile Include="Operations\FilterAchOperaion.cs" />
+    <Compile Include="Operations\GetSecurityKeysOperation.cs" />
+    <Compile Include="Operations\DelayOperation.cs" />
+    <Compile Include="Operations\NoiseDataExOperation.cs" />
+    <Compile Include="Operations\NVRGetValueOperation.cs" />
+    <Compile Include="Operations\ResponseDataExOperation.cs" />
+    <Compile Include="Operations\RequestDataExOperation.cs" />
+    <Compile Include="Operations\SendDataExOperation.cs" />
+    <Compile Include="Operations\GetBackgroundRssiOperation.cs" />
+    <Compile Include="Operations\GetPriorityRouteOperation.cs" />
+    <Compile Include="Operations\SerialApiSetupOperation.cs" />
+    <Compile Include="Operations\ExploreRequestExclusionOperation.cs" />
+    <Compile Include="Operations\IoPortOperation.cs" />
+    <Compile Include="Operations\IoPortStatusOperation.cs" />
+    <Compile Include="Operations\NUnitEndOperation.cs" />
+    <Compile Include="Operations\NUnitRunOperation.cs" />
+    <Compile Include="Operations\NUnitListOperation.cs" />
+    <Compile Include="Operations\NUnitInitOperation.cs" />
+    <Compile Include="Operations\FirmwareUpdateNvmInitOperation.cs" />
+    <Compile Include="Operations\FirmwareUpdateNvmSetNewImageOperation.cs" />
+    <Compile Include="Operations\FirmwareUpdateNvmWriteOperation.cs" />
+    <Compile Include="Operations\NoiseDataOperation.cs" />
+    <Compile Include="Operations\NUnitCmdOperation.cs" />
+    <Compile Include="Operations\NvmBackupRestoreCloseOperation.cs" />
+    <Compile Include="Operations\NvmBackupRestoreOpenOperation.cs" />
+    <Compile Include="Operations\NvmBackupRestoreReadOperation.cs" />
+    <Compile Include="Operations\NvmBackupRestoreWriteOperation.cs" />
+    <Compile Include="Operations\RemoveNodeIdOperation.cs" />
+    <Compile Include="Operations\ResponseDataOperation.cs" />
+    <Compile Include="Operations\ExpectDataOperation.cs" />
+    <Compile Include="Operations\RequestDataOperation.cs" />
+    <Compile Include="Operations\SerialApiTestOperation.cs" />
+    <Compile Include="Operations\SetRoutingMAXOperation.cs" />
+    <Compile Include="Operations\SetPriorityRouteOperation.cs" />
+    <Compile Include="Operations\SetVirtualDeviceLearnModeOperation.cs" />
+    <Compile Include="Operations\SoftResetOperation.cs" />
+    <Compile Include="Security\Enums\SecurityS2TestFrames.cs" />
+    <Compile Include="Security\Enums\SecurityS0Delays.cs" />
+    <Compile Include="Security\Operations\AddNodeS2Operation.cs" />
+    <Compile Include="Security\Operations\RequestNodeInfoSecureTask.cs" />
+    <Compile Include="Security\Operations\SendDataBridgeSecureS2Task.cs" />
+    <Compile Include="Security\Operations\SetLearnModeSecureOperation.cs" />
+    <Compile Include="Security\Operations\SetLearnModeS2Operation.cs" />
+    <Compile Include="Security\Operations\SecurityS2ReportTask.cs" />
+    <Compile Include="Security\Operations\SendDataSecureS2Task.cs" />
+    <Compile Include="Security\Operations\SendDataFragmentedSecureTask.cs" />
+    <Compile Include="Security\Operations\SetLearnModeS0Operation.cs" />
+    <Compile Include="Security\S0\SecurityS0CryptoProvider.cs" />
+    <Compile Include="Security\S2\SecurityS2CryptoProvider.cs" />
+    <Compile Include="Security\S2\RetransmissionRecord.cs" />
+    <Compile Include="Security\SecurityManager.cs" />
+    <Compile Include="Security\Operations\AddNodeS0Operation.cs" />
+    <Compile Include="Security\Operations\SendDataBridgeSecureTask.cs" />
+    <Compile Include="Security\Operations\SendDataSecureTask.cs" />
+    <Compile Include="Security\Operations\SecurityReportTask.cs" />
+    <Compile Include="Security\SecurityManagerInfo.cs" />
+    <Compile Include="Security\Services\SecurityTestSettingsService.cs" />
+    <Compile Include="Settings\SettingsSubstituteManager.cs" />
+    <Compile Include="SmartStart\NodeProvision.cs" />
+    <Compile Include="SmartStart\SetSmartStartAction.cs" />
+    <Compile Include="SmartStart\SmartStartSupport.cs" />
+    <Compile Include="SubstituteManagerBase.cs" />
+    <Compile Include="Supervision\SupervisionManager.cs" />
+    <Compile Include="Supervision\SupervisionReportTask.cs" />
+    <Compile Include="Tasks\ExclusionTask.cs" />
+    <Compile Include="Tasks\InclusionTask.cs" />
+    <Compile Include="InsistentAction.cs" />
+    <Compile Include="Tasks\NodeInfoTask.cs" />
+    <Compile Include="Tasks\SendDataGroupTask.cs" />
+    <Compile Include="Tasks\SetupNodeLifelineTask.cs" />
+    <Compile Include="Tasks\TestInterfaceNoiseDataOperation.cs" />
+    <Compile Include="Tasks\TestInterfaceSendDataTask.cs" />
+    <Compile Include="TransportService\Operations\SendDataTransportTask.cs" />
+    <Compile Include="TransportService\SegmentsContainer.cs" />
+    <Compile Include="TransportService\TransportServiceManager.cs" />
+    <Compile Include="TransportService\TransportServiceManagerInfo.cs" />
+    <Compile Include="BasicFrame.cs" />
+    <Compile Include="Enums\CommandTypes.cs" />
+    <Compile Include="Enums\ControllerUpdateStatuses.cs" />
+    <Compile Include="Enums\CreatePrimaryModes.cs" />
+    <Compile Include="Enums\FailedNodeStatuses.cs" />
+    <Compile Include="Enums\FailedNodeRetValues.cs" />
+    <Compile Include="Enums\LearnModeStatuses.cs" />
+    <Compile Include="Enums\NodeStatuses.cs" />
+    <Compile Include="Enums\ProtocolStatuses.cs" />
+    <Compile Include="Enums\RouteStatuses.cs" />
+    <Compile Include="Enums\SleepModes.cs" />
+    <Compile Include="Enums\SucUpdateStatuses.cs" />
+    <Compile Include="ApiHandler.cs" />
+    <Compile Include="ApiMessage.cs" />
+    <Compile Include="ApiOperation.cs" />
+    <Compile Include="Operations\ApplicationCommandHandlerBridgeOperation.cs" />
+    <Compile Include="Operations\ApplicationCommandHandlerOperation.cs" />
+    <Compile Include="Operations\ApplicationCommandHandlerPModeOperation.cs" />
+    <Compile Include="Operations\ApplicationControllerUpdateOperation.cs" />
+    <Compile Include="Operations\ApplicationVirtualDeviceNodeInformationOperation.cs" />
+    <Compile Include="Operations\ApplicationEndDeviceUpdateOperation.cs" />
+    <Compile Include="Operations\AreNodesNeighboursOperation.cs" />
+    <Compile Include="Operations\AssignReturnRouteOperation.cs" />
+    <Compile Include="Operations\AssignSucReturnRouteOperation.cs" />
+    <Compile Include="Operations\ControllerChangeOperation.cs" />
+    <Compile Include="Operations\SetSucSelfOperation.cs" />
+    <Compile Include="Operations\SetWutTimeoutOperation.cs" />
+    <Compile Include="Operations\WatchDogStopOperation.cs" />
+    <Compile Include="Operations\CreateNewPrimaryCtrlOperation.cs" />
+    <Compile Include="Operations\DeleteReturnRouteOperation.cs" />
+    <Compile Include="Operations\DeleteSucReturnRouteOperation.cs" />
+    <Compile Include="Operations\EnableSucOperation.cs" />
+    <Compile Include="Operations\GetControllerCapabilitiesOperation.cs" />
+    <Compile Include="Operations\GetNeighborCountOperation.cs" />
+    <Compile Include="Operations\GetRoutingInfoOperation.cs" />
+    <Compile Include="Operations\GetSucNodeIdOperation.cs" />
+    <Compile Include="Operations\GetTransmitCountOperation.cs" />
+    <Compile Include="Operations\GetVirtualNodesOperation.cs" />
+    <Compile Include="Operations\IsFailedNodeOperation.cs" />
+    <Compile Include="Operations\IsNodeWithinDirectRangeOperation.cs" />
+    <Compile Include="Operations\IsVirtualNodeOperation.cs" />
+    <Compile Include="Operations\MemoryGetBufferOperation.cs" />
+    <Compile Include="Operations\MemoryGetByteOperation.cs" />
+    <Compile Include="Operations\MemoryGetIdOperation.cs" />
+    <Compile Include="Operations\MemoryPutBufferOperation.cs" />
+    <Compile Include="Operations\MemoryPutByteOperation.cs" />
+    <Compile Include="Operations\RediscoveryNeededOperation.cs" />
+    <Compile Include="Operations\RemoveFailedNodeIdOperation.cs" />
+    <Compile Include="Operations\ReplaceFailedNodeOperation.cs" />
+    <Compile Include="Operations\ReplicationReceiveCompleteOperation.cs" />
+    <Compile Include="Operations\ReplicationSendOperation.cs" />
+    <Compile Include="Operations\RequestNewRouteDestinationsOperation.cs" />
+    <Compile Include="Operations\RequestNodeInfoOperation.cs" />
+    <Compile Include="Operations\RequestNodeNeighborUpdateOperation.cs" />
+    <Compile Include="Operations\ResetTransmitCountOperation.cs" />
+    <Compile Include="Operations\SendDataAbortOperation.cs" />
+    <Compile Include="Operations\SendDataBridgeOperation.cs" />
+    <Compile Include="Operations\SendDataMetaBridgeOperation.cs" />
+    <Compile Include="Operations\SendDataMultiBridgeOperation.cs" />
+    <Compile Include="Operations\SendVirtualDeviceNodeInformationOperation.cs" />
+    <Compile Include="Operations\SendSucIdOperation.cs" />
+    <Compile Include="Operations\SerialApiSetTimeoutsOperation.cs" />
+    <Compile Include="Operations\SerialApiSoftResetOperation.cs" />
+    <Compile Include="Operations\SetLearnModeControllerOperation.cs" />
+    <Compile Include="Operations\SendDataMultiOperation.cs" />
+    <Compile Include="Operations\SerialApiGetInitDataOperation.cs" />
+    <Compile Include="Operations\SetRoutingInfoOperation.cs" />
+    <Compile Include="Operations\SetSucNodeIdOperation.cs" />
+    <Compile Include="Operations\StoreHomeIdOperation.cs" />
+    <Compile Include="Operations\StoreNodeInfoOperation.cs" />
+    <Compile Include="Operations\VersionOperation.cs" />
+    <Compile Include="Operations\WatchDogDisableOperation.cs" />
+    <Compile Include="Operations\WatchDogEnableOperation.cs" />
+    <Compile Include="Operations\WatchDogKickOperation.cs" />
+    <Compile Include="ControlNApiOperation.cs" />
+    <Compile Include="RequestApiOperation.cs" />
+    <Compile Include="Devices\BridgeController.cs" />
+    <Compile Include="Devices\Controller.cs" />
+    <Compile Include="Devices\Device.cs" />
+    <Compile Include="Devices\InstallerController.cs" />
+    <Compile Include="Devices\EndDevice.cs" />
+    <Compile Include="Operations\AddNodeOperation.cs" />
+    <Compile Include="Operations\ExploreRequestInclusionOperation.cs" />
+    <Compile Include="Operations\GetNodeProtocolInfoOperation.cs" />
+    <Compile Include="Operations\GetProtocolStatusOperation.cs" />
+    <Compile Include="Operations\GetRandomWordOperation.cs" />
+    <Compile Include="Operations\RandomOperation.cs" />
+    <Compile Include="Operations\RemoveNodeOperation.cs" />
+    <Compile Include="Operations\RequestNetworkUpdateOperation.cs" />
+    <Compile Include="Operations\RFPowerLevelGetOperation.cs" />
+    <Compile Include="Operations\RFPowerlevelRediscoverySetOperation.cs" />
+    <Compile Include="Operations\RFPowerLevelSetOperation.cs" />
+    <Compile Include="Operations\SendDataOperation.cs" />
+    <Compile Include="Operations\SendNodeInformationOperation.cs" />
+    <Compile Include="Operations\SendTestFrameOperation.cs" />
+    <Compile Include="Operations\ApplicationNodeInformationOperation.cs" />
+    <Compile Include="Operations\SerialApiGetCapabilitiesOperation.cs" />
+    <Compile Include="Operations\SetDefaultOperation.cs" />
+    <Compile Include="Operations\SetExtIntLevelOperation.cs" />
+    <Compile Include="Operations\SetLearnModeEndDeviceOperation.cs" />
+    <Compile Include="CallbackApiOperation.cs" />
+    <Compile Include="ControlApiOperation.cs" />
+    <Compile Include="DataFrame.cs" />
+    <Compile Include="Operations\SetPromiscuousModeOperation.cs" />
+    <Compile Include="Operations\SetRFReceiveModeOperation.cs" />
+    <Compile Include="Operations\SetSleepModeOperation.cs" />
+    <Compile Include="Operations\TypeLibraryOperation.cs" />
+    <Compile Include="Operations\WatchDogStartOperation.cs" />
+    <Compile Include="Enums\FrameReceiveStates.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XModemApplicationLayer.cs" />
+    <Compile Include="XModemDataFrame.cs" />
+    <Compile Include="XModemFrameClient.cs" />
+    <Compile Include="XModemFrameLayer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZWave\ZWave.csproj">
+      <Project>{B214D482-57EB-42BE-AEC7-D64850F56514}</Project>
+      <Name>ZWave</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Configuration\SecuritySettings.ps1" />
+    <None Include="Configuration\SecuritySettings.xsd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

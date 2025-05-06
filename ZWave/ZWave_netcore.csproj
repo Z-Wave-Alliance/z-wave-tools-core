@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>ZWave</AssemblyName>
+		<TargetFrameworks>net6.0;net48</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == ''">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto32.dll" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto64.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto64.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto32.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'debian-arm'">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\arm\libs2crypto32.so" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\BasicTransport\arm\libbasictrans32.so" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\linux\libs2crypto64.so" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\BasicTransport\linux\libbasictrans64.so" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\osx\libs2crypto64.dylib" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\BasicTransport\osx\libbasictrans64.dylib" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\arm\libs2crypto32.so" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\..\z-wave-blobs\z-wave-tools-core\BasicTransport\arm\libbasictrans32.so" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Utils\Utils_netcore.csproj" />
+		<ProjectReference Include="..\ZWaveXml\ZWaveXml_netcore.csproj" />
+		<PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
+	</ItemGroup>
+</Project>
