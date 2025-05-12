@@ -114,10 +114,10 @@ namespace ZWave.ZnifferApplication.Devices
         private void AssignProperties(GetVersionResult ret)
         {
             ChipType = (ChipTypes)ret.ChipType;
-            ChipRevision = ret.ChipVersion; 
+            ChipRevision = ret.ChipVersion;
             Version = ret.SnifferVersion.ToString();
             Revision = ret.SnifferRevision;
-            ApiVersion = ret.ApiVersion; // V4
+            ApiVersion = ret.ApiVersion;
             if (ApiVersion == ZnifferApiVersion.V3)
             {
                 this.Frequency = ret.CurrentFrequency;

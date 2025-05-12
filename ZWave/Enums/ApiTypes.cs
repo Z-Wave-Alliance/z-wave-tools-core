@@ -56,6 +56,9 @@ namespace ZWave.Enums
         /// Trident IoT Serial Zniffer
         /// </summary>
         TridentIoTZniffer = 0x0C,
+        /// <summary>
+        /// WSTK board instrument
+        /// </summary>
         WstkInstrument = 0x80,
         /// <summary>
         /// Programmable attenuator instrument

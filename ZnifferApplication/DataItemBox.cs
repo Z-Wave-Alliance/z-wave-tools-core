@@ -3,10 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using Utils.UI.Enums;
-
 
 namespace ZWave.ZnifferApplication
 {
@@ -191,7 +188,7 @@ namespace ZWave.ZnifferApplication
         private const int _apiTypeIndex = 21;         // 1 byte
         private const int _headerTypeIndex = 22;      // 1 byte
         private const int _wakeupCounterIndex = 23;   // 2 bytes
-        private const int _dataLengthIndex = 25;      // 2 bytes
+        private const int _dataLengthIndex = 25;     // 2 bytes
 
         public ushort SeqNo
         {
@@ -371,4 +368,3 @@ namespace ZWave.ZnifferApplication
     }
 
 }
-
