@@ -224,7 +224,8 @@ namespace ZWave.ZnifferApplication
             {
                 if (!_hasSource)
                 {
-                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic)
+                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic 
+                        || ApiType == ApiTypes.TridentIoTZniffer)
                     {
                         _source = HeaderStore.GetSource(HeaderType, Store, DataLength);
                     }
@@ -433,7 +434,8 @@ namespace ZWave.ZnifferApplication
             {
                 if (!_hasPayload)
                 {
-                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic)
+                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic
+                        || ApiType == ApiTypes.TridentIoTZniffer)
                     {
                         byte crcBytes = (byte)((Speed > 1) ? 0x02 : 0x01);
                         _payload = HeaderStore.GetPayload(HeaderType, Store, DataLength, crcBytes);
@@ -501,7 +503,8 @@ namespace ZWave.ZnifferApplication
             {
                 if (!_hasHomeId)
                 {
-                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic)
+                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic 
+                        || ApiType == ApiTypes.TridentIoTZniffer)
                     {
                         _homeId = HeaderStore.GetHomeId(HeaderType, Store, DataLength);
                     }
@@ -525,7 +528,7 @@ namespace ZWave.ZnifferApplication
             {
                 if (!_hasHomeIdHash)
                 {
-                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti)
+                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.TridentIoTZniffer)
                     {
                         _homeIdHash = HeaderStore.GetHomeIdHash(HeaderType, Store, DataLength, Frequency, ApiType);
                     }
@@ -544,7 +547,8 @@ namespace ZWave.ZnifferApplication
             {
                 if (!_hasDestination)
                 {
-                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic)
+                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic
+                        || ApiType == ApiTypes.TridentIoTZniffer)
                     {
                         _destination = HeaderStore.GetDestination(HeaderType, Store, DataLength, Frequency, ApiType);
                     }
@@ -576,7 +580,8 @@ namespace ZWave.ZnifferApplication
             {
                 if (!_hasDestinations)
                 {
-                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic)
+                    if (ApiType == ApiTypes.Zniffer || ApiType == ApiTypes.Pti || ApiType == ApiTypes.PtiDiagnostic 
+                        || ApiType == ApiTypes.TridentIoTZniffer)
                     {
                         _destinations = HeaderStore.GetDestinations(HeaderType, Store, DataLength, Frequency, ApiType);
                     }
@@ -663,7 +668,7 @@ namespace ZWave.ZnifferApplication
                     DataLength = firstBox.DataLength,
                     HeaderType = firstBox.HeaderType,
                     Store = dataBuffer,
-                    ApiType = (ApiTypes)firstBox.ApiType
+                    ApiType = (ApiTypes)firstBox.ApiType,
                 };
                 return ret;
             }

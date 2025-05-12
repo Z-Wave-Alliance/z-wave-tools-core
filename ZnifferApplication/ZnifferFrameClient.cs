@@ -51,6 +51,7 @@ namespace ZWave.ZnifferApplication
         }
 
         public ushort SessionId { get; set; }
+
         public Action<CustomDataFrame> ReceiveFrameCallback { get; set; }
         public Func<byte[], int> SendDataCallback { get; set; }
 
@@ -59,9 +60,9 @@ namespace ZWave.ZnifferApplication
         private Frame3xReceiveStates mParser3xState;
         private Frame4xReceiveStates mParser4xState;
         public int ApiVersion { get; set; } // 0 - unknown, 1 - V3, 2 - V4
+        public ApiTypes ApiType { get; set; } = ApiTypes.Zniffer;
 
         readonly Type commandTypesType = typeof(CommandTypes);
-
 
         public DataFrame ReceivingDataFrame { get; set; }
         public int ReceivingDataLength { get; set; }
@@ -149,7 +150,7 @@ namespace ZWave.ZnifferApplication
 
         public void HandleData(DataChunk dataChunk, bool isFromFile)
         {
-            if (dataChunk.ApiType == ApiTypes.Zniffer)
+            if (dataChunk.ApiType == ApiTypes.Zniffer || dataChunk.ApiType == ApiTypes.TridentIoTZniffer )
             {
                 byte[] data = dataChunk.GetDataBuffer();
                 if (data != null && data.Length > 0)
@@ -545,6 +546,14 @@ namespace ZWave.ZnifferApplication
         {
             if (ReceivingDataFrame != null)
             {
+                // At the moment, there is only two possible options of serial Zniffer
+                // Hence we are only changing 
+                if (ReceivingDataFrame.DataItem.ApiType == ApiTypes.Zniffer 
+                    || ReceivingDataFrame.DataItem.ApiType == ApiTypes.TridentIoTZniffer)
+                {
+                    ReceivingDataFrame.ApiType = ApiType;
+                    ReceivingDataFrame.DataItem.ApiType = ApiType;
+                }
                 if (mTransmitCallback != null && ReceivingDataFrame.DataFrameType == DataFrameTypes.Data)
                     mTransmitCallback(ReceivingDataFrame);
                 ReceiveFrameCallback?.Invoke(ReceivingDataFrame);

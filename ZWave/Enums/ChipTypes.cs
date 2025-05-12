@@ -24,7 +24,8 @@ namespace ZWave.Enums
         ZW080x = 0x08,
         [Description("ZGM130S chip type (700 series). Example: ZGM130S_BRD4202A, ZGM130S_BRD4207A")]
         ZW0713 = 0x13,
-        [Description("EFR32ZG14 chip type (700 series). Example: ZG14_BRD4201A, ZG14_BRD4206A")]
+        [Description("- EFR32ZG14 chip type (700 series). Example: ZG14_BRD4201A, ZG14_BRD4206A." +
+                     "- Trident IoT DKNCZ20")]
         ZW0714 = 0x14,
         [Description("Any chip type")]
         Any = 0x20,

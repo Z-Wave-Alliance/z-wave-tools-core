@@ -12,6 +12,7 @@ namespace ZWave.ZnifferApplication
 {
     public class ZnifferFrameLayer : FrameLayer
     {
+        public ZnifferFrameClient ZnifferFrameClient { get; set; }
         public FrameDefinition FrameDefinition { get; set; }
         public ZnifferFrameLayer(FrameDefinition frameDefinition)
             : base()
@@ -21,8 +22,8 @@ namespace ZWave.ZnifferApplication
 
         public override IFrameClient CreateClient(ushort sessionId)
         {
-            IFrameClient ret = new ZnifferFrameClient(TransmitCallback, FrameDefinition);
-            return ret;
+            ZnifferFrameClient = new ZnifferFrameClient(TransmitCallback, FrameDefinition);
+            return (IFrameClient)ZnifferFrameClient;
         }
     }
 }
