@@ -1,7 +1,10 @@
 # YAML -*- mode: yaml; tab-width: 2; indent-tabs-mode: nil; coding: utf-8 -*-
 # SPDX-License-Identifier: BSD-3-Clause
 # SPDX-FileCopyrightText: 2024 Z-Wave Alliance
-# Demo copied from https://docs.github.com/en/actions/quickstart
+# SPDX-FileCopyrightText: 2025 Trident IoT, LLC <https://www.tridentiot.com>
+
+# This workflow requires a secret named GH_ZWAVE_ACCESS_TOKEN that contains
+# a Personal Access Token with read-only permissions to "Contents".
 name: Build and Test Z-Wave Tools Core
 
 on:
@@ -9,6 +12,8 @@ on:
     branches:
       - main
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
