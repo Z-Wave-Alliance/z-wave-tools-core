@@ -29,7 +29,6 @@ namespace ZWave.Enums
         Thermostat = 40,
         MultilevelSensor = 41,
         MultilevelSwitch = 42,
-        KeyFob = 43,
         Meter = 44,
         LEDBulb_v1 = 45, //ZWave Led Bulbs may contain different classes
         LEDBulb_v2 = 46, //ZWave Led Bulbs may contain different classes

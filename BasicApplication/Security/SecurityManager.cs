@@ -1,20 +1,20 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using System;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utils;
-using ZWave.Security;
+using ZWave.BasicApplication.CommandClasses;
 using ZWave.BasicApplication.Enums;
 using ZWave.BasicApplication.Operations;
 using ZWave.BasicApplication.Security;
-using ZWave.CommandClasses;
-using ZWave.Enums;
-using ZWave.Layers.Frame;
 using ZWave.BasicApplication.Tasks;
-using ZWave.BasicApplication.CommandClasses;
+using ZWave.CommandClasses;
 using ZWave.Configuration;
 using ZWave.Devices;
+using ZWave.Enums;
+using ZWave.Layers.Frame;
+using ZWave.Security;
 
 namespace ZWave.BasicApplication
 {
@@ -1345,7 +1345,9 @@ namespace ZWave.BasicApplication
                                     multiActionTxOptions,
                                     timeoutMs);
                                 reqData.IsFollowup = true;
-                                ag.AddActions(reqData);
+                                //Let Controller idle a bit as reqData doesn't expect possible re-sync
+                                var followUpEmptySeparator = new DelayOperation(SecurityManagerInfo.Network.DelayResponseMs);
+                                ag.AddActions(reqData, followUpEmptySeparator);
                             }
                         }
                         NextMPAN(nodeGroupId, new byte[16]); // Spec [CC:009F.01.00.11.028]
@@ -1630,7 +1632,7 @@ namespace ZWave.BasicApplication
                 {
                     SubstituteSettings = new SubstituteSettings(SubstituteFlags.DenySecurity, 0)
                 };
-            };
+            }
             return ret;
         }
 

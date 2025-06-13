@@ -879,7 +879,7 @@ namespace ZWave.Devices
         public int S0MaxBytesPerFrameSize { get; set; } = 26;
         public int TransportServiceMaxSegmentSize { get; set; } = 46;
         public int TransportServiceMaxLRSegmentSize { get; set; } = 148;
-        public int RequestTimeoutMs { get; set; } = 500;
+        public int RequestTimeoutMs { get; set; } = 1500;
         public int DelayResponseMs { get; set; }
         public int? InclusionControllerInitiateRequestTimeoutMs { get; set; }
         public SupervisionReportStatuses SupervisionReportStatusResponse { get; set; } = SupervisionReportStatuses.SUCCESS;

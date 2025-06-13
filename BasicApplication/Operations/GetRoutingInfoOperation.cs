@@ -1,9 +1,12 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
+using Utils;
 using ZWave.BasicApplication.Enums;
 using ZWave.Devices;
+using ZWave.Security;
 
 namespace ZWave.BasicApplication.Operations
 {
@@ -16,17 +19,35 @@ namespace ZWave.BasicApplication.Operations
         private NodeTag Node { get; set; }
         private byte RemoveBad { get; set; }
         private byte RemoveNonReps { get; set; }
-        public GetRoutingInfoOperation(NodeTag node, byte removeBad, byte removeNonReps)
+
+        /// <summary>
+        /// ZW_GetRoutingInfo is a function that can be used to read out neighbor information from the protocol.
+        /// </summary>
+        /// <param name="network"></param>
+        /// <param name="node"> Node whom routing info is needed from.</param>
+        /// <param name="removeBadLinks">Remove bad link from routing info.
+        /// Bad links are a short list of nodes which recently has failed to answer a transmission.</param>
+        /// <param name="removeNonRepeaters">Remove non-repeaters from the routing info.</param>
+        public GetRoutingInfoOperation(NetworkViewPoint network, NodeTag node, byte removeBadLinks, byte removeNonRepeaters)
             : base(CommandTypes.CmdGetRoutingTableLine, true)
         {
+            _network = network;
             Node = node;
-            RemoveBad = removeBad;
-            RemoveNonReps = removeNonReps;
+            RemoveBad = removeBadLinks;
+            RemoveNonReps = removeNonRepeaters;
         }
 
         protected override byte[] CreateInputParameters()
         {
-            return new byte[] { (byte)Node.Id, RemoveBad, RemoveNonReps };
+            var ret = new List<byte>();
+            if (_network.IsNodeIdBaseTypeLR)
+            {
+                ret.Add((byte)(Node.Id >> 8));
+            }
+            ret.Add((byte)Node.Id);
+            ret.Add(RemoveBad);
+            ret.Add(RemoveNonReps);
+            return ret.ToArray();
         }
 
         protected override void SetStateCompleted(IActionUnit ou)

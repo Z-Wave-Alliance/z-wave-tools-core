@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using System;
+using System;
 using System.Threading;
 using ZWave.BasicApplication.Enums;
 using ZWave.BasicApplication.Operations;
@@ -413,11 +413,19 @@ namespace ZWave.BasicApplication.Devices
             return (GetNeighborCountResult)Execute(new GetNeighborCountOperation(node));
         }
 
-        public GetRoutingInfoResult GetRoutingInfo(NodeTag node, byte removeBad, byte removeNonReps)
+        /// <summary>
+        /// Call GetRoutingInfo Serail API command.
+        /// </summary>
+        /// <param name="node">Node whom routing info is needed from.</param>
+        /// <param name="removeBadLinks">Remove bad link from routing info.
+        /// Bad links are a short list of nodes which recently has failed to answer a transmission.</param>
+        /// <param name="removeNonRepeaters">Remove non-repeaters from the routing info.</param>
+        /// <returns>Neigbors list.</returns>
+        public GetRoutingInfoResult GetRoutingInfo(NodeTag node, byte removeBadLinks, byte removeNonRepeaters)
         {
-            return (GetRoutingInfoResult)Execute(new GetRoutingInfoOperation(node, removeBad, removeNonReps));
+            return (GetRoutingInfoResult)Execute(new GetRoutingInfoOperation(_network, node, removeBadLinks, removeNonRepeaters));
         }
-
+        
         public GetSucNodeIdResult GetSucNodeId()
         {
             return (GetSucNodeIdResult)Execute(new GetSucNodeIdOperation(_network));

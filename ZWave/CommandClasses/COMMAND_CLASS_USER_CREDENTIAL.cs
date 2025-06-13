@@ -150,8 +150,18 @@ namespace ZWave.CommandClasses
                 public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
                 public byte reserved
                 {
-                    get { return (byte)(_value >> 0 & 0x7F); }
-                    set { HasValue = true; _value &= 0xFF - 0x7F; _value += (byte)(value << 0 & 0x7F); }
+                    get { return (byte)(_value >> 0 & 0x1F); }
+                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
+                }
+                public byte adminCodeDeactivationSupport
+                {
+                    get { return (byte)(_value >> 5 & 0x01); }
+                    set { HasValue = true; _value &= 0xFF - 0x20; _value += (byte)(value << 5 & 0x20); }
+                }
+                public byte adminCodeSupport
+                {
+                    get { return (byte)(_value >> 6 & 0x01); }
+                    set { HasValue = true; _value &= 0xFF - 0x40; _value += (byte)(value << 6 & 0x40); }
                 }
                 public byte credentialChecksumSupport
                 {
@@ -235,6 +245,11 @@ namespace ZWave.CommandClasses
                 public ByteValue clNumberOfSteps = 0;
             }
             public List<TVG7CLNUMBEROFSTEPSPERCREDENTIALTYPE> vg7ClNumberOfStepsPerCredentialType = new List<TVG7CLNUMBEROFSTEPSPERCREDENTIALTYPE>();
+            public class TVG8MAXIMUMCREDENTIALHASHLENGTHPERCREDENTIALTYPE
+            {
+                public ByteValue maximumCredentialHashLength = 0;
+            }
+            public List<TVG8MAXIMUMCREDENTIALHASHLENGTHPERCREDENTIALTYPE> vg8MaximumCredentialHashLengthPerCredentialType = new List<TVG8MAXIMUMCREDENTIALHASHLENGTHPERCREDENTIALTYPE>();
             public static implicit operator CREDENTIAL_CAPABILITIES_REPORT(byte[] data)
             {
                 CREDENTIAL_CAPABILITIES_REPORT ret = new CREDENTIAL_CAPABILITIES_REPORT();
@@ -293,6 +308,13 @@ namespace ZWave.CommandClasses
                         TVG7CLNUMBEROFSTEPSPERCREDENTIALTYPE tmp = new TVG7CLNUMBEROFSTEPSPERCREDENTIALTYPE();
                         tmp.clNumberOfSteps = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                         ret.vg7ClNumberOfStepsPerCredentialType.Add(tmp);
+                    }
+                    ret.vg8MaximumCredentialHashLengthPerCredentialType = new List<TVG8MAXIMUMCREDENTIALHASHLENGTHPERCREDENTIALTYPE>();
+                    for (int j = 0; j < ret.numberOfSupportedCredentialTypes; j++)
+                    {
+                        TVG8MAXIMUMCREDENTIALHASHLENGTHPERCREDENTIALTYPE tmp = new TVG8MAXIMUMCREDENTIALHASHLENGTHPERCREDENTIALTYPE();
+                        tmp.maximumCredentialHashLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        ret.vg8MaximumCredentialHashLengthPerCredentialType.Add(tmp);
                     }
                 }
                 return ret;
@@ -357,6 +379,13 @@ namespace ZWave.CommandClasses
                     foreach (var item in command.vg7ClNumberOfStepsPerCredentialType)
                     {
                         if (item.clNumberOfSteps.HasValue) ret.Add(item.clNumberOfSteps);
+                    }
+                }
+                if (command.vg8MaximumCredentialHashLengthPerCredentialType != null)
+                {
+                    foreach (var item in command.vg8MaximumCredentialHashLengthPerCredentialType)
+                    {
+                        if (item.maximumCredentialHashLength.HasValue) ret.Add(item.maximumCredentialHashLength);
                     }
                 }
                 return ret.ToArray();
@@ -553,6 +582,7 @@ namespace ZWave.CommandClasses
         public partial class USER_REPORT
         {
             public const byte ID = 0x07;
+            public ByteValue userReportType = 0;
             public const byte nextUserUniqueIdentifierBytesCount = 2;
             public byte[] nextUserUniqueIdentifier = new byte[nextUserUniqueIdentifierBytesCount];
             public ByteValue userModifierType = 0;
@@ -628,6 +658,7 @@ namespace ZWave.CommandClasses
                 if (data != null)
                 {
                     int index = 2;
+                    ret.userReportType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.nextUserUniqueIdentifier = (data.Length - index) >= nextUserUniqueIdentifierBytesCount ? new byte[nextUserUniqueIdentifierBytesCount] : new byte[data.Length - index];
                     if (data.Length > index) ret.nextUserUniqueIdentifier[0] = data[index++];
                     if (data.Length > index) ret.nextUserUniqueIdentifier[1] = data[index++];
@@ -659,6 +690,7 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
                 ret.Add(ID);
+                if (command.userReportType.HasValue) ret.Add(command.userReportType);
                 if (command.nextUserUniqueIdentifier != null)
                 {
                     foreach (var tmp in command.nextUserUniqueIdentifier)
@@ -696,245 +728,6 @@ namespace ZWave.CommandClasses
                 if (command.userName != null)
                 {
                     foreach (var tmp in command.userName)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class USER_SET_ERROR_REPORT
-        {
-            public const byte ID = 0x08;
-            public ByteValue userSetErrorType = 0;
-            public ByteValue userModifierType = 0;
-            public const byte userModifierNodeIdBytesCount = 2;
-            public byte[] userModifierNodeId = new byte[userModifierNodeIdBytesCount];
-            public const byte userUniqueIdentifierBytesCount = 2;
-            public byte[] userUniqueIdentifier = new byte[userUniqueIdentifierBytesCount];
-            public ByteValue userType = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte userActiveState
-                {
-                    get { return (byte)(_value >> 0 & 0x01); }
-                    set { HasValue = true; _value &= 0xFF - 0x01; _value += (byte)(value << 0 & 0x01); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 1 & 0x7F); }
-                    set { HasValue = true; _value &= 0xFF - 0xFE; _value += (byte)(value << 1 & 0xFE); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public ByteValue credentialRule = 0;
-            public const byte expiringTimeoutMinutesBytesCount = 2;
-            public byte[] expiringTimeoutMinutes = new byte[expiringTimeoutMinutesBytesCount];
-            public struct Tproperties2
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties2 Empty { get { return new Tproperties2() { _value = 0, HasValue = false }; } }
-                public byte userNameEncoding
-                {
-                    get { return (byte)(_value >> 0 & 0x07); }
-                    set { HasValue = true; _value &= 0xFF - 0x07; _value += (byte)(value << 0 & 0x07); }
-                }
-                public byte reserved2
-                {
-                    get { return (byte)(_value >> 3 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0xF8; _value += (byte)(value << 3 & 0xF8); }
-                }
-                public static implicit operator Tproperties2(byte data)
-                {
-                    Tproperties2 ret = new Tproperties2();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties2 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties2 properties2 = 0;
-            public ByteValue userNameLength = 0;
-            public IList<byte> userName = new List<byte>();
-            public static implicit operator USER_SET_ERROR_REPORT(byte[] data)
-            {
-                USER_SET_ERROR_REPORT ret = new USER_SET_ERROR_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.userSetErrorType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.userModifierType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.userModifierNodeId = (data.Length - index) >= userModifierNodeIdBytesCount ? new byte[userModifierNodeIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.userModifierNodeId[0] = data[index++];
-                    if (data.Length > index) ret.userModifierNodeId[1] = data[index++];
-                    ret.userUniqueIdentifier = (data.Length - index) >= userUniqueIdentifierBytesCount ? new byte[userUniqueIdentifierBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.userUniqueIdentifier[0] = data[index++];
-                    if (data.Length > index) ret.userUniqueIdentifier[1] = data[index++];
-                    ret.userType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.credentialRule = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.expiringTimeoutMinutes = (data.Length - index) >= expiringTimeoutMinutesBytesCount ? new byte[expiringTimeoutMinutesBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.expiringTimeoutMinutes[0] = data[index++];
-                    if (data.Length > index) ret.expiringTimeoutMinutes[1] = data[index++];
-                    ret.properties2 = data.Length > index ? (Tproperties2)data[index++] : Tproperties2.Empty;
-                    ret.userNameLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.userName = new List<byte>();
-                    for (int i = 0; i < ret.userNameLength; i++)
-                    {
-                        if (data.Length > index) ret.userName.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](USER_SET_ERROR_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
-                ret.Add(ID);
-                if (command.userSetErrorType.HasValue) ret.Add(command.userSetErrorType);
-                if (command.userModifierType.HasValue) ret.Add(command.userModifierType);
-                if (command.userModifierNodeId != null)
-                {
-                    foreach (var tmp in command.userModifierNodeId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.userUniqueIdentifier != null)
-                {
-                    foreach (var tmp in command.userUniqueIdentifier)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.userType.HasValue) ret.Add(command.userType);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.credentialRule.HasValue) ret.Add(command.credentialRule);
-                if (command.expiringTimeoutMinutes != null)
-                {
-                    foreach (var tmp in command.expiringTimeoutMinutes)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.properties2.HasValue) ret.Add(command.properties2);
-                if (command.userNameLength.HasValue) ret.Add(command.userNameLength);
-                if (command.userName != null)
-                {
-                    foreach (var tmp in command.userName)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class USER_NOTIFICATION_REPORT
-        {
-            public const byte ID = 0x09;
-            public ByteValue userModifierType = 0;
-            public const byte userModifierNodeIdBytesCount = 2;
-            public byte[] userModifierNodeId = new byte[userModifierNodeIdBytesCount];
-            public const byte userUniqueIdentifierBytesCount = 2;
-            public byte[] userUniqueIdentifier = new byte[userUniqueIdentifierBytesCount];
-            public ByteValue userType = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte userActiveState
-                {
-                    get { return (byte)(_value >> 0 & 0x01); }
-                    set { HasValue = true; _value &= 0xFF - 0x01; _value += (byte)(value << 0 & 0x01); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 1 & 0x7F); }
-                    set { HasValue = true; _value &= 0xFF - 0xFE; _value += (byte)(value << 1 & 0xFE); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public ByteValue credentialRule = 0;
-            public const byte expiringTimeoutMinutesBytesCount = 2;
-            public byte[] expiringTimeoutMinutes = new byte[expiringTimeoutMinutesBytesCount];
-            public static implicit operator USER_NOTIFICATION_REPORT(byte[] data)
-            {
-                USER_NOTIFICATION_REPORT ret = new USER_NOTIFICATION_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.userModifierType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.userModifierNodeId = (data.Length - index) >= userModifierNodeIdBytesCount ? new byte[userModifierNodeIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.userModifierNodeId[0] = data[index++];
-                    if (data.Length > index) ret.userModifierNodeId[1] = data[index++];
-                    ret.userUniqueIdentifier = (data.Length - index) >= userUniqueIdentifierBytesCount ? new byte[userUniqueIdentifierBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.userUniqueIdentifier[0] = data[index++];
-                    if (data.Length > index) ret.userUniqueIdentifier[1] = data[index++];
-                    ret.userType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.credentialRule = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.expiringTimeoutMinutes = (data.Length - index) >= expiringTimeoutMinutesBytesCount ? new byte[expiringTimeoutMinutesBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.expiringTimeoutMinutes[0] = data[index++];
-                    if (data.Length > index) ret.expiringTimeoutMinutes[1] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](USER_NOTIFICATION_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
-                ret.Add(ID);
-                if (command.userModifierType.HasValue) ret.Add(command.userModifierType);
-                if (command.userModifierNodeId != null)
-                {
-                    foreach (var tmp in command.userModifierNodeId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.userUniqueIdentifier != null)
-                {
-                    foreach (var tmp in command.userUniqueIdentifier)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.userType.HasValue) ret.Add(command.userType);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.credentialRule.HasValue) ret.Add(command.credentialRule);
-                if (command.expiringTimeoutMinutes != null)
-                {
-                    foreach (var tmp in command.expiringTimeoutMinutes)
                     {
                         ret.Add(tmp);
                     }
@@ -1085,6 +878,7 @@ namespace ZWave.CommandClasses
         public partial class CREDENTIAL_REPORT
         {
             public const byte ID = 0x0C;
+            public ByteValue credentialReportType = 0;
             public const byte userUniqueIdentifierBytesCount = 2;
             public byte[] userUniqueIdentifier = new byte[userUniqueIdentifierBytesCount];
             public ByteValue credentialType = 0;
@@ -1132,6 +926,7 @@ namespace ZWave.CommandClasses
                 if (data != null)
                 {
                     int index = 2;
+                    ret.credentialReportType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.userUniqueIdentifier = (data.Length - index) >= userUniqueIdentifierBytesCount ? new byte[userUniqueIdentifierBytesCount] : new byte[data.Length - index];
                     if (data.Length > index) ret.userUniqueIdentifier[0] = data[index++];
                     if (data.Length > index) ret.userUniqueIdentifier[1] = data[index++];
@@ -1162,6 +957,7 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
                 ret.Add(ID);
+                if (command.credentialReportType.HasValue) ret.Add(command.credentialReportType);
                 if (command.userUniqueIdentifier != null)
                 {
                     foreach (var tmp in command.userUniqueIdentifier)
@@ -1198,225 +994,6 @@ namespace ZWave.CommandClasses
                 if (command.nextCredentialSlot != null)
                 {
                     foreach (var tmp in command.nextCredentialSlot)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class CREDENTIAL_SET_ERROR_REPORT
-        {
-            public const byte ID = 0x0D;
-            public ByteValue credentialSetErrorType = 0;
-            public const byte userUniqueIdentifierBytesCount = 2;
-            public byte[] userUniqueIdentifier = new byte[userUniqueIdentifierBytesCount];
-            public ByteValue credentialType = 0;
-            public const byte credentialSlotBytesCount = 2;
-            public byte[] credentialSlot = new byte[credentialSlotBytesCount];
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 0 & 0x7F); }
-                    set { HasValue = true; _value &= 0xFF - 0x7F; _value += (byte)(value << 0 & 0x7F); }
-                }
-                public byte crb
-                {
-                    get { return (byte)(_value >> 7 & 0x01); }
-                    set { HasValue = true; _value &= 0xFF - 0x80; _value += (byte)(value << 7 & 0x80); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public ByteValue credentialLength = 0;
-            public IList<byte> credentialData = new List<byte>();
-            public ByteValue credentialModifierType = 0;
-            public const byte credentialModifierNodeIdBytesCount = 2;
-            public byte[] credentialModifierNodeId = new byte[credentialModifierNodeIdBytesCount];
-            public static implicit operator CREDENTIAL_SET_ERROR_REPORT(byte[] data)
-            {
-                CREDENTIAL_SET_ERROR_REPORT ret = new CREDENTIAL_SET_ERROR_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.credentialSetErrorType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.userUniqueIdentifier = (data.Length - index) >= userUniqueIdentifierBytesCount ? new byte[userUniqueIdentifierBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.userUniqueIdentifier[0] = data[index++];
-                    if (data.Length > index) ret.userUniqueIdentifier[1] = data[index++];
-                    ret.credentialType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.credentialSlot = (data.Length - index) >= credentialSlotBytesCount ? new byte[credentialSlotBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.credentialSlot[0] = data[index++];
-                    if (data.Length > index) ret.credentialSlot[1] = data[index++];
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.credentialLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.credentialData = new List<byte>();
-                    for (int i = 0; i < ret.credentialLength; i++)
-                    {
-                        if (data.Length > index) ret.credentialData.Add(data[index++]);
-                    }
-                    ret.credentialModifierType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.credentialModifierNodeId = (data.Length - index) >= credentialModifierNodeIdBytesCount ? new byte[credentialModifierNodeIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.credentialModifierNodeId[0] = data[index++];
-                    if (data.Length > index) ret.credentialModifierNodeId[1] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](CREDENTIAL_SET_ERROR_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
-                ret.Add(ID);
-                if (command.credentialSetErrorType.HasValue) ret.Add(command.credentialSetErrorType);
-                if (command.userUniqueIdentifier != null)
-                {
-                    foreach (var tmp in command.userUniqueIdentifier)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.credentialType.HasValue) ret.Add(command.credentialType);
-                if (command.credentialSlot != null)
-                {
-                    foreach (var tmp in command.credentialSlot)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.credentialLength.HasValue) ret.Add(command.credentialLength);
-                if (command.credentialData != null)
-                {
-                    foreach (var tmp in command.credentialData)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.credentialModifierType.HasValue) ret.Add(command.credentialModifierType);
-                if (command.credentialModifierNodeId != null)
-                {
-                    foreach (var tmp in command.credentialModifierNodeId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class CREDENTIAL_NOTIFICATION_REPORT
-        {
-            public const byte ID = 0x0E;
-            public const byte userUniqueIdentifierBytesCount = 2;
-            public byte[] userUniqueIdentifier = new byte[userUniqueIdentifierBytesCount];
-            public ByteValue credentialType = 0;
-            public const byte credentialSlotBytesCount = 2;
-            public byte[] credentialSlot = new byte[credentialSlotBytesCount];
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 0 & 0x7F); }
-                    set { HasValue = true; _value &= 0xFF - 0x7F; _value += (byte)(value << 0 & 0x7F); }
-                }
-                public byte crb
-                {
-                    get { return (byte)(_value >> 7 & 0x01); }
-                    set { HasValue = true; _value &= 0xFF - 0x80; _value += (byte)(value << 7 & 0x80); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public ByteValue credentialLength = 0;
-            public IList<byte> credentialData = new List<byte>();
-            public ByteValue credentialModifierType = 0;
-            public const byte credentialModifierNodeIdBytesCount = 2;
-            public byte[] credentialModifierNodeId = new byte[credentialModifierNodeIdBytesCount];
-            public static implicit operator CREDENTIAL_NOTIFICATION_REPORT(byte[] data)
-            {
-                CREDENTIAL_NOTIFICATION_REPORT ret = new CREDENTIAL_NOTIFICATION_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.userUniqueIdentifier = (data.Length - index) >= userUniqueIdentifierBytesCount ? new byte[userUniqueIdentifierBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.userUniqueIdentifier[0] = data[index++];
-                    if (data.Length > index) ret.userUniqueIdentifier[1] = data[index++];
-                    ret.credentialType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.credentialSlot = (data.Length - index) >= credentialSlotBytesCount ? new byte[credentialSlotBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.credentialSlot[0] = data[index++];
-                    if (data.Length > index) ret.credentialSlot[1] = data[index++];
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.credentialLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.credentialData = new List<byte>();
-                    for (int i = 0; i < ret.credentialLength; i++)
-                    {
-                        if (data.Length > index) ret.credentialData.Add(data[index++]);
-                    }
-                    ret.credentialModifierType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.credentialModifierNodeId = (data.Length - index) >= credentialModifierNodeIdBytesCount ? new byte[credentialModifierNodeIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.credentialModifierNodeId[0] = data[index++];
-                    if (data.Length > index) ret.credentialModifierNodeId[1] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](CREDENTIAL_NOTIFICATION_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
-                ret.Add(ID);
-                if (command.userUniqueIdentifier != null)
-                {
-                    foreach (var tmp in command.userUniqueIdentifier)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.credentialType.HasValue) ret.Add(command.credentialType);
-                if (command.credentialSlot != null)
-                {
-                    foreach (var tmp in command.credentialSlot)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.credentialLength.HasValue) ret.Add(command.credentialLength);
-                if (command.credentialData != null)
-                {
-                    foreach (var tmp in command.credentialData)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.credentialModifierType.HasValue) ret.Add(command.credentialModifierType);
-                if (command.credentialModifierNodeId != null)
-                {
-                    foreach (var tmp in command.credentialModifierNodeId)
                     {
                         ret.Add(tmp);
                     }
@@ -1576,9 +1153,7 @@ namespace ZWave.CommandClasses
         public partial class USER_CREDENTIAL_ASSOCIATION_SET
         {
             public const byte ID = 0x12;
-            public const byte sourceUserUniqueIdentifierBytesCount = 2;
-            public byte[] sourceUserUniqueIdentifier = new byte[sourceUserUniqueIdentifierBytesCount];
-            public ByteValue sourceCredentialType = 0;
+            public ByteValue credentialType = 0;
             public const byte sourceCredentialSlotBytesCount = 2;
             public byte[] sourceCredentialSlot = new byte[sourceCredentialSlotBytesCount];
             public const byte destinationUserUniqueIdentifierBytesCount = 2;
@@ -1591,10 +1166,7 @@ namespace ZWave.CommandClasses
                 if (data != null)
                 {
                     int index = 2;
-                    ret.sourceUserUniqueIdentifier = (data.Length - index) >= sourceUserUniqueIdentifierBytesCount ? new byte[sourceUserUniqueIdentifierBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.sourceUserUniqueIdentifier[0] = data[index++];
-                    if (data.Length > index) ret.sourceUserUniqueIdentifier[1] = data[index++];
-                    ret.sourceCredentialType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.credentialType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.sourceCredentialSlot = (data.Length - index) >= sourceCredentialSlotBytesCount ? new byte[sourceCredentialSlotBytesCount] : new byte[data.Length - index];
                     if (data.Length > index) ret.sourceCredentialSlot[0] = data[index++];
                     if (data.Length > index) ret.sourceCredentialSlot[1] = data[index++];
@@ -1612,14 +1184,7 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
                 ret.Add(ID);
-                if (command.sourceUserUniqueIdentifier != null)
-                {
-                    foreach (var tmp in command.sourceUserUniqueIdentifier)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.sourceCredentialType.HasValue) ret.Add(command.sourceCredentialType);
+                if (command.credentialType.HasValue) ret.Add(command.credentialType);
                 if (command.sourceCredentialSlot != null)
                 {
                     foreach (var tmp in command.sourceCredentialSlot)
@@ -1647,9 +1212,7 @@ namespace ZWave.CommandClasses
         public partial class USER_CREDENTIAL_ASSOCIATION_REPORT
         {
             public const byte ID = 0x13;
-            public const byte sourceUserUniqueIdentifierBytesCount = 2;
-            public byte[] sourceUserUniqueIdentifier = new byte[sourceUserUniqueIdentifierBytesCount];
-            public ByteValue sourceCredentialType = 0;
+            public ByteValue credentialType = 0;
             public const byte sourceCredentialSlotBytesCount = 2;
             public byte[] sourceCredentialSlot = new byte[sourceCredentialSlotBytesCount];
             public const byte destinationUserUniqueIdentifierBytesCount = 2;
@@ -1663,10 +1226,7 @@ namespace ZWave.CommandClasses
                 if (data != null)
                 {
                     int index = 2;
-                    ret.sourceUserUniqueIdentifier = (data.Length - index) >= sourceUserUniqueIdentifierBytesCount ? new byte[sourceUserUniqueIdentifierBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.sourceUserUniqueIdentifier[0] = data[index++];
-                    if (data.Length > index) ret.sourceUserUniqueIdentifier[1] = data[index++];
-                    ret.sourceCredentialType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.credentialType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.sourceCredentialSlot = (data.Length - index) >= sourceCredentialSlotBytesCount ? new byte[sourceCredentialSlotBytesCount] : new byte[data.Length - index];
                     if (data.Length > index) ret.sourceCredentialSlot[0] = data[index++];
                     if (data.Length > index) ret.sourceCredentialSlot[1] = data[index++];
@@ -1685,14 +1245,7 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
                 ret.Add(ID);
-                if (command.sourceUserUniqueIdentifier != null)
-                {
-                    foreach (var tmp in command.sourceUserUniqueIdentifier)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.sourceCredentialType.HasValue) ret.Add(command.sourceCredentialType);
+                if (command.credentialType.HasValue) ret.Add(command.credentialType);
                 if (command.sourceCredentialSlot != null)
                 {
                     foreach (var tmp in command.sourceCredentialSlot)
@@ -1893,6 +1446,148 @@ namespace ZWave.CommandClasses
                 if (command.credentialChecksum != null)
                 {
                     foreach (var tmp in command.credentialChecksum)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class ADMIN_PIN_CODE_SET
+        {
+            public const byte ID = 0x1A;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte adminPinCodeLength
+                {
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> adminCode = new List<byte>();
+            public static implicit operator ADMIN_PIN_CODE_SET(byte[] data)
+            {
+                ADMIN_PIN_CODE_SET ret = new ADMIN_PIN_CODE_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.adminCode = new List<byte>();
+                    for (int i = 0; i < ret.properties1.adminPinCodeLength; i++)
+                    {
+                        if (data.Length > index) ret.adminCode.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](ADMIN_PIN_CODE_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.adminCode != null)
+                {
+                    foreach (var tmp in command.adminCode)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class ADMIN_PIN_CODE_GET
+        {
+            public const byte ID = 0x1B;
+            public static implicit operator ADMIN_PIN_CODE_GET(byte[] data)
+            {
+                ADMIN_PIN_CODE_GET ret = new ADMIN_PIN_CODE_GET();
+                return ret;
+            }
+            public static implicit operator byte[](ADMIN_PIN_CODE_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class ADMIN_PIN_CODE_REPORT
+        {
+            public const byte ID = 0x1C;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte adminPinCodeLength
+                {
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                }
+                public byte adminPinCodeOperationResult
+                {
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> adminCode = new List<byte>();
+            public static implicit operator ADMIN_PIN_CODE_REPORT(byte[] data)
+            {
+                ADMIN_PIN_CODE_REPORT ret = new ADMIN_PIN_CODE_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.adminCode = new List<byte>();
+                    for (int i = 0; i < ret.properties1.adminPinCodeLength; i++)
+                    {
+                        if (data.Length > index) ret.adminCode.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](ADMIN_PIN_CODE_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.adminCode != null)
+                {
+                    foreach (var tmp in command.adminCode)
                     {
                         ret.Add(tmp);
                     }

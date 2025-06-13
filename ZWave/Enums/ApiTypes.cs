@@ -67,6 +67,10 @@
         /// <summary>
         /// Digital multimeter instrument
         /// </summary>
-        Dmm7510Instrument = 0x83
+        Dmm7510Instrument = 0x83,
+        /// <summary>
+        /// Sample's IO command line interface
+        /// </summary>
+        SampleCLI = 0x84
     }
 }

@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!--
 SPDX-License-Identifier: BSD-3-Clause
 SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
 -->
-<zw_classes version="2.14.6">
+<zw_classes version="2.15.2">
   <bas_dev key="0x01" name="BASIC_TYPE_CONTROLLER" help="Controller" comment="Node is a portable controller" />
   <bas_dev key="0x04" name="BASIC_TYPE_ROUTING_END_NODE" help="Routing End Node" comment="Node is an End Node with routing capabilities" />
   <bas_dev key="0x03" name="BASIC_TYPE_END_NODE" help="End Node" comment="Node is an End Node" />
@@ -11596,14 +11596,15 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
     <cmd key="0x02" name="SWITCH_BINARY_GET" help="Switch Binary Get" support_mode="RX" />
     <cmd key="0x03" name="SWITCH_BINARY_REPORT" help="Switch Binary Report" support_mode="TX">
       <param key="0x00" name="Value" type="BYTE">
-        <bitflag key="0x01" flagname="off/disable" flagmask="0x00" />
-        <bitflag key="0x02" flagname="on/enable" flagmask="0xFF" />
+        <bitflag key="0x01" flagname="Off (0%)" flagmask="0x00" />
+        <bitflag key="0x02" flagname="Unknown" flagmask="0xFE" />
+        <bitflag key="0x03" flagname="On (100%)" flagmask="0xFF" />
       </param>
     </cmd>
     <cmd key="0x01" name="SWITCH_BINARY_SET" help="Switch Binary Set" support_mode="RX">
       <param key="0x00" name="Switch Value" type="BYTE">
-        <bitflag key="0x01" flagname="off/disable" flagmask="0x00" />
-        <bitflag key="0x02" flagname="on/enable" flagmask="0xFF" />
+        <bitflag key="0x01" flagname="Off (0%)" flagmask="0x00" />
+        <bitflag key="0x02" flagname="On (100%)" flagmask="0xFF" />
       </param>
     </cmd>
   </cmd_class>
@@ -11611,12 +11612,13 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
     <cmd key="0x02" name="SWITCH_BINARY_GET" help="Switch Binary Get" support_mode="RX" />
     <cmd key="0x03" name="SWITCH_BINARY_REPORT" help="Switch Binary Report" support_mode="TX">
       <param key="0x00" name="Current Value" type="CONST">
-        <const key="0x00" flagname="off/disable" flagmask="0x00" />
-        <const key="0x01" flagname="on/enable" flagmask="0xFF" />
+        <const key="0x00" flagname="Off (0%)" flagmask="0x00" />
+        <const key="0x01" flagname="Unknown" flagmask="0xFE" />
+        <const key="0x02" flagname="On (100%)" flagmask="0xFF" />
       </param>
       <param key="0x01" name="Target Value" type="CONST">
-        <const key="0x00" flagname="off/disable" flagmask="0x00" />
-        <const key="0x01" flagname="on/enable" flagmask="0xFF" />
+        <const key="0x00" flagname="Off (0%)" flagmask="0x00" />
+        <const key="0x01" flagname="On (100%)" flagmask="0xFF" />
       </param>
       <param key="0x02" name="Duration" type="CONST">
         <const key="0x00" flagname="Already at the Target Value" flagmask="0x00" />
@@ -11626,8 +11628,8 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
     </cmd>
     <cmd key="0x01" name="SWITCH_BINARY_SET" help="Switch Binary Set" support_mode="RX">
       <param key="0x00" name="Target Value" type="CONST">
-        <const key="0x00" flagname="off/disable" flagmask="0x00" />
-        <const key="0x01" flagname="on/enable" flagmask="0xFF" />
+        <const key="0x00" flagname="Off (0%)" flagmask="0x00" />
+        <const key="0x01" flagname="On (100%)" flagmask="0xFF" />
       </param>
       <param key="0x01" name="Duration" type="CONST">
         <const key="0x00" flagname="Instantly" flagmask="0x00" />
@@ -18564,9 +18566,10 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       <param key="0x00" name="Number of supported User Unique Identifiers" type="WORD" />
       <param key="0x01" name="Supported Credential Rules Bit Mask" type="BITMASK">
         <bitmask key="0x00" paramoffs="255" lenmask="0x00" len="1" />
-        <bitflag key="0x00" flagname="Single" flagmask="0x01" />
-        <bitflag key="0x01" flagname="Dual" flagmask="0x02" />
-        <bitflag key="0x02" flagname="Triple" flagmask="0x03" />
+        <bitflag key="0x00" flagname="Reserved" flagmask="0x00" />
+        <bitflag key="0x01" flagname="Single" flagmask="0x01" />
+        <bitflag key="0x02" flagname="Dual" flagmask="0x02" />
+        <bitflag key="0x03" flagname="Triple" flagmask="0x03" />
       </param>
       <param key="0x02" name="Max Length of User Name" type="BYTE" />
       <param key="0x03" name="Properties1" type="STRUCT_BYTE">
@@ -18595,8 +18598,10 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
     <cmd key="0x03" name="CREDENTIAL_CAPABILITIES_GET" help="Credential Capabilities Get" support_mode="RX" />
     <cmd key="0x04" name="CREDENTIAL_CAPABILITIES_REPORT" help="Credential Capabilities Report" support_mode="TX">
       <param key="0x00" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x7F" />
-        <bitflag key="0x01" flagname="Credential Checksum Support" flagmask="0x80" />
+        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x1F" />
+        <bitflag key="0x01" flagname="Admin Code Deactivation Support" flagmask="0x20" />
+        <bitflag key="0x02" flagname="Admin Code Support" flagmask="0x40" />
+        <bitflag key="0x03" flagname="Credential Checksum Support" flagmask="0x80" />
       </param>
       <param key="0x01" name="Number of Supported Credential Types" type="BYTE" />
       <variant_group key="0x02" name="vg1 Credential Type" paramOffs="0x01" sizemask="0xFF" sizeoffs="0x00">
@@ -18622,6 +18627,9 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       </variant_group>
       <variant_group key="0x08" name="vg7 CL Number of Steps per Credential Type" paramOffs="0x01" sizemask="0xFF" sizeoffs="0x00">
         <param key="0x00" name="CL Number of Steps" type="BYTE" />
+      </variant_group>
+      <variant_group key="0x09" name="vg8 Maximum Credential Hash Length per Credential Type" paramOffs="0x01" sizemask="0xFF" sizeoffs="0x00">
+        <param key="0x00" name="Maximum Credential Hash Length" type="BYTE" />
       </variant_group>
     </cmd>
     <cmd key="0x05" name="USER_SET" help="User Set" support_mode="RX">
@@ -18670,17 +18678,27 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       <param key="0x00" name="User Unique Identifier" type="WORD" />
     </cmd>
     <cmd key="0x07" name="USER_REPORT" help="User Report" support_mode="TX">
-      <param key="0x00" name="Next User Unique Identifier" type="WORD" />
-      <param key="0x01" name="User Modifier Type" type="CONST">
+      <param key="0x00" name="User Report Type" type="CONST">
+        <const key="0x00" flagname="Added" flagmask="0x00" />
+        <const key="0x01" flagname="Modified" flagmask="0x01" />
+        <const key="0x02" flagname="Deleted" flagmask="0x02" />
+        <const key="0x03" flagname="Unchanged" flagmask="0x03" />
+        <const key="0x04" flagname="Response to Get" flagmask="0x04" />
+        <const key="0x05" flagname="Add Against Occupied" flagmask="0x05" />
+        <const key="0x06" flagname="Modify Against Empty" flagmask="0x06" />
+        <const key="0x07" flagname="Zero Expiring Minutes Invalid" flagmask="0x07" />
+      </param>
+      <param key="0x01" name="Next User Unique Identifier" type="WORD" />
+      <param key="0x02" name="User Modifier Type" type="CONST">
         <const key="0x00" flagname="DNE" flagmask="0x00" />
         <const key="0x01" flagname="Unknown" flagmask="0x01" />
         <const key="0x02" flagname="Z-Wave" flagmask="0x02" />
         <const key="0x03" flagname="Locally" flagmask="0x03" />
         <const key="0x04" flagname="Mobile App or other IoT technology" flagmask="0x04" />
       </param>
-      <param key="0x02" name="User Modifier Node ID" type="WORD" />
-      <param key="0x03" name="User Unique Identifier" type="WORD" />
-      <param key="0x04" name="User Type" type="CONST">
+      <param key="0x03" name="User Modifier Node ID" type="WORD" />
+      <param key="0x04" name="User Unique Identifier" type="WORD" />
+      <param key="0x05" name="User Type" type="CONST">
         <const key="0x00" flagname="General User" flagmask="0x00" />
         <const key="0x01" flagname="Programming User" flagmask="0x03" />
         <const key="0x02" flagname="Non-Access User" flagmask="0x04" />
@@ -18689,17 +18707,17 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x05" flagname="Expiring User" flagmask="0x07" />
         <const key="0x06" flagname="Remote Only User" flagmask="0x09" />
       </param>
-      <param key="0x05" name="Properties1" type="STRUCT_BYTE">
+      <param key="0x06" name="Properties1" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="User Active State" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Reserved" fieldmask="0xFE" shifter="1" />
       </param>
-      <param key="0x06" name="Credential Rule" type="BYTE">
+      <param key="0x07" name="Credential Rule" type="BYTE">
         <bitflag key="0x01" flagname="Single" flagmask="0x01" />
         <bitflag key="0x02" flagname="Dual" flagmask="0x02" />
         <bitflag key="0x03" flagname="Triple" flagmask="0x03" />
       </param>
-      <param key="0x07" name="Expiring Timeout Minutes" type="WORD" />
-      <param key="0x08" name="Properties2" type="STRUCT_BYTE">
+      <param key="0x08" name="Expiring Timeout Minutes" type="WORD" />
+      <param key="0x09" name="Properties2" type="STRUCT_BYTE">
         <fieldenum key="0x00" fieldname="User Name Encoding" fieldmask="0x07">
           <fieldenum value="Using standard ASCII codes" />
           <fieldenum value="Using standard and OEM Extended ASCII codes" />
@@ -18707,86 +18725,10 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         </fieldenum>
         <bitfield key="0x01" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
       </param>
-      <param key="0x09" name="User Name Length" type="BYTE" />
-      <param key="0x0A" name="User Name" type="VARIANT">
-        <variant paramoffs="9" sizemask="0xFF" />
+      <param key="0x0A" name="User Name Length" type="BYTE" />
+      <param key="0x0B" name="User Name" type="VARIANT">
+        <variant paramoffs="10" sizemask="0xFF" />
       </param>
-    </cmd>
-    <cmd key="0x08" name="USER_SET_ERROR_REPORT" help="User Set Error Report" support_mode="TX">
-      <param key="0x00" name="User Set Error Type" type="CONST">
-        <const key="0x00" flagname="UserAddRejectedLocationOccupied" flagmask="0x00" />
-        <const key="0x01" flagname="UserModifyRejectedLocationEmpty" flagmask="0x01" />
-      </param>
-      <param key="0x01" name="User Modifier Type" type="CONST">
-        <const key="0x00" flagname="DNE" flagmask="0x00" />
-        <const key="0x01" flagname="Unknown" flagmask="0x01" />
-        <const key="0x02" flagname="Z-Wave" flagmask="0x02" />
-        <const key="0x03" flagname="Locally" flagmask="0x03" />
-        <const key="0x04" flagname="Mobile App or other IoT technology" flagmask="0x04" />
-      </param>
-      <param key="0x02" name="User Modifier Node ID" type="WORD" />
-      <param key="0x03" name="User Unique Identifier" type="WORD" />
-      <param key="0x04" name="User Type" type="CONST">
-        <const key="0x00" flagname="General User" flagmask="0x00" />
-        <const key="0x01" flagname="Programming User" flagmask="0x03" />
-        <const key="0x02" flagname="Non-Access User" flagmask="0x04" />
-        <const key="0x03" flagname="Duress User" flagmask="0x05" />
-        <const key="0x04" flagname="Disposable User" flagmask="0x06" />
-        <const key="0x05" flagname="Expiring User" flagmask="0x07" />
-        <const key="0x06" flagname="Remote Only User" flagmask="0x09" />
-      </param>
-      <param key="0x05" name="Properties1" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="User Active State" flagmask="0x01" />
-        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xFE" shifter="1" />
-      </param>
-      <param key="0x06" name="Credential Rule" type="BYTE">
-        <bitflag key="0x01" flagname="Single" flagmask="0x01" />
-        <bitflag key="0x02" flagname="Dual" flagmask="0x02" />
-        <bitflag key="0x03" flagname="Triple" flagmask="0x03" />
-      </param>
-      <param key="0x07" name="Expiring Timeout Minutes" type="WORD" />
-      <param key="0x08" name="Properties2" type="STRUCT_BYTE">
-        <fieldenum key="0x00" fieldname="User Name Encoding" fieldmask="0x07">
-          <fieldenum value="Using standard ASCII codes" />
-          <fieldenum value="Using standard and OEM Extended ASCII codes" />
-          <fieldenum value="Unicode UTF-16" />
-        </fieldenum>
-        <bitfield key="0x01" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
-      </param>
-      <param key="0x09" name="User Name Length" type="BYTE" />
-      <param key="0x0A" name="User Name" type="VARIANT">
-        <variant paramoffs="9" sizemask="0xFF" />
-      </param>
-    </cmd>
-    <cmd key="0x09" name="USER_NOTIFICATION_REPORT" help="User Notification Report" support_mode="TX">
-      <param key="0x00" name="User Modifier Type" type="CONST">
-        <const key="0x00" flagname="DNE" flagmask="0x00" />
-        <const key="0x01" flagname="Unknown" flagmask="0x01" />
-        <const key="0x02" flagname="Z-Wave" flagmask="0x02" />
-        <const key="0x03" flagname="Locally" flagmask="0x03" />
-        <const key="0x04" flagname="Mobile App or other IoT technology" flagmask="0x04" />
-      </param>
-      <param key="0x01" name="User Modifier Node ID" type="WORD" />
-      <param key="0x02" name="User Unique Identifier" type="WORD" />
-      <param key="0x03" name="User Type" type="CONST">
-        <const key="0x00" flagname="General User" flagmask="0x00" />
-        <const key="0x01" flagname="Programming User" flagmask="0x03" />
-        <const key="0x02" flagname="Non-Access User" flagmask="0x04" />
-        <const key="0x03" flagname="Duress User" flagmask="0x05" />
-        <const key="0x04" flagname="Disposable User" flagmask="0x06" />
-        <const key="0x05" flagname="Expiring User" flagmask="0x07" />
-        <const key="0x06" flagname="Remote Only User" flagmask="0x09" />
-      </param>
-      <param key="0x04" name="Properties1" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="User Active State" flagmask="0x01" />
-        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xFE" shifter="1" />
-      </param>
-      <param key="0x05" name="Credential Rule" type="BYTE">
-        <bitflag key="0x01" flagname="Single" flagmask="0x01" />
-        <bitflag key="0x02" flagname="Dual" flagmask="0x02" />
-        <bitflag key="0x03" flagname="Triple" flagmask="0x03" />
-      </param>
-      <param key="0x06" name="Expiring Timeout Minutes" type="WORD" />
     </cmd>
     <cmd key="0x0A" name="CREDENTIAL_SET" help="Credential Set" support_mode="RX">
       <param key="0x00" name="User Unique Identifier" type="WORD" />
@@ -18835,59 +18777,18 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       <param key="0x02" name="Credential Slot" type="WORD" />
     </cmd>
     <cmd key="0x0C" name="CREDENTIAL_REPORT" help="Credential Report" support_mode="TX">
-      <param key="0x00" name="User Unique Identifier" type="WORD" />
-      <param key="0x01" name="Credential Type" type="CONST">
-        <const key="0x00" flagname="PIN Code" flagmask="0x01" />
-        <const key="0x01" flagname="Password" flagmask="0x02" />
-        <const key="0x02" flagname="RFID Code" flagmask="0x03" />
-        <const key="0x03" flagname="BLE" flagmask="0x04" />
-        <const key="0x04" flagname="NFC" flagmask="0x05" />
-        <const key="0x05" flagname="UWB" flagmask="0x06" />
-        <const key="0x06" flagname="Eye Biometric" flagmask="0x07" />
-        <const key="0x07" flagname="Face Biometric" flagmask="0x08" />
-        <const key="0x08" flagname="Finger Biometric" flagmask="0x09" />
-        <const key="0x09" flagname="Hand Biometric" flagmask="0x0A" />
-        <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
-      </param>
-      <param key="0x02" name="Credential Slot" type="WORD" />
-      <param key="0x03" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x7F" />
-        <bitflag key="0x01" flagname="CRB" flagmask="0x80" />
-      </param>
-      <param key="0x04" name="Credential Length" type="BYTE" />
-      <param key="0x05" name="Credential Data" type="VARIANT">
-        <variant paramoffs="4" sizemask="0xFF" />
-      </param>
-      <param key="0x06" name="Credential Modifier Type" type="CONST">
-        <const key="0x00" flagname="DNE" flagmask="0x00" />
-        <const key="0x01" flagname="Unknown" flagmask="0x01" />
-        <const key="0x02" flagname="Z-Wave" flagmask="0x02" />
-        <const key="0x03" flagname="Locally" flagmask="0x03" />
-        <const key="0x04" flagname="Mobile App or other IoT technology" flagmask="0x04" />
-      </param>
-      <param key="0x07" name="Credential Modifier Node ID" type="WORD" />
-      <param key="0x08" name="Next Credential Type" type="CONST">
-        <const key="0x00" flagname="None" flagmask="0x00" />
-        <const key="0x01" flagname="PIN Code" flagmask="0x01" />
-        <const key="0x02" flagname="Password" flagmask="0x02" />
-        <const key="0x03" flagname="RFID Code" flagmask="0x03" />
-        <const key="0x04" flagname="BLE" flagmask="0x04" />
-        <const key="0x05" flagname="NFC" flagmask="0x05" />
-        <const key="0x06" flagname="UWB" flagmask="0x06" />
-        <const key="0x07" flagname="Eye Biometric" flagmask="0x07" />
-        <const key="0x08" flagname="Face Biometric" flagmask="0x08" />
-        <const key="0x09" flagname="Finger Biometric" flagmask="0x09" />
-        <const key="0x0A" flagname="Hand Biometric" flagmask="0x0A" />
-        <const key="0x0B" flagname="Unspecified Biometric" flagmask="0x0B" />
-      </param>
-      <param key="0x09" name="Next Credential Slot" type="WORD" />
-    </cmd>
-    <cmd key="0x0D" name="CREDENTIAL_SET_ERROR_REPORT" help="Credential Set Error Report" support_mode="TX">
-      <param key="0x00" name="Credential Set Error Type" type="CONST">
-        <const key="0x00" flagname="CredentialAddRejectedLocationOccupied" flagmask="0x00" />
-        <const key="0x01" flagname="CredentialModifyRejectedLocationEmpty" flagmask="0x01" />
-        <const key="0x02" flagname="DuplicateCredential" flagmask="0x02" />
-        <const key="0x03" flagname="ManufacturerSecurityRules" flagmask="0x03" />
+      <param key="0x00" name="Credential Report Type" type="CONST">
+        <const key="0x00" flagname="Added" flagmask="0x00" />
+        <const key="0x01" flagname="Modified" flagmask="0x01" />
+        <const key="0x02" flagname="Deleted" flagmask="0x02" />
+        <const key="0x03" flagname="Unchanged" flagmask="0x03" />
+        <const key="0x04" flagname="Response to Get" flagmask="0x04" />
+        <const key="0x05" flagname="Add Against Occupied" flagmask="0x05" />
+        <const key="0x06" flagname="Modify Against Empty" flagmask="0x06" />
+        <const key="0x07" flagname="Duplicate" flagmask="0x07" />
+        <const key="0x08" flagname="Manufacturer Security Rules" flagmask="0x08" />
+        <const key="0x09" flagname="Wrong User Unique Identifier" flagmask="0x09" />
+        <const key="0x0A" flagname="Duplicate Admin PIN Code" flagmask="0x0A" />
       </param>
       <param key="0x01" name="User Unique Identifier" type="WORD" />
       <param key="0x02" name="Credential Type" type="CONST">
@@ -18920,39 +18821,21 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x04" flagname="Mobile App or other IoT technology" flagmask="0x04" />
       </param>
       <param key="0x08" name="Credential Modifier Node ID" type="WORD" />
-    </cmd>
-    <cmd key="0x0E" name="CREDENTIAL_NOTIFICATION_REPORT" help="Credential Notification Report" support_mode="TX">
-      <param key="0x00" name="User Unique Identifier" type="WORD" />
-      <param key="0x01" name="Credential Type" type="CONST">
-        <const key="0x00" flagname="PIN Code" flagmask="0x01" />
-        <const key="0x01" flagname="Password" flagmask="0x02" />
-        <const key="0x02" flagname="RFID Code" flagmask="0x03" />
-        <const key="0x03" flagname="BLE" flagmask="0x04" />
-        <const key="0x04" flagname="NFC" flagmask="0x05" />
-        <const key="0x05" flagname="UWB" flagmask="0x06" />
-        <const key="0x06" flagname="Eye Biometric" flagmask="0x07" />
-        <const key="0x07" flagname="Face Biometric" flagmask="0x08" />
-        <const key="0x08" flagname="Finger Biometric" flagmask="0x09" />
-        <const key="0x09" flagname="Hand Biometric" flagmask="0x0A" />
-        <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
+      <param key="0x09" name="Next Credential Type" type="CONST">
+        <const key="0x00" flagname="None" flagmask="0x00" />
+        <const key="0x01" flagname="PIN Code" flagmask="0x01" />
+        <const key="0x02" flagname="Password" flagmask="0x02" />
+        <const key="0x03" flagname="RFID Code" flagmask="0x03" />
+        <const key="0x04" flagname="BLE" flagmask="0x04" />
+        <const key="0x05" flagname="NFC" flagmask="0x05" />
+        <const key="0x06" flagname="UWB" flagmask="0x06" />
+        <const key="0x07" flagname="Eye Biometric" flagmask="0x07" />
+        <const key="0x08" flagname="Face Biometric" flagmask="0x08" />
+        <const key="0x09" flagname="Finger Biometric" flagmask="0x09" />
+        <const key="0x0A" flagname="Hand Biometric" flagmask="0x0A" />
+        <const key="0x0B" flagname="Unspecified Biometric" flagmask="0x0B" />
       </param>
-      <param key="0x02" name="Credential Slot" type="WORD" />
-      <param key="0x03" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x7F" />
-        <bitflag key="0x01" flagname="CRB" flagmask="0x80" />
-      </param>
-      <param key="0x04" name="Credential Length" type="BYTE" />
-      <param key="0x05" name="Credential Data" type="VARIANT">
-        <variant paramoffs="4" sizemask="0xFF" />
-      </param>
-      <param key="0x06" name="Credential Modifier Type" type="CONST">
-        <const key="0x00" flagname="DNE" flagmask="0x00" />
-        <const key="0x01" flagname="Unknown" flagmask="0x01" />
-        <const key="0x02" flagname="Z-Wave" flagmask="0x02" />
-        <const key="0x03" flagname="Locally" flagmask="0x03" />
-        <const key="0x04" flagname="Mobile App or other IoT technology" flagmask="0x04" />
-      </param>
-      <param key="0x07" name="Credential Modifier Node ID" type="WORD" />
+      <param key="0x0A" name="Next Credential Slot" type="WORD" />
     </cmd>
     <cmd key="0x0F" name="CREDENTIAL_LEARN_START" help="Credential Learn Start" support_mode="RX">
       <param key="0x00" name="User Unique Identifier" type="WORD" />
@@ -19008,9 +18891,8 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       <param key="0x03" name="Credential Slot" type="WORD" />
       <param key="0x04" name="Credential Learn Steps Remaining" type="BYTE" />
     </cmd>
-    <cmd key="0x12" name="USER_CREDENTIAL_ASSOCIATION_SET" help="User Unique Identifier Credential Association Set" support_mode="RX">
-      <param key="0x00" name="Source User Unique Identifier" type="WORD" />
-      <param key="0x01" name="Source Credential Type" type="CONST">
+    <cmd key="0x12" name="USER_CREDENTIAL_ASSOCIATION_SET" help="User Credential Association Set" support_mode="RX">
+      <param key="0x00" name="Credential Type" type="CONST">
         <const key="0x00" flagname="PIN Code" flagmask="0x01" />
         <const key="0x01" flagname="Password" flagmask="0x02" />
         <const key="0x02" flagname="RFID Code" flagmask="0x03" />
@@ -19023,13 +18905,12 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x09" flagname="Hand Biometric" flagmask="0x0A" />
         <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
       </param>
-      <param key="0x02" name="Source Credential Slot" type="WORD" />
-      <param key="0x03" name="Destination User Unique Identifier" type="WORD" />
-      <param key="0x04" name="Destination Credential Slot" type="WORD" />
+      <param key="0x01" name="Source Credential Slot" type="WORD" />
+      <param key="0x02" name="Destination User Unique Identifier" type="WORD" />
+      <param key="0x03" name="Destination Credential Slot" type="WORD" />
     </cmd>
-    <cmd key="0x13" name="USER_CREDENTIAL_ASSOCIATION_REPORT" help="User Unique Identifier Credential Association Report" support_mode="TX">
-      <param key="0x00" name="Source User Unique Identifier" type="WORD" />
-      <param key="0x01" name="Source Credential Type" type="CONST">
+    <cmd key="0x13" name="USER_CREDENTIAL_ASSOCIATION_REPORT" help="User Credential Association Report" support_mode="TX">
+      <param key="0x00" name="Credential Type" type="CONST">
         <const key="0x00" flagname="PIN Code" flagmask="0x01" />
         <const key="0x01" flagname="Password" flagmask="0x02" />
         <const key="0x02" flagname="RFID Code" flagmask="0x03" />
@@ -19042,20 +18923,18 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x09" flagname="Hand Biometric" flagmask="0x0A" />
         <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
       </param>
-      <param key="0x02" name="Source Credential Slot" type="WORD" />
-      <param key="0x03" name="Destination User Unique Identifier" type="WORD" />
-      <param key="0x04" name="Destination Credential Slot" type="WORD" />
-      <param key="0x05" name="User Credential Association Status" type="CONST">
+      <param key="0x01" name="Source Credential Slot" type="WORD" />
+      <param key="0x02" name="Destination User Unique Identifier" type="WORD" />
+      <param key="0x03" name="Destination Credential Slot" type="WORD" />
+      <param key="0x04" name="User Credential Association Status" type="CONST">
         <const key="0x00" flagname="Success" flagmask="0x00" />
-        <const key="0x01" flagname="Source User Unique Identifier Invalid" flagmask="0x01" />
-        <const key="0x02" flagname="Source User Unique Identifier Nonexistent" flagmask="0x02" />
-        <const key="0x03" flagname="Source Credential Type Invalid" flagmask="0x03" />
-        <const key="0x04" flagname="Source Credential Slot Invalid" flagmask="0x04" />
-        <const key="0x05" flagname="Source Credential Slot Empty" flagmask="0x05" />
-        <const key="0x06" flagname="Destination User Unique Identifier Invalid" flagmask="0x06" />
-        <const key="0x07" flagname="Destination User Unique Identifier Nonexistent" flagmask="0x07" />
-        <const key="0x08" flagname="Destination Credential Slot Invalid" flagmask="0x08" />
-        <const key="0x09" flagname="Destination Credential Slot Occupied" flagmask="0x09" />
+        <const key="0x01" flagname="Credential Type Invalid" flagmask="0x01" />
+        <const key="0x02" flagname="Source Credential Slot Invalid" flagmask="0x02" />
+        <const key="0x03" flagname="Source Credential Slot Empty" flagmask="0x03" />
+        <const key="0x04" flagname="Destination User Unique Identifier Invalid" flagmask="0x04" />
+        <const key="0x05" flagname="Destination User Unique Identifier Nonexistent" flagmask="0x05" />
+        <const key="0x06" flagname="Destination Credential Slot Invalid" flagmask="0x06" />
+        <const key="0x07" flagname="Destination Credential Slot Occupied" flagmask="0x07" />
       </param>
     </cmd>
     <cmd key="0x14" name="ALL_USERS_CHECKSUM_GET" help="All Users Checksum Get" support_mode="RX" />
@@ -19099,6 +18978,25 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
       </param>
       <param key="0x01" name="Credential Checksum" type="WORD" />
+    </cmd>
+    <cmd key="0x1A" name="ADMIN_PIN_CODE_SET" help="Admin PIN Code Set" support_mode="RX">
+      <param key="0x00" name="Properties1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Admin PIN Code Length" fieldmask="0x0F" />
+        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xF0" shifter="4" />
+      </param>
+      <param key="0x01" name="Admin Code" type="VARIANT">
+        <variant paramoffs="0" sizemask="0x0F" />
+      </param>
+    </cmd>
+    <cmd key="0x1B" name="ADMIN_PIN_CODE_GET" help="Admin PIN Code Get" support_mode="RX" />
+    <cmd key="0x1C" name="ADMIN_PIN_CODE_REPORT" help="Admin PIN Code Report" support_mode="TX">
+      <param key="0x00" name="Properties1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Admin PIN Code Length" fieldmask="0x0F" />
+        <bitfield key="0x01" fieldname="Admin PIN Code Operation Result" fieldmask="0xF0" shifter="4" />
+      </param>
+      <param key="0x01" name="Admin Code" type="VARIANT">
+        <variant paramoffs="0" sizemask="0x0F" />
+      </param>
     </cmd>
   </cmd_class>
 </zw_classes>
