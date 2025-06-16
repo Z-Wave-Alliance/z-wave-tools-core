@@ -940,7 +940,7 @@ namespace Utils
         }
 
 
-        public static byte[] GetBytes(string hex) //Convert.FromHexString ?
+        public static byte[] GetBytes(string hex)
         {
             if (string.IsNullOrEmpty(hex))
                 return new byte[0];

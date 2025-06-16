@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2025 Trident IoT, LLC <https://www.tridentiot.com>
 ﻿<!GENERATING_INFO!>
  % The XML editor inserts here information about the automatic generation:
  % Ex:
@@ -65,11 +66,11 @@
 #define ROLE_TYPE_CONTROLLER_SUB_STATIC                                                  0x01
 #define ROLE_TYPE_CONTROLLER_PORTABLE                                                    0x02
 #define ROLE_TYPE_CONTROLLER_PORTABLE_REPORTING                                          0x03
-#define ROLE_TYPE_SLAVE_PORTABLE                                                         0x04
-#define ROLE_TYPE_SLAVE_ALWAYS_ON                                                        0x05
-#define ROLE_TYPE_SLAVE_SLEEPING_REPORTING                                               0x06
-#define ROLE_TYPE_SLAVE_SLEEPING_LISTENING                                               0x07
-#define ROLE_TYPE_SLAVE_NETWORK_AWARE                                                    0x08
+#define ROLE_TYPE_END_NODE_PORTABLE                                                      0x04
+#define ROLE_TYPE_END_NODE_ALWAYS_ON                                                     0x05
+#define ROLE_TYPE_END_NODE_SLEEPING_REPORTING                                            0x06
+#define ROLE_TYPE_END_NODE_SLEEPING_LISTENING                                            0x07
+#define ROLE_TYPE_END_NODE_NETWORK_AWARE                                                 0x08
 
 
 /************* Z-Wave+ Icon Type identifiers **************/

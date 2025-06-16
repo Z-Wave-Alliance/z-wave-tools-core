@@ -25,7 +25,7 @@ namespace ZWave.BasicApplication.Operations
         /// </summary>
         /// <param name="network"></param>
         /// <param name="node"> Node whom routing info is needed from.</param>
-        /// <param name="removeBadLinks">Remove bad link from routing info.
+        /// <param name="removeBadLinks">Remove bad links from routing info.
         /// Bad links are a short list of nodes which recently has failed to answer a transmission.</param>
         /// <param name="removeNonRepeaters">Remove non-repeaters from the routing info.</param>
         public GetRoutingInfoOperation(NetworkViewPoint network, NodeTag node, byte removeBadLinks, byte removeNonRepeaters)

@@ -414,18 +414,18 @@ namespace ZWave.BasicApplication.Devices
         }
 
         /// <summary>
-        /// Call GetRoutingInfo Serail API command.
+        /// Call GetRoutingInfo Serial API command.
         /// </summary>
         /// <param name="node">Node whom routing info is needed from.</param>
-        /// <param name="removeBadLinks">Remove bad link from routing info.
+        /// <param name="removeBadLinks">Remove bad links from routing info.
         /// Bad links are a short list of nodes which recently has failed to answer a transmission.</param>
         /// <param name="removeNonRepeaters">Remove non-repeaters from the routing info.</param>
-        /// <returns>Neigbors list.</returns>
+        /// <returns>Neighbors list.</returns>
         public GetRoutingInfoResult GetRoutingInfo(NodeTag node, byte removeBadLinks, byte removeNonRepeaters)
         {
             return (GetRoutingInfoResult)Execute(new GetRoutingInfoOperation(_network, node, removeBadLinks, removeNonRepeaters));
         }
-        
+
         public GetSucNodeIdResult GetSucNodeId()
         {
             return (GetSucNodeIdResult)Execute(new GetSucNodeIdOperation(_network));
