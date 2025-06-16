@@ -490,11 +490,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto32.dll">
+    <Content Include="..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto32.dll">
       <Link>s2crypto32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto64.dll">
+    <Content Include="..\z-wave-blobs\z-wave-tools-core\CryptoLibraryS2\win\s2crypto64.dll">
       <Link>s2crypto64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

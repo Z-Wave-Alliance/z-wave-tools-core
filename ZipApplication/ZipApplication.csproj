@@ -108,11 +108,11 @@
   </ItemGroup>
   <ItemGroup>
     <!-- TODO: https://github.com/Z-Wave-Alliance/z-wave-blobs/issues/9 -->
-    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans32.dll">
+    <Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans32.dll">
       <Link>ziptrans32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans64.dll">
+    <Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans64.dll">
       <Link>ziptrans64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
