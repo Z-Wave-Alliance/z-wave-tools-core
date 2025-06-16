@@ -18,27 +18,25 @@ The structure of the tools project is as follows:
 
 ```
 /root 
-    /z-wave-blobs
-        .
-        .
-        .
     /z-wave-pc-controller
+        /z-wave-tools-core
+            /z-wave-blobs
         .
         .
-        .
-    /z-wave-pc-zniffer
-        .
-        .
-        .
-    /z-wave-tools-core
-        .
+    /z-wave-pc-zniffer 
+        /z-wave-tools-core
+            /z-wave-blobs
         .
         .
     /z-wave-xml-tools
-        .
+        /z-wave-tools-core
+            /z-wave-blobs
         .
         .
 ```
+
+> NOTE: To pull the submodules, run `git submodule update --init --recursive` from the root directory.
+
 Notice that this structure needs to be kept for the build steps stated below.
 
 ## Building 
