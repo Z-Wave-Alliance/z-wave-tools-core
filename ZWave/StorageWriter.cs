@@ -177,6 +177,12 @@ namespace ZWave
 
         private void DoWork(string fileName, FileMode fileMode)
         {
+            string fileDirectory = Path.GetDirectoryName(fileName); // empty if the given 'fileName' contains no directory information
+            if (fileDirectory != string.Empty && !Directory.Exists(fileDirectory))
+            {
+                Directory.CreateDirectory(fileDirectory);
+            }
+
             using (BinaryWriter sWriter = new BinaryWriter(new FileStream(fileName, fileMode)))
             {
                 if (sWriter.BaseStream.Position == 0)
