@@ -8,6 +8,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org/>
  - https://github.com/Z-Wave-Alliance/z-wave-pc-controller
  - https://github.com/Z-Wave-Alliance/z-wave-pc-zniffer
  - https://github.com/Z-Wave-Alliance/z-wave-xml-tools
+ - https://github.com/Z-Wave-Alliance/z-wave-automated-test-system
  
  This repository is currently dependent on [z-wave-blobs](https://github.com/Z-Wave-Alliance/z-wave-blobs), which contains a set of pre-compiled files. Going forward, it is intended to evolve Z-Wave Tools Core and the tools related projects [away from Z-Wave Blobs](https://github.com/Z-Wave-Alliance/z-wave-pc-zniffer/issues/6) .
  
