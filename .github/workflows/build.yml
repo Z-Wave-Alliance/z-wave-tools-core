@@ -53,8 +53,8 @@ jobs:
       - name: Add MSBuild.exe to Path
         uses: microsoft/setup-msbuild@v1.1
 
-      #- name: Add VSTest.Console.exe to Path
-      #  uses: darenm/Setup-VSTest@v1.2
+      - name: Add VSTest.Console.exe to Path
+        uses: darenm/Setup-VSTest@v1.2
 
       - name: Restore NuGet Packages for Z-Wave Tools Core Solution
         run: |
@@ -72,11 +72,26 @@ jobs:
         run: |
           MSBuild.exe ${{env.Solution_Path}} -property:Platform="${{env.TargetPlatform}}" -property:Configuration=${{env.Configuration}} -verbosity:minimal
 
-      #- name: Run NUnit Tests
-      #  run: |
-      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\BasicApplicationTests\bin\Debug\BasicApplicationTests.dll
-      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\UtilsTests\bin\Debug\UtilsTests.dll
-      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZnifferApplicationTests\bin\Debug\ZnifferApplicationTests.dll
-      #    vstest.console.exe /logger:$env:LOGGER_ARGS Tests\ZWaveTests\bin\Debug\ZWaveTests.dll
-      #  env:
-      #    LOGGER_ARGS: "console;verbosity=minimal"
+      - name: Run BasicApplication NUnit Tests with VSTest
+        run: |
+          vstest.console.exe /logger:$env:LOGGER_ARGS z-wave-tools-core\Tests\BasicApplicationTests\bin\Debug\BasicApplicationTests.dll
+        env:
+          LOGGER_ARGS: "console;verbosity=minimal"
+
+      - name: Run Utils NUnit Tests with VSTest
+        run: |
+          vstest.console.exe /logger:$env:LOGGER_ARGS z-wave-tools-core\Tests\UtilsTests\bin\Debug\UtilsTests.dll
+        env:
+          LOGGER_ARGS: "console;verbosity=minimal"
+
+      - name: Run ZnifferApplication NUnit Tests with VSTest
+        run: |
+          vstest.console.exe /logger:$env:LOGGER_ARGS z-wave-tools-core\Tests\ZnifferApplicationTests\bin\Debug\ZnifferApplicationTests.dll
+        env:
+          LOGGER_ARGS: "console;verbosity=minimal"
+
+      - name: Run ZWave NUnit Tests with VSTest
+        run: |
+          vstest.console.exe /logger:$env:LOGGER_ARGS z-wave-tools-core\Tests\ZWaveTests\bin\Debug\ZWaveTests.dll
+        env:
+          LOGGER_ARGS: "console;verbosity=minimal"
