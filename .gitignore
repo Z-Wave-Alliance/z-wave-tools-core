@@ -17,6 +17,7 @@ launchSettings.json
 
 # Visual Studio 2015 cache/options directory
 .vs/
+packages/**
 UpgradeLog.htm
 
 # Visual Studio Code cache/options directory
