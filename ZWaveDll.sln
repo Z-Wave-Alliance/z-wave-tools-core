@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.705
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZWave", "ZWave\ZWave.csproj", "{B214D482-57EB-42BE-AEC7-D64850F56514}"
 EndProject
@@ -22,6 +22,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZnifferApplicationTests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UicApplication", "UicApplication\UicApplication.csproj", "{B8A46AB2-E8EB-4249-8C73-87D028B1428D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{7A1ED2CD-CCB2-48AD-9671-2BD7668D1922}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilsTests", "Tests\UtilsTests\UtilsTests.csproj", "{645A11A1-0C2C-4F03-84C9-0115EA89FF75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZWaveTests", "Tests\ZWaveTests\ZWaveTests.csproj", "{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,10 +46,6 @@ Global
 		{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C298CDF-2B64-4BE7-B9D4-449D5F30E57F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E351174-ED53-4E8A-A065-3E15A7E228B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E351174-ED53-4E8A-A065-3E15A7E228B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E351174-ED53-4E8A-A065-3E15A7E228B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,10 +66,6 @@ Global
 		{86C06ABF-0920-4B7A-BA16-A0C76CEF5C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86C06ABF-0920-4B7A-BA16-A0C76CEF5C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86C06ABF-0920-4B7A-BA16-A0C76CEF5C27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC8F3D1C-69D7-4E17-84BF-8E35CBDAD1CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC8F3D1C-69D7-4E17-84BF-8E35CBDAD1CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC8F3D1C-69D7-4E17-84BF-8E35CBDAD1CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,9 +74,23 @@ Global
 		{B8A46AB2-E8EB-4249-8C73-87D028B1428D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8A46AB2-E8EB-4249-8C73-87D028B1428D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8A46AB2-E8EB-4249-8C73-87D028B1428D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645A11A1-0C2C-4F03-84C9-0115EA89FF75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{86C06ABF-0920-4B7A-BA16-A0C76CEF5C27} = {7A1ED2CD-CCB2-48AD-9671-2BD7668D1922}
+		{CC8F3D1C-69D7-4E17-84BF-8E35CBDAD1CB} = {7A1ED2CD-CCB2-48AD-9671-2BD7668D1922}
+		{645A11A1-0C2C-4F03-84C9-0115EA89FF75} = {7A1ED2CD-CCB2-48AD-9671-2BD7668D1922}
+		{DBD3DF67-A8FA-438D-B4B4-7405AD601C6F} = {7A1ED2CD-CCB2-48AD-9671-2BD7668D1922}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {105CFFD7-9ADB-4679-8AAB-A57E28C8037C}
