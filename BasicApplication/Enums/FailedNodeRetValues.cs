@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿namespace ZWave.BasicApplication.Enums
+namespace ZWave.BasicApplication.Enums
 {
     //NOT_PRIMARY_CONTROLLER = 1;
     //NO_CALLBACK_FUNCTION = 2;

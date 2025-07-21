@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using ZWave.Layers;
+using ZWave.Layers;
 using ZWave.Layers.Transport;
 using ZWave.Layers.Application;
 using ZWave.ZnifferApplication.Devices;

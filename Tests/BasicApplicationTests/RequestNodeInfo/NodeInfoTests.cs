@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using System.Linq;
+using System.Linq;
 using NUnit.Framework;
 using ZWave.BasicApplication;
 using ZWave.BasicApplication.Devices;
