@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using Utils.UI.Enums;
+using Utils.UI.Enums;
 using Utils.UI.Logging;
 
 namespace Utils.UI.Interfaces

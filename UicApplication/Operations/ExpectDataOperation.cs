@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using UicApplication;
+using UicApplication;
 using UicApplication.Data;
 using UicApplication.Enums;
 

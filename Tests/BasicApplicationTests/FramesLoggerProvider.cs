@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using ZWave.Layers;
+using ZWave.Layers;
 using ZWave.BasicApplication.Enums;
 using System.Collections.Generic;
 using System;

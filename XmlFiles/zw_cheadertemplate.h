@@ -1,7 +1,7 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
 /// SPDX-FileCopyrightText: 2025 Trident IoT, LLC <https://www.tridentiot.com>
-﻿<!GENERATING_INFO!>
+<!GENERATING_INFO!>
  % The XML editor inserts here information about the automatic generation:
  % Ex:
  %  //Generated on: 1:50:46 PM, Tuesday, June 28, 2005

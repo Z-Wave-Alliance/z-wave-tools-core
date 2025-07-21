@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using System.Threading;
+using System.Threading;
 using ZWave.BasicApplication.Operations;
 using ZWave.Devices;
 using ZWave.Enums;

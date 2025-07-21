@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System.Linq;
 using ZWave.BasicApplication;
 using ZWave.BasicApplication.EmulatedLink;
