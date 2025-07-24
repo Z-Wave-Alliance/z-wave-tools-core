@@ -6,22 +6,22 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
-		<Content Include="..\lib\ZipTransport\win\ziptrans64.dll" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans64.dll" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
-		<Content Include="..\lib\ZipTransport\win\ziptrans32.dll" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\win\ziptrans32.dll" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'debian-arm'">
-		<Content Include="..\lib\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
-		<Content Include="..\lib\ZipTransport\linux\libziptrans64.so" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\linux\libziptrans64.so" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
-		<Content Include="..\lib\ZipTransport\osx\libziptrans64.dylib" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\osx\libziptrans64.dylib" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
-		<Content Include="..\lib\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="SSH.NET" Version="2020.0.2" />
