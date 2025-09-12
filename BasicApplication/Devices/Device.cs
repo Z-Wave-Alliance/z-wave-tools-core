@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Linq;
 using System.Threading;
@@ -910,6 +911,11 @@ namespace ZWave.BasicApplication.Devices
             return (SendDataResult)Execute(new SendDataExOperation(Network, node, data, txOptions, txSecOptions, scheme, txOptions2));
         }
 
+        public SendDataResult SendDataEx(NodeTag node, byte[] data, TransmitOptions txOptions, SubstituteSettings substituteSettings, TransmitSecurityOptions txSecOptions, SecuritySchemes scheme, TransmitOptions2 txOptions2)
+        {
+            return (SendDataResult)Execute(new SendDataExOperation(Network, node, data, txOptions, txSecOptions, scheme, txOptions2) { SubstituteSettings = substituteSettings });
+        }
+
         public SendDataResult SendDataEx(NodeTag node, byte[] data, TransmitOptions txOptions, TransmitSecurityOptions txSecOptions, SecuritySchemes scheme, TransmitOptions2 txOptions2, int Timeout)
         {
             return (SendDataResult)Execute(new SendDataExOperation(Network, node, data, txOptions, txSecOptions, scheme, txOptions2, Timeout));
@@ -1031,6 +1037,11 @@ namespace ZWave.BasicApplication.Devices
         public SendDataResult SendDataMultiEx(byte[] data, TransmitOptions txOptions, SecuritySchemes scheme, byte groupId)
         {
             return (SendDataResult)Execute(new SendDataMultiExOperation(data, txOptions, scheme, groupId));
+        }
+
+        public SendDataResult SendDataMultiEx(byte[] data, TransmitOptions txOptions, SubstituteSettings substituteSettings, SecuritySchemes scheme, byte groupId)
+        {
+            return (SendDataResult)Execute(new SendDataMultiExOperation(data, txOptions, scheme, groupId) { SubstituteSettings = substituteSettings });
         }
 
         public ActionToken SendDataMultiEx(byte[] data, TransmitOptions txOptions, SecuritySchemes scheme, byte groupId, Action<IActionItem> completedCallback)
@@ -1490,6 +1501,13 @@ namespace ZWave.BasicApplication.Devices
         public RequestDataResult RequestDataEx(NodeTag node, byte[] data, TransmitOptions txOptions, TransmitSecurityOptions txSecOptions, SecuritySchemes scheme, TransmitOptions2 txOptions2, byte[] expectData, int timeoutMs)
         {
             RequestDataExOperation operation = new RequestDataExOperation(Network, NodeTag.Empty, node, data, txOptions, txSecOptions, scheme, txOptions2, expectData[0], expectData[1], timeoutMs);
+            return (RequestDataResult)Execute(operation);
+        }
+
+        public RequestDataResult RequestDataEx(NodeTag node, byte[] data, TransmitOptions txOptions, SubstituteSettings substituteSettings, TransmitSecurityOptions txSecOptions, SecuritySchemes scheme, TransmitOptions2 txOptions2, byte[] expectData, int timeoutMs)
+        {
+            RequestDataExOperation operation = new RequestDataExOperation(Network, NodeTag.Empty, node, data, txOptions, txSecOptions, scheme, txOptions2, expectData[0], expectData[1], timeoutMs);
+            operation.SubstituteSettings = substituteSettings;
             return (RequestDataResult)Execute(operation);
         }
 

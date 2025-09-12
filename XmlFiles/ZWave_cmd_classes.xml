@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!--
 SPDX-License-Identifier: BSD-3-Clause
-SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
+SPDX-FileCopyrightText: 2022-2025 Z-Wave-Alliance <https://z-wavealliance.org/>
 -->
-<zw_classes version="2.15.2">
+<zw_classes version="2.16.1">
   <bas_dev key="0x01" name="BASIC_TYPE_CONTROLLER" help="Controller" comment="Node is a portable controller" />
   <bas_dev key="0x04" name="BASIC_TYPE_ROUTING_END_NODE" help="Routing End Node" comment="Node is an End Node with routing capabilities" />
   <bas_dev key="0x03" name="BASIC_TYPE_END_NODE" help="End Node" comment="Node is an End Node" />
@@ -3746,7 +3746,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       <param key="0x01" name="Firmware Checksum" type="WORD" />
     </cmd>
   </cmd_class>
-  <cmd_class key="0x8C" version="1" name="COMMAND_CLASS_GEOGRAPHIC_LOCATION" help="Command Class Geographic Location">
+  <cmd_class key="0x8C" version="1" name="COMMAND_CLASS_GEOGRAPHIC_LOCATION" help="Command Class Geographic Location" comment="[OBSOLETED]">
     <cmd key="0x02" name="GEOGRAPHIC_LOCATION_GET" help="Geographic Location Get" support_mode="RX" />
     <cmd key="0x03" name="GEOGRAPHIC_LOCATION_REPORT" help="Geographic Location Report" support_mode="TX">
       <param key="0x00" name="Longitude Degrees" type="BYTE" />
@@ -3771,6 +3771,64 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitfield key="0x00" fieldname="Latitude Minutes" fieldmask="0x7F" />
         <bitflag key="0x01" flagname="Lat. Sign" flagmask="0x80" />
       </param>
+    </cmd>
+  </cmd_class>
+  <cmd_class key="0x8C" version="2" name="COMMAND_CLASS_GEOGRAPHIC_LOCATION" help="Command Class Geographic Location">
+    <cmd key="0x02" name="GEOGRAPHIC_LOCATION_GET" help="Geographic Location Get" support_mode="RX" />
+    <cmd key="0x03" name="GEOGRAPHIC_LOCATION_REPORT" help="Geographic Location Report" support_mode="TX">
+      <param key="0x00" name="Longitude Integer" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Longitude Integer 7:1" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Longitude Sign" flagmask="0x80" />
+      </param>
+      <param key="0x01" name="Longitude Fraction 1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Longitude Fraction 22:16" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Longitude Integer 0" flagmask="0x80" />
+      </param>
+      <param key="0x02" name="Longitude Fraction 15:8" type="BYTE" />
+      <param key="0x03" name="Longitude Fraction 7:0" type="BYTE" />
+      <param key="0x04" name="Latitude Integer" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Latitude Integer 7:1" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Latitude Sign" flagmask="0x80" />
+      </param>
+      <param key="0x05" name="Latitude Fraction 1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Latitude Fraction 22:16" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Latitude Integer 0" flagmask="0x80" />
+      </param>
+      <param key="0x06" name="Latitude Fraction 15:8" type="BYTE" />
+      <param key="0x07" name="Latitude Fraction 7:0" type="BYTE" />
+      <param key="0x08" name="Altitude 23:16" type="BYTE" />
+      <param key="0x09" name="Altitude 15:8" type="BYTE" />
+      <param key="0x0A" name="Altitude 7:0" type="BYTE" />
+      <param key="0x0B" name="Status" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x07" />
+        <bitflag key="0x01" flagname="Read Only" flagmask="0x08" />
+        <bitfield key="0x02" fieldname="Quality" fieldmask="0xF0" shifter="4" />
+      </param>
+    </cmd>
+    <cmd key="0x01" name="GEOGRAPHIC_LOCATION_SET" help="Geographic Location Set" support_mode="RX">
+      <param key="0x00" name="Longitude Integer" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Longitude Integer 7:1" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Longitude Sign" flagmask="0x80" />
+      </param>
+      <param key="0x01" name="Longitude Fraction 1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Longitude Fraction 22:16" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Longitude Integer 0" flagmask="0x80" />
+      </param>
+      <param key="0x02" name="Longitude Fraction 15:8" type="BYTE" />
+      <param key="0x03" name="Longitude Fraction 7:0" type="BYTE" />
+      <param key="0x04" name="Latitude Integer" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Latitude Integer 7:1" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Latitude Sign" flagmask="0x80" />
+      </param>
+      <param key="0x05" name="Latitude Fraction 1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Latitude Fraction 22:16" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Latitude Integer 0" flagmask="0x80" />
+      </param>
+      <param key="0x06" name="Latitude Fraction 15:8" type="BYTE" />
+      <param key="0x07" name="Latitude Fraction 7:0" type="BYTE" />
+      <param key="0x08" name="Altitude 23:16" type="BYTE" />
+      <param key="0x09" name="Altitude 15:8" type="BYTE" />
+      <param key="0x0A" name="Altitude 7:0" type="BYTE" />
     </cmd>
   </cmd_class>
   <cmd_class key="0x7B" version="1" name="COMMAND_CLASS_GROUPING_NAME" help="Command Class Grouping Name" comment="[DEPRECATED]">
@@ -13832,7 +13890,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       </param>
     </cmd>
     <cmd key="0x20" name="CMD_NODES_EXIST_REPLY" help="Cmd Nodes Exist Reply">
-      <param key="0x00" name="Node Mask Type" type="CONST" comment="The type of nodes which are to be present ">
+      <param key="0x00" name="Node Mask Type" type="CONST" comment="The type of nodes which are to be present">
         <const key="0x00" flagname="ALL" flagmask="0x00" />
         <const key="0x01" flagname="REPEATER" flagmask="0x01" />
         <const key="0x02" flagname="LISTENING" flagmask="0x02" />
@@ -13912,7 +13970,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x02" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -13964,7 +14022,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14116,7 +14174,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x03" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14173,7 +14231,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14226,7 +14284,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14268,7 +14326,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14316,7 +14374,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14367,7 +14425,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14405,7 +14463,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Security" flagmask="0x01" />
+        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -16925,7 +16983,7 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       <param key="0x00" name="Properties1" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Echo" flagmask="0x01" />
         <bitflag key="0x01" flagname="Request CSA" flagmask="0x02" />
-        <bitflag key="0x02" flagname="NLS support" flagmask="0x04" />
+        <bitflag key="0x02" flagname="NLS Support" flagmask="0x04" />
         <bitfield key="0x03" fieldname="Reserved" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x01" name="Supported KEX Schemes" type="BYTE" />
@@ -18573,27 +18631,28 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
       </param>
       <param key="0x02" name="Max Length of User Name" type="BYTE" />
       <param key="0x03" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x1F" />
-        <bitflag key="0x01" flagname="User Checksum Support" flagmask="0x20" />
-        <bitflag key="0x02" flagname="All Users Checksum Support" flagmask="0x40" />
-        <bitflag key="0x03" flagname="User Schedule Support" flagmask="0x80" />
+        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x03" />
+        <bitflag key="0x01" flagname="ASCII Encoding Support" flagmask="0x04" />
+        <bitflag key="0x02" flagname="Extended ASCII Encoding Support" flagmask="0x08" />
+        <bitflag key="0x03" flagname="UTF-16 Encoding Support" flagmask="0x10" />
+        <bitflag key="0x04" flagname="User Checksum Support" flagmask="0x20" />
+        <bitflag key="0x05" flagname="All Users Checksum Support" flagmask="0x40" />
+        <bitflag key="0x06" flagname="User Schedule Support" flagmask="0x80" />
       </param>
       <param key="0x04" name="Supported User Types Bit Mask Length" type="BYTE" />
-      <variant_group key="0x05" name="vg1" paramOffs="0x04" sizemask="0xFF" sizeoffs="0x00">
-        <param key="0x00" name="Supported User Types Bit Mask" type="BITMASK">
-          <bitmask key="0x00" paramoffs="255" lenmask="0x00" len="1" />
-          <bitflag key="0x00" flagname="General User" flagmask="0x00" />
-          <bitflag key="0x01" flagname="Reserved" flagmask="0x01" />
-          <bitflag key="0x02" flagname="Reserved2" flagmask="0x02" />
-          <bitflag key="0x03" flagname="Programming User" flagmask="0x03" />
-          <bitflag key="0x04" flagname="Non-Access User" flagmask="0x04" />
-          <bitflag key="0x05" flagname="Duress User" flagmask="0x05" />
-          <bitflag key="0x06" flagname="Disposable User" flagmask="0x06" />
-          <bitflag key="0x07" flagname="Expiring User" flagmask="0x07" />
-          <bitflag key="0x08" flagname="Reserved3" flagmask="0x08" />
-          <bitflag key="0x09" flagname="Remote Only User" flagmask="0x09" />
-        </param>
-      </variant_group>
+      <param key="0x05" name="Supported User Types Bit Mask" type="BITMASK">
+        <bitmask key="0x00" paramoffs="4" lenmask="0xFF" />
+        <bitflag key="0x00" flagname="General User" flagmask="0x00" />
+        <bitflag key="0x01" flagname="Reserved" flagmask="0x01" />
+        <bitflag key="0x02" flagname="Reserved2" flagmask="0x02" />
+        <bitflag key="0x03" flagname="Programming User" flagmask="0x03" />
+        <bitflag key="0x04" flagname="Non-Access User" flagmask="0x04" />
+        <bitflag key="0x05" flagname="Duress User" flagmask="0x05" />
+        <bitflag key="0x06" flagname="Disposable User" flagmask="0x06" />
+        <bitflag key="0x07" flagname="Expiring User" flagmask="0x07" />
+        <bitflag key="0x08" flagname="Reserved3" flagmask="0x08" />
+        <bitflag key="0x09" flagname="Remote Only User" flagmask="0x09" />
+      </param>
     </cmd>
     <cmd key="0x03" name="CREDENTIAL_CAPABILITIES_GET" help="Credential Capabilities Get" support_mode="RX" />
     <cmd key="0x04" name="CREDENTIAL_CAPABILITIES_REPORT" help="Credential Capabilities Report" support_mode="TX">
@@ -18905,9 +18964,8 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x09" flagname="Hand Biometric" flagmask="0x0A" />
         <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
       </param>
-      <param key="0x01" name="Source Credential Slot" type="WORD" />
+      <param key="0x01" name="Credential Slot" type="WORD" />
       <param key="0x02" name="Destination User Unique Identifier" type="WORD" />
-      <param key="0x03" name="Destination Credential Slot" type="WORD" />
     </cmd>
     <cmd key="0x13" name="USER_CREDENTIAL_ASSOCIATION_REPORT" help="User Credential Association Report" support_mode="TX">
       <param key="0x00" name="Credential Type" type="CONST">
@@ -18923,18 +18981,15 @@ SPDX-FileCopyrightText: 2022-2024 Z-Wave-Alliance <https://z-wavealliance.org/>
         <const key="0x09" flagname="Hand Biometric" flagmask="0x0A" />
         <const key="0x0A" flagname="Unspecified Biometric" flagmask="0x0B" />
       </param>
-      <param key="0x01" name="Source Credential Slot" type="WORD" />
+      <param key="0x01" name="Credential Slot" type="WORD" />
       <param key="0x02" name="Destination User Unique Identifier" type="WORD" />
-      <param key="0x03" name="Destination Credential Slot" type="WORD" />
       <param key="0x04" name="User Credential Association Status" type="CONST">
         <const key="0x00" flagname="Success" flagmask="0x00" />
         <const key="0x01" flagname="Credential Type Invalid" flagmask="0x01" />
-        <const key="0x02" flagname="Source Credential Slot Invalid" flagmask="0x02" />
-        <const key="0x03" flagname="Source Credential Slot Empty" flagmask="0x03" />
+        <const key="0x02" flagname="Credential Slot Invalid" flagmask="0x02" />
+        <const key="0x03" flagname="Credential Slot Empty" flagmask="0x03" />
         <const key="0x04" flagname="Destination User Unique Identifier Invalid" flagmask="0x04" />
         <const key="0x05" flagname="Destination User Unique Identifier Nonexistent" flagmask="0x05" />
-        <const key="0x06" flagname="Destination Credential Slot Invalid" flagmask="0x06" />
-        <const key="0x07" flagname="Destination Credential Slot Occupied" flagmask="0x07" />
       </param>
     </cmd>
     <cmd key="0x14" name="ALL_USERS_CHECKSUM_GET" help="All Users Checksum Get" support_mode="RX" />

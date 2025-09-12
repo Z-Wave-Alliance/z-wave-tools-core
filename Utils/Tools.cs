@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -1089,38 +1090,39 @@ namespace Utils
             return ret;
         }
 
-        private const short Poly = 0x1021;
+        private const ushort CRC16_START = 0x1D0F;
+        private const ushort CRC16_POLY = 0x1021;
 
         public static byte[] CalculateCrc16Array(IEnumerable<byte> data)
         {
-            short res = CalculateCrc16(data, 0, 0);
+            ushort res = CalculateCrc16(data, 0, 0);
             return new[] { (byte)(res >> 8), (byte)res };
         }
 
-        public static short CalculateCrc16(IEnumerable<byte> data)
+        public static ushort CalculateCrc16(IEnumerable<byte> data)
         {
             return CalculateCrc16(data, 0, 0);
         }
 
         public static byte[] CalculateCrc16Array(IEnumerable<byte> data, int index, int length)
         {
-            short res = CalculateCrc16(data, index, length);
+            ushort res = CalculateCrc16(data, index, length);
             return new[] { (byte)(res >> 8), (byte)res };
         }
 
-        public static short CalculateCrc16(IEnumerable<byte> data, int index, int length)
+        public static ushort CalculateCrc16(IEnumerable<byte> data, int index, int length)
         {
-            short crc = 0x1D0F;
+            ushort crc = CRC16_START;
             int i = index;
             foreach (byte b in data)
             {
                 for (byte bitMask = 0x80; bitMask != 0; bitMask >>= 1)
                 {
-                    byte newBit = (byte)(Convert.ToByte((b & bitMask) != 0) ^ Convert.ToByte((crc & 0x8000) != 0));
+                    bool newBit = ((b & bitMask) != 0) ^ ((crc & 0x8000) != 0);
                     crc <<= 1;
-                    if (newBit != 0)
+                    if (newBit)
                     {
-                        crc ^= Poly;
+                        crc ^= CRC16_POLY;
                     }
                 }
                 if (length > 0 && ++i >= length)
@@ -1129,32 +1131,31 @@ namespace Utils
             return crc;
         }
 
-        public static ushort ZW_CheckCrc16(ushort crc, byte[] pDataAddr, ushort bDataLen)
+        public static ushort ZW_CheckCrc16(ushort crc, byte[] pDataAddr, int bDataLen)
         {
-            const ushort poly = 0x1021;
             byte i = 0;
             while (bDataLen-- > 0)
             {
-                var workData = pDataAddr[i++];
+                byte workData = pDataAddr[i++];
                 byte bitMask;
                 for (bitMask = 0x80; bitMask != 0; bitMask >>= 1)
                 {
                     /* Align test bit with next bit of the message byte, starting with msb.
                     */
-                    var newBit = ((workData & bitMask) != 0) ^ ((crc & 0x8000) != 0);
+                    bool newBit = ((workData & bitMask) != 0) ^ ((crc & 0x8000) != 0);
                     crc <<= 1;
                     if (newBit)
                     {
-                        crc ^= poly;
+                        crc ^= CRC16_POLY;
                     }
                 } /* for (bitMask = 0x80; bitMask != 0; bitMask >>= 1) */
             }
             return crc;
         }
 
-        public static ushort ZW_CreateCrc16(byte[] pHeaderAddr, byte bHeaderLen, byte[] pPayloadAddr, byte bPayloadLen)
+        public static ushort ZW_CreateCrc16(byte[] pHeaderAddr, int bHeaderLen, byte[] pPayloadAddr, int bPayloadLen)
         {
-            ushort crc = 0x1D0F;
+            ushort crc = CRC16_START;
             if (pHeaderAddr != null && bHeaderLen > 0)
             {
                 crc = ZW_CheckCrc16(crc, pHeaderAddr, bHeaderLen);
@@ -1347,6 +1348,27 @@ namespace Utils
             return null;
         }
 
+        public static ushort ByteArrayToUInt16(byte[] bytes)
+        {
+            byte[] tmp;
+            if (bytes.Length < 2)
+            {
+                tmp = new byte[2];
+                Array.Copy(bytes, 0, tmp, 2 - bytes.Length, bytes.Length);
+            }
+            else
+            {
+                tmp = bytes.ToArray();
+            }
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(tmp);
+            }
+
+            return BitConverter.ToUInt16(tmp, 0);
+        }
+
         public static byte[] UInt32ToByteArray(uint value)
         {
             byte[] bytes = BitConverter.GetBytes(value);
@@ -1365,7 +1387,7 @@ namespace Utils
             }
             else
             {
-                tmp = bytes;
+                tmp = bytes.ToArray();
             }
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(tmp);
@@ -1561,6 +1583,175 @@ namespace Utils
             return GetBytes(hexesRes);
         }
 
+        public static string GetStringFromAsciiBytes(byte[] asciiBytes)
+        {
+            if (asciiBytes == null)
+            {
+                return string.Empty;
+            }
+            return Encoding.ASCII.GetString(asciiBytes);
+        }
 
+        /// <summary>
+        /// OEM Extended ASCII in the Z-Wave specification is Code Page (CCSID) 437, also known as 'OEM-US' for the IBM PC. 
+        /// </summary>
+        public static string GetStringFromOemExtendedAsciiBytes(byte[] oemExtAsciiBytes)
+        {
+            if (oemExtAsciiBytes == null)
+            {
+                return string.Empty;
+            }
+            return Encoding.GetEncoding(437).GetString(oemExtAsciiBytes);
+        }
+
+        public static string GetStringFromUtf16BigEndianBytes(byte[] utf16BEBytes)
+        {
+            if (utf16BEBytes == null)
+            {
+                return string.Empty;
+            }
+            return Encoding.BigEndianUnicode.GetString(utf16BEBytes);
+        }
+
+        /// <summary>
+        /// If the given minimum length is greater than the encoded given string, spaces will be added.
+        /// Byte array will be shortened to the maximum length given.
+        /// </summary>
+        public static byte[] GetAsciiBytes(string s, byte? minLength = null, byte? maxLength = null)
+        {
+            return GetBytes(EncodingType.Ascii, s, minLength, maxLength);
+        }
+
+        /// <summary>
+        /// OEM Extended ASCII in the Z-Wave specification is Code Page (CCSID) 437, also known as 'OEM-US' for the IBM PC. 
+        /// If the given minimum length is greater than the encoded given string, spaces will be added.
+        /// Byte array will be shortened to the maximum length given.
+        /// </summary>
+        public static byte[] GetOemExtendedAsciiBytes(string s, byte? minLength = null, byte? maxLength = null)
+        {
+            return GetBytes(EncodingType.OemExtendedAscii, s, minLength, maxLength);
+        }
+
+        /// <summary>
+        /// If the given minimum length is greater than the encoded given string, spaces will be added.
+        /// Byte array will be shortened to the maximum length given.
+        /// </summary>
+        public static byte[] GetUtf16BigEndianBytes(string s, byte? minLength = null, byte? maxLength = null)
+        {
+            return GetBytes(EncodingType.Utf16BigEndian, s, minLength, maxLength);
+        }
+
+        private static byte[] GetBytes(EncodingType encoding, string s, byte? minLength, byte? maxLength)
+        {
+            if (maxLength != null && minLength != null && minLength > maxLength)
+            {
+                // minLength cannot be greater than maxLength!
+                minLength = maxLength;
+            }
+
+            if (string.IsNullOrEmpty(s))
+            {
+                if (minLength != null)
+                {
+                    return new byte[(byte)minLength];
+                }
+
+                return new byte[0];
+            }
+
+            byte[] bytes;
+            switch (encoding)
+            {
+                case EncodingType.Ascii:
+                    bytes = System.Text.Encoding.ASCII.GetBytes(s);
+                    break;
+                case EncodingType.OemExtendedAscii:
+                    // OEM Extended ASCII in the Z-Wave specification is Code Page (CCSID) 437, also known as 'OEM-US' for the IBM PC.
+                    bytes = System.Text.Encoding.GetEncoding(437).GetBytes(s);
+                    break;
+                case EncodingType.Utf16BigEndian:
+                    bytes = System.Text.Encoding.BigEndianUnicode.GetBytes(s);
+                    if (minLength != null && minLength % 2 != 0)
+                    {
+                        // Given Min Length ({minLength}) is not an even value!
+                        minLength = (byte)((byte)minLength - 1);
+                    }
+                    if (maxLength != null && maxLength % 2 != 0)
+                    {
+                        // Given Max Length ({maxLength}) is not an even value!
+                        maxLength = (byte)((byte)maxLength - 1);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(encoding), encoding, null);
+            }
+
+            // Consider Minimum Length
+            if (minLength != null && minLength > bytes.Length)
+            {
+                switch (encoding)
+                {
+                    case EncodingType.Ascii:
+                    case EncodingType.OemExtendedAscii:
+                        // Adding spaces
+                        for (int i = bytes.Length; i < minLength; i++)
+                        {
+                            Array.Resize(ref bytes, bytes.Length + 1);
+                            bytes[bytes.Length - 1] = 0x20;
+                        }
+                        break;
+                    case EncodingType.Utf16BigEndian:
+                        // Adding spaces
+                        for (int i = bytes.Length; i < minLength; i += 2)
+                        {
+                            Array.Resize(ref bytes, bytes.Length + 2);
+                            bytes[bytes.Length - 2] = 0x00;
+                            bytes[bytes.Length - 1] = 0x20;
+                        }
+                        break;
+                }
+            }
+
+            // Consider Maximum Length
+            if (maxLength != null && maxLength < bytes.Length)
+            {
+                return GetShortenedBytes(bytes, (byte)maxLength);
+            }
+
+            return bytes;
+        }
+
+        /// <summary>
+        /// Shortens the byte array to the given maximum length.
+        /// </summary>
+        /// <returns>New byte array, not longer than 'maxLength'</returns>
+        public static byte[] GetShortenedBytes(byte[] bytes, byte maxLength)
+        {
+            if (bytes == null)
+            {
+                return new byte[0];
+            }
+
+            byte[] ret;
+
+            if (bytes.Length > maxLength)
+            {
+                ret = new byte[maxLength];
+            }
+            else
+            {
+                ret = new byte[bytes.Length];
+            }
+
+            Array.Copy(bytes, ret, ret.Length);
+            return ret;
+        }
+
+        private enum EncodingType
+        {
+            Ascii,
+            OemExtendedAscii,
+            Utf16BigEndian
+        }
     }
 }
