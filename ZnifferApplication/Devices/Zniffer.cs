@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2025 Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using ZWave.Enums;
@@ -202,15 +203,16 @@ namespace ZWave.ZnifferApplication.Devices
             }
         }
 
-        public void SetLRChannel(byte channelCode)
+        public void SetLRChannelConfig(byte channelConfigCode)
         {
             if (ApiVersion == ZnifferApiVersion.V4)
             {
-                byte code = channelCode;
+                byte code = channelConfigCode;
                 SetLRChConfigOperation operation = new SetLRChConfigOperation(code);
                 Execute(operation);
             }
-            else throw new NotSupportedException();
+            else
+                throw new NotSupportedException();
         }
 
         public Dictionary<byte, RFrequency> GetFrequencies()
@@ -286,10 +288,10 @@ namespace ZWave.ZnifferApplication.Devices
                 throw new NotSupportedException("UZB Zniffer isn't supported");
             }
 
-            // If the NCP Zniffer reports 0 long range channel then it means this feature not supported 
+            // If the Zniffer NCP reports 0 long range channel, then it means this feature not supported.
             if (ret.Count == 0)
             {
-                throw new NotSupportedException("This NCP Zniffer Version isn't supported");
+                throw new NotSupportedException("This Zniffer NCP Version is not supported");
             }
             return ret;
         }
@@ -321,13 +323,13 @@ namespace ZWave.ZnifferApplication.Devices
                 }
                 else
                 {
-                    // If the NCP Zniffer reports 0 long range channel then it means this feature not supported 
-                    throw new NotSupportedException("This NCP Zniffer Version isn't supported");
+                    // If the Zniffer NCP reports 0 long range channel, then it means this feature not supported.
+                    throw new NotSupportedException("This Zniffer NCP Version is not supported");
                 }
             }
             else
             {
-                throw new NotSupportedException("UZB Zniffer isn't supported");
+                throw new NotSupportedException("UZB Zniffer is not supported");
             }
 
             return ret;

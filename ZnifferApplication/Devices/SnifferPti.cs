@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2024 Z-Wave Alliance
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using ZWave.Enums;
 using ZWave.Layers;
 using ZWave.Layers.Application;
 using ZWave.Xml.FrameHeader;
+using ZWave.ZnifferApplication.Enums;
 using ZWave.ZnifferApplication.Operations;
 
 namespace ZWave.ZnifferApplication.Devices
@@ -87,6 +89,16 @@ namespace ZWave.ZnifferApplication.Devices
         {
             ListenDataOperation op = new ListenDataOperation(dataItemCallback);
             return ExecuteAsync(op, completedCallback);
+        }
+
+        public void SetLRChannelConfig(byte channelConfigCode)
+        {
+            throw new NotSupportedException();
+        }
+
+        public bool Start()
+        {
+            throw new NotImplementedException();
         }
     }
 }

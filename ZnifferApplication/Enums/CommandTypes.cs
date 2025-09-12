@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2025 Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace ZWave.ZnifferApplication.Enums
     {
         DataHandler = 0x00,
 
-        // Zwave NCP Zniffer (Serial) Commands
+        // Z-Wave Zniffer NCP (Serial) Commands
         GetVersion4x = 0x01,
         SetFrequency4x = 0x02, 
         GetFrequencies4x = 0x03,

@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2025 Z-Wave Alliance https://z-wavealliance.org
 using System;
 
 namespace ZWave.Enums
@@ -35,6 +36,7 @@ namespace ZWave.Enums
         LEDBulb_v3 = 47, //ZWave Led Bulbs may contain different classes
         LEDBulb_v4 = 48, //ZWave Led Bulbs may contain different classes
         BarrierOperator = 49,
-        MultiNotificationSensor = 50 //A sensor PIR that supports a large number of notification types.
+        MultiNotificationSensor = 50, //A sensor PIR that supports a large number of notification types.
+        ZnifferNCP = 200
     }
 }

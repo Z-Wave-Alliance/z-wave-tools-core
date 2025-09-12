@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2025 Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Linq;
 using Utils;
@@ -183,7 +184,7 @@ namespace ZWave.BasicApplication.Operations
                 }
                 ReceivedAchData.Extensions = ou.DataFrame.Extensions;
                 ReceivedAchData.SrcNode = new NodeTag(ReceivedAchData.SrcNode.Id, ou.DataFrame.SrcEndPoint);
-                ReceivedAchData.DstNode = new NodeTag(ReceivedAchData.DstNode.Id, ou.DataFrame.DstEndPoint);
+                ReceivedAchData.DstNode = new NodeTag(ReceivedAchData.DstNode.Id, ou.DataFrame.DstEndPoint, ou.DataFrame.IsBitAdress);
             }
             OnHandledAA(ou);
         }
@@ -264,7 +265,7 @@ namespace ZWave.BasicApplication.Operations
                 }
                 ReceivedAchData.Extensions = ou.DataFrame.Extensions;
                 ReceivedAchData.SrcNode = new NodeTag(ReceivedAchData.SrcNode.Id, ou.DataFrame.SrcEndPoint);
-                ReceivedAchData.DstNode = new NodeTag(ReceivedAchData.DstNode.Id, ou.DataFrame.DstEndPoint);
+                ReceivedAchData.DstNode = new NodeTag(ReceivedAchData.DstNode.Id, ou.DataFrame.DstEndPoint, ou.DataFrame.IsBitAdress);
             }
             if (DstNode.Id == 0 || DstNode == ReceivedAchData.DstNode)
             {
@@ -291,7 +292,7 @@ namespace ZWave.BasicApplication.Operations
                 }
                 ReceivedAchData.Extensions = ou.DataFrame.Extensions;
                 ReceivedAchData.SrcNode = new NodeTag(ReceivedAchData.SrcNode.Id, ou.DataFrame.SrcEndPoint);
-                ReceivedAchData.DstNode = new NodeTag(ReceivedAchData.DstNode.Id, ou.DataFrame.DstEndPoint);
+                ReceivedAchData.DstNode = new NodeTag(ReceivedAchData.DstNode.Id, ou.DataFrame.DstEndPoint, ou.DataFrame.IsBitAdress);
             }
             OnHandledAA(ou);
         }
@@ -391,8 +392,7 @@ namespace ZWave.BasicApplication.Operations
             }
             return ret;
         }
-
-        protected bool IsResponseAllowed(NetworkViewPoint network, byte[] command, SecuritySchemes scheme, bool secureCommandClass)
+        protected virtual bool IsHandlingAllowed(NetworkViewPoint network, byte[] command, SecuritySchemes scheme, bool secureCommandClass)
         {
             bool ret = false;
             if (network.GetHighestSecurityScheme() == scheme)

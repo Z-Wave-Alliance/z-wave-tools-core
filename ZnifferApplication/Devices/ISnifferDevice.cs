@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2024 Z-Wave Alliance
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,7 @@ namespace ZWave.ZnifferApplication.Devices
         ActionToken ExpectData(byte[] homeId, byte? nodeId, Func<ActionToken, DataItem, bool> dataItemPredicate, int timeoutMs, Action<IActionItem> completedCallback);
         ActionToken CollectData(byte[] homeId, byte? nodeId, Func<ActionToken, DataItem, bool> dataItemPredicate, int timeoutMs, Action<IActionItem> completedCallback);
         ActionToken ListenData(ListenDataOperation.DataItemCallbackDelegate dataItemCallback, Action<IActionItem> completedCallback);
+        void SetLRChannelConfig(byte channelConfigCode);
+        bool Start();
     }
 }

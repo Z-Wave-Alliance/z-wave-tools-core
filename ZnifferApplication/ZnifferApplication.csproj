@@ -41,6 +41,7 @@
     <Compile Include="DataItemsCollection.cs" />
     <Compile Include="Devices\ISnifferDevice.cs" />
     <Compile Include="Devices\SnifferPti.cs" />
+    <Compile Include="Enums\ZnifferChannelConfig.cs" />
     <Compile Include="ExtensionsFilterObject.cs" />
     <Compile Include="FilterObject.cs" />
     <Compile Include="Operations\CollectPtiDataOperation.cs" />

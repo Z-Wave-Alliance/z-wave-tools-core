@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: 2025 Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,17 @@ namespace ZWave.Layers.Transport
                 _tcpStream = null;
                 ex.Message._DLOG();
                 return false;
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.TargetSite.Name == "BeginConnect")
+                {
+                    _tcpStream = null;
+                    ex.Message._DLOG();
+                    return false;
+                }
+
+                throw ex;
             }
             catch (OperationCanceledException)
             {

@@ -82,6 +82,7 @@
     <Compile Include="CommandClasses\COMMAND_CLASS_ASSOCIATION_GRP_INFO_V3.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_ASSOCIATION_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_ASSOCIATION_V3.cs" />
+    <Compile Include="CommandClasses\COMMAND_CLASS_ASSOCIATION_V4.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_AUTHENTICATION.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_AUTHENTICATION_MEDIA_WRITE.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_AV_CONTENT_DIRECTORY_MD.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="CommandClasses\COMMAND_CLASS_FIRMWARE_UPDATE_MD_V8.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_GENERIC_SCHEDULE.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_GEOGRAPHIC_LOCATION.cs" />
+    <Compile Include="CommandClasses\COMMAND_CLASS_GEOGRAPHIC_LOCATION_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_GROUPING_NAME.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_HAIL.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_HRV_CONTROL.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V3.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V4.cs" />
+    <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V5.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_V3.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_MULTI_CHANNEL_V4.cs" />
@@ -219,6 +222,7 @@
     <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_ENTRY_LOCK.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_ENTRY_LOCK_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_ENTRY_LOCK_V3.cs" />
+    <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_ENTRY_LOCK_V4.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_V3.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SCHEDULE_V4.cs" />
@@ -228,6 +232,7 @@
     <Compile Include="CommandClasses\COMMAND_CLASS_SCREEN_MD_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SECURITY.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SECURITY_2.cs" />
+    <Compile Include="CommandClasses\COMMAND_CLASS_SECURITY_2_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SECURITY_PANEL_MODE.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SECURITY_PANEL_ZONE.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_SECURITY_PANEL_ZONE_SENSOR.cs" />
@@ -293,6 +298,7 @@
     <Compile Include="CommandClasses\COMMAND_CLASS_TRANSPORT_SERVICE_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_USER_CODE.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_USER_CODE_V2.cs" />
+    <Compile Include="CommandClasses\COMMAND_CLASS_USER_CREDENTIAL.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_VERSION.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_VERSION_V2.cs" />
     <Compile Include="CommandClasses\COMMAND_CLASS_VERSION_V3.cs" />
