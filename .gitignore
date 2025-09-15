@@ -7,6 +7,9 @@
 # Mac OS
 .DS_Store
 
+# Windows
+Thumbs.db
+
 # Nuget packages folder
 packages/**
 
@@ -25,6 +28,7 @@ _ReSharper*/
 *.aps
 *.bak
 *.cache
+*.dbmdl
 *.exe
 *.ilk
 *.log
@@ -38,7 +42,6 @@ _ReSharper*/
 *.tlh
 *.vspscc
 launchSettings.json
-*.dbmdl
 UpgradeLog.htm
 
 # User-specific files
