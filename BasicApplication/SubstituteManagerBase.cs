@@ -1,12 +1,17 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Utils;
+using ZWave.BasicApplication.Devices;
+using ZWave.BasicApplication.Enums;
+using ZWave.BasicApplication.TransportService;
+using ZWave.Devices;
+using ZWave.Enums;
 using ZWave.Layers;
 using ZWave.Layers.Frame;
-using ZWave.BasicApplication.Enums;
-using ZWave.Enums;
-using ZWave.Devices;
 
 namespace ZWave.BasicApplication
 {
@@ -21,7 +26,32 @@ namespace ZWave.BasicApplication
             get { return GetId(); }
         }
 
-        public bool IsActive { get; protected set; }
+        private bool _isActive;
+        public bool IsActive
+        {
+            get
+            {
+                if (!_isActive)
+                {
+                    return false;
+                }
+
+                if (this is TransportServiceManager || this is SecurityManager)
+                {
+                    // Skip Transport Service Manager and Security Manager for the End Device SAPI
+                    // because these encapsulations are handled in the SAPI firmware itself.
+                    return !_network.Library.IsSerialApiEndDevice() && !_network.Library.IsSampleApplication();
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            protected set
+            { 
+                _isActive = value;
+            } 
+        }
 
         protected abstract SubstituteIncomingFlags GetId();
 
