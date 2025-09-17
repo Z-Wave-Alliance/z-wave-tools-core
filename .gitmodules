@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+# SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
+
 [submodule "z-wave-blobs"]
 	path = z-wave-blobs
-	url = git@github.com:Z-Wave-Alliance/z-wave-blobs.git
+	url = ../z-wave-blobs.git
