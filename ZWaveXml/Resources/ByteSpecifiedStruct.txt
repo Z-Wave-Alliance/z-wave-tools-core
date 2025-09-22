@@ -1,5 +1,3 @@
-SPDX-License-Identifier: BSD-3-Clause
-SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
     public struct ByteValue
     {
         public byte Value { get; private set; }

@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -118,7 +119,7 @@ namespace ZWave.Xml.HeaderGenerator
             if (!isZats)
             { 
                 sw.WriteLine($"/// SPDX-License-Identifier: BSD-3-Clause");
-                sw.WriteLine($"/// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com");
+                sw.WriteLine($"/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org");
             }
         }
 
@@ -1019,7 +1020,7 @@ namespace ZWave.Xml.HeaderGenerator
             {
                 StreamWriter sw = new StreamWriter(fs);
                 GenerateLicenseInfo(sw, isZats);
-                sw.WriteLine("/// Genareted file from the Z-Wave XML Editor.");
+                sw.WriteLine("/// Generated file from the Z-Wave XML Editor.");
                 GenerateNamespaceBegin(sw, isZats);
 
                 sw.WriteLine(structText);
