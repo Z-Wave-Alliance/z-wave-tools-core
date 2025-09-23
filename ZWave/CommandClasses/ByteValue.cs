@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
-/// Genareted file from the Z-Wave XML Editor.
+/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
+/// Generated file from the Z-Wave XML Editor.
 namespace ZWave.CommandClasses
 {
     public struct ByteValue
