@@ -75,7 +75,7 @@ namespace ZWave.Xml.HeaderGenerator
                     : cmdClass.Name;
                 using (FileStream fs = new FileStream(Path.Combine(folder ?? "", name + ".cs"), FileMode.Create))
                 {
-                    StreamWriter sw = new StreamWriter(fs);
+                    StreamWriter sw = new StreamWriter(fs) { NewLine = LINE_ENDING };
                     GenerateLicenseInfo(sw, isZats);
                     if (cmdClass.Command != null && cmdClass.Command.Count > 0)
                     {
@@ -1018,7 +1018,7 @@ namespace ZWave.Xml.HeaderGenerator
             }
             using (FileStream fs = new FileStream(Path.Combine(folder ?? "", expStrName), FileMode.Create))
             {
-                StreamWriter sw = new StreamWriter(fs);
+                StreamWriter sw = new StreamWriter(fs) { NewLine = LINE_ENDING };
                 GenerateLicenseInfo(sw, isZats);
                 sw.WriteLine("/// Generated file from the Z-Wave XML Editor.");
                 GenerateNamespaceBegin(sw, isZats);
