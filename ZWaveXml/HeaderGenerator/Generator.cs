@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace ZWave.Xml.HeaderGenerator
     /// </summary>
     public abstract class Generator
     {
+        protected const string LINE_ENDING = "\n"; // Unix line ending
+
         /// <summary>
         /// Reference to options class
         /// </summary>
