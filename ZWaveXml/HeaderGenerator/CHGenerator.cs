@@ -186,7 +186,7 @@ namespace ZWave.Xml.HeaderGenerator
         private void Generate_Info()
         {
             Sw.WriteLine(LineComment + "This file is auto generated. Do not edit it manually!");
-            Sw.WriteLine(LineComment + "Generated on: " + DateTime.Now);
+            Sw.WriteLine(LineComment + "Generated with: https://github.com/Z-Wave-Alliance/z-wave-xml-tools");
         }
 
         private void Generate_Defines(IEnumerable<BasicDevice> basicDeviceList)
