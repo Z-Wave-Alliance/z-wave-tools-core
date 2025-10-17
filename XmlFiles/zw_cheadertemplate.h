@@ -71,6 +71,7 @@
 #define ROLE_TYPE_END_NODE_SLEEPING_REPORTING                                            0x06
 #define ROLE_TYPE_END_NODE_SLEEPING_LISTENING                                            0x07
 #define ROLE_TYPE_END_NODE_NETWORK_AWARE                                                 0x08
+#define ROLE_TYPE_END_NODE_WAKE_ON_EVENT                                                 0x09
 
 
 /************* Z-Wave+ Icon Type identifiers **************/
