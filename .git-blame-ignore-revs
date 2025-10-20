@@ -1,0 +1,13 @@
+# .git-blame-ignore-revs
+# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org/>
+#
+# This file contains a list of revisions that should be ignored by git blame.
+# These are typically commits that make large formatting changes or other
+# non-functional modifications that would clutter blame output.
+#
+# To use this file, run:
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Style: Finish text files on newline ...
+d8c846b
