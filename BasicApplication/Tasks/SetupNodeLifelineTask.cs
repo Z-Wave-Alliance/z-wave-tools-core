@@ -164,10 +164,7 @@ namespace ZWave.BasicApplication.Tasks
             {
                 COMMAND_CLASS_ZWAVEPLUS_INFO_V2.ZWAVEPLUS_INFO_REPORT zwaveInfo = SpecificResult.RequestRoleType.Command;
                 var roleType = (RoleTypes)zwaveInfo.roleType.Value;
-                return roleType == RoleTypes.END_NODE_ALWAYS_ON ||
-                    roleType == RoleTypes.END_NODE_PORTABLE ||
-                    roleType == RoleTypes.END_NODE_SLEEPING_LISTENING ||
-                    roleType == RoleTypes.END_NODE_SLEEPING_REPORTING;
+                return roleType.IsEndNode();
             }
             return BasicDeviceType != 0x04; //BASIC_TYPE_ROUTING_END_NODE
         }
