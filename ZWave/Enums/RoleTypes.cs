@@ -1,9 +1,11 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
 /// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
+using System.Collections.Generic;
+
 namespace ZWave.Enums
 {
-    public enum RoleTypes
+    public enum RoleTypes : byte
     {
         None = 0xFF,
         CONTROLLER_CENTRAL_STATIC = 0x00,
@@ -20,6 +22,33 @@ namespace ZWave.Enums
 
     public static class RoleTypes_Extensions
     {
+        public static readonly List<RoleTypeInfo> RoleTypesInfo = new List<RoleTypeInfo>
+        {
+            new RoleTypeInfo { RoleType = RoleTypes.None, Name = "Unknown", Abbreviation = "n/a" },
+            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_CENTRAL_STATIC, Name = "Central Static Controller", Abbreviation = "CSC" },
+            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_SUB_STATIC, Name = "Sub Static Controller", Abbreviation = "SSC" },
+            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_PORTABLE, Name = "Portable Controller", Abbreviation = "PC" },
+            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_PORTABLE_REPORTING, Name = "Portable Reporting Controller", Abbreviation = "RPC" },
+            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_PORTABLE, Name = "Portable End Node", Abbreviation = "PEN" },
+            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_ALWAYS_ON, Name = "Always On End Node", Abbreviation = "AOEN" },
+            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_SLEEPING_REPORTING, Name = "Sleeping Reporting End Node", Abbreviation = "RSEN" },
+            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_SLEEPING_LISTENING, Name = "Sleeping Listening End Node", Abbreviation = "LSEN" },
+            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_NETWORK_AWARE, Name = "Network Aware End Node", Abbreviation = "NAEN" },
+            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_WAKE_ON_EVENT, Name = "Wake On Event End Node", Abbreviation = "WOEEN" }
+        };
+
+        public static string GetName(this RoleTypes roleType)
+        {
+            var info = RoleTypesInfo.Find(r => r.RoleType == roleType);
+            return info != null ? info.Name : "Unknown";
+        }
+
+        public static string GetAbbreviation(this RoleTypes roleType)
+        {
+            var info = RoleTypesInfo.Find(r => r.RoleType == roleType);
+            return info != null ? info.Abbreviation : "n/a";
+        }
+
         /// <summary>
         /// Determines if the Role Type is a controller.
         /// </summary>
@@ -87,6 +116,13 @@ namespace ZWave.Enums
                 default:
                     return false;
             }
+        }
+
+        public class RoleTypeInfo
+        {
+            public RoleTypes RoleType { get; set; }
+            public string Name { get; set; }
+            public string Abbreviation { get; set; }
         }
     }
 }
