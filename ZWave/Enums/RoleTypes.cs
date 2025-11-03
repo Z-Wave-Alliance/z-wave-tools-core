@@ -1,7 +1,10 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
 /// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Utils;
 
 namespace ZWave.Enums
 {
@@ -22,31 +25,31 @@ namespace ZWave.Enums
 
     public static class RoleTypes_Extensions
     {
-        public static readonly List<RoleTypeInfo> RoleTypesInfo = new List<RoleTypeInfo>
+        private static readonly IReadOnlyCollection<RoleTypeInfo> _roleTypesInfo = new List<RoleTypeInfo>
         {
-            new RoleTypeInfo { RoleType = RoleTypes.None, Name = "Unknown", Abbreviation = "n/a" },
-            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_CENTRAL_STATIC, Name = "Central Static Controller", Abbreviation = "CSC" },
-            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_SUB_STATIC, Name = "Sub Static Controller", Abbreviation = "SSC" },
-            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_PORTABLE, Name = "Portable Controller", Abbreviation = "PC" },
-            new RoleTypeInfo { RoleType = RoleTypes.CONTROLLER_PORTABLE_REPORTING, Name = "Portable Reporting Controller", Abbreviation = "RPC" },
-            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_PORTABLE, Name = "Portable End Node", Abbreviation = "PEN" },
-            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_ALWAYS_ON, Name = "Always On End Node", Abbreviation = "AOEN" },
-            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_SLEEPING_REPORTING, Name = "Sleeping Reporting End Node", Abbreviation = "RSEN" },
-            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_SLEEPING_LISTENING, Name = "Sleeping Listening End Node", Abbreviation = "LSEN" },
-            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_NETWORK_AWARE, Name = "Network Aware End Node", Abbreviation = "NAEN" },
-            new RoleTypeInfo { RoleType = RoleTypes.END_NODE_WAKE_ON_EVENT, Name = "Wake On Event End Node", Abbreviation = "WOEEN" }
+            new RoleTypeInfo(RoleTypes.None, "Unknown", "n/a"),
+            new RoleTypeInfo(RoleTypes.CONTROLLER_CENTRAL_STATIC, "Central Static Controller", "CSC"),
+            new RoleTypeInfo(RoleTypes.CONTROLLER_SUB_STATIC, "Sub Static Controller", "SSC"),
+            new RoleTypeInfo(RoleTypes.CONTROLLER_PORTABLE, "Portable Controller", "PC"),
+            new RoleTypeInfo(RoleTypes.CONTROLLER_PORTABLE_REPORTING, "Portable Reporting Controller", "RPC"),
+            new RoleTypeInfo(RoleTypes.END_NODE_PORTABLE, "Portable End Node", "PEN"),
+            new RoleTypeInfo(RoleTypes.END_NODE_ALWAYS_ON, "Always On End Node", "AOEN"),
+            new RoleTypeInfo(RoleTypes.END_NODE_SLEEPING_REPORTING, "Sleeping Reporting End Node", "RSEN"),
+            new RoleTypeInfo(RoleTypes.END_NODE_SLEEPING_LISTENING, "Sleeping Listening End Node", "LSEN"),
+            new RoleTypeInfo(RoleTypes.END_NODE_NETWORK_AWARE, "Network Aware End Node", "NAEN"),
+            new RoleTypeInfo(RoleTypes.END_NODE_WAKE_ON_EVENT, "Wake On Event End Node", "WOEEN")
         };
 
         public static string GetName(this RoleTypes roleType)
         {
-            var info = RoleTypesInfo.Find(r => r.RoleType == roleType);
-            return info != null ? info.Name : "Unknown";
+            RoleTypeInfo info = _roleTypesInfo.FirstOrDefault(i => i.RoleType == roleType);
+            return !info.Name.IsNullOrEmpty() ? info.Name : "Unknown";
         }
 
         public static string GetAbbreviation(this RoleTypes roleType)
         {
-            var info = RoleTypesInfo.Find(r => r.RoleType == roleType);
-            return info != null ? info.Abbreviation : "n/a";
+            RoleTypeInfo info = _roleTypesInfo.FirstOrDefault(i => i.RoleType == roleType);
+            return !info.Abbreviation.IsNullOrEmpty() ? info.Abbreviation : "n/a";
         }
 
         /// <summary>
@@ -118,11 +121,18 @@ namespace ZWave.Enums
             }
         }
 
-        public class RoleTypeInfo
+        public readonly struct RoleTypeInfo
         {
-            public RoleTypes RoleType { get; set; }
-            public string Name { get; set; }
-            public string Abbreviation { get; set; }
+            public RoleTypeInfo(RoleTypes roleType, string name, string abbreviation)
+            {
+                RoleType = roleType;
+                Name = name;
+                Abbreviation = abbreviation;
+            }
+
+            public readonly RoleTypes RoleType;
+            public readonly string Name;
+            public readonly string Abbreviation;
         }
     }
 }
