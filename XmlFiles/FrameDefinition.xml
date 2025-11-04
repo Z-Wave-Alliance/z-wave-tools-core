@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <!--
 SPDX-License-Identifier: BSD-3-Clause
@@ -127,7 +127,8 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
    	<Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
       <Param Order="0" Name="ExtensionLength" Text="Extension Length" Type="HEX" Bits="3"/>
       <Param Order="1" Name="Discard" Text="Discard" Type="HEX" Bits="1"/>
-      <Param Order="2" Name="Extension 1" Text="Extension 1" Type="HEX" Bits="4"/>
+      <Param Order="2" Name="Extension Type" Text="Extension Type" Type="HEX" Bits="3"/>
+      <Param Order="3" Name="Reserved" Text="Reserved" Type="HEX" Bits="1"/>
     </Param>
     <Param Order="1" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties3.ExtensionLength" OptRef="Properties2.Extended"/>
 	<Validation ParamName="Properties2.HeaderType" ParamHexValue="0x01"/>
@@ -158,7 +159,8 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
    	<Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
       <Param Order="0" Name="ExtensionLength" Text="Extension Length" Type="HEX" Bits="3"/>
       <Param Order="1" Name="Discard" Text="Discard" Type="HEX" Bits="1"/>
-      <Param Order="2" Name="Extension 1" Text="Extension 1" Type="HEX" Bits="4"/>
+      <Param Order="2" Name="Extension Type" Text="Extension Type" Type="HEX" Bits="3"/>
+      <Param Order="3" Name="Reserved" Text="Reserved" Type="HEX" Bits="1"/>
     </Param>
     <Param Order="1" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties3.ExtensionLength" OptRef="Properties2.Extended"/>
 	<Validation ParamName="Properties2.HeaderType" ParamHexValue="0x01"/>
@@ -182,12 +184,12 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
       <Param Order="1" Name="AddressOffset" Text="Address Offset" Type="HEX" Bits="3"/>
     </Param>
     <Param Order="1" Name="MaskByte" Text="Mask Byte" Type="BITMASK" Bits="8" SizeRef="Properties3.NumberOfMaskBytes"/>
-    <Param Order="2" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
+    <Param Order="2" Name="Properties4" Text="Properties4" Type="HEX" Bits="8" OptRef="Properties2.Extended">
       <Param Order="0" Name="ExtensionLength" Text="Extension Length" Type="HEX" Bits="3"/>
       <Param Order="1" Name="Discard" Text="Discard" Type="HEX" Bits="1"/>
       <Param Order="2" Name="ExtensionType" Text="Extension Type" Type="NUMBER" Bits="4"/>
     </Param>
-    <Param Order="3" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties3.ExtensionLength" OptRef="Properties2.Extended"/>
+    <Param Order="3" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties4.ExtensionLength" OptRef="Properties2.Extended"/>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x02"/>
     <Validation ParamName="Properties1.Ack" ParamHexValue="0x00"/>
     <Destination>
@@ -380,7 +382,8 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
       <Param Order="0" Name="Direction" Text="Direction" Type="BOOLEAN" Bits="1"/>
       <Param Order="1" Name="RoutedAcknowledge" Text="Routed Acknowledge" Type="BOOLEAN" Bits="1"/>
       <Param Order="2" Name="RoutedError" Text="Routed Error" Type="BOOLEAN" Bits="1"/>
-      <Param Order="3" Name="Reserved" Text="Reserved" Type="HEX" Bits="5"/>
+      <Param Order="3" Name="ExtendedHeaderPresent" Text="Extended Header Present" Type="BOOLEAN" Bits="1"/>
+      <Param Order="4" Name="FailedHop" Text="Failed Hop" Type="HEX" Bits="4"/>
     </Param>
     <Param Order="2" Name="Properties4" Text="Properties4" Type="HEX" Bits="8">
       <Param Order="0" Name="Hops" Text="Hops" Type="HEX" Bits="4"/>
@@ -620,7 +623,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
     <Param Order="6" Name="Repeater1" Text="Repeater 1" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="7" Name="Repeater2" Text="Repeater 2" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="8" Name="Repeater3" Text="Repeater 3" Type="NODE_NUMBER" Bits="8"/>
-    <Param Order="9" Name="Reserved2" Text="Reserved" Type="HEX" Bits="32"/>
+    <Param Order="9" Name="NetworkHomeID" Text="Network Home ID" Type="HEX" Bits="32"/>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x01"/>
     <Destination>
@@ -733,8 +736,8 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
     <HeaderCodes>
       <HeaderCode>60</HeaderCode>
       <HeaderCode>61</HeaderCode>
-	  <HeaderCode>62</HeaderCode>
-	  <HeaderCode>63</HeaderCode>
+      <HeaderCode>62</HeaderCode>
+      <HeaderCode>63</HeaderCode>
     </HeaderCodes>
   </HeaderFilter>
   <HeaderFilter Order="12" Text="Unknown Header">
