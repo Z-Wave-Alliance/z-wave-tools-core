@@ -72,7 +72,11 @@ namespace Utils
 
         public static List<Tuple<string, string>> GetGammaSourceAndSerial()
         {
-            var pidvid = @"VID_1366&PID_0105";
+            var vidPids = new List<string>()
+            {
+                @"VID_1366&PID_0105",   // SEGGER legacy driver "JLink CDC UART Port"
+                @"VID_1366&PID_1024"    // WinUSB driver
+            };
             Dictionary<string, List<string>> tmp = new Dictionary<string, List<string>>();
             List<Tuple<string, string>> ret = new List<Tuple<string, string>>();
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(
@@ -88,22 +92,25 @@ namespace Utils
                         var dependent = queryObj.GetPropertyValue("Dependent") as string;
                         if (dependent != null)
                         {
-                            if (dependent.Contains(pidvid))
+                            foreach (string vidPid in vidPids)
                             {
-                                string id = dependent.Substring(dependent.IndexOf(pidvid) + pidvid.Length).Replace(@"\\", @"\");
-                                id = id.Trim('\\', '\"');
-                                if (!id.StartsWith("&"))
+                                if (dependent.Contains(vidPid))
                                 {
-                                    id = id.TrimStart('0');
-                                    if (!tmp.ContainsKey(id))
+                                    string id = dependent.Substring(dependent.IndexOf(vidPid) + vidPid.Length).Replace(@"\\", @"\");
+                                    id = id.Trim('\\', '\"');
+                                    if (!id.StartsWith("&"))
                                     {
-                                        tmp.Add(id, new List<string>());
-                                        lastId = id;
+                                        id = id.TrimStart('0');
+                                        if (!tmp.ContainsKey(id))
+                                        {
+                                            tmp.Add(id, new List<string>());
+                                            lastId = id;
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    tmp[lastId].Add(id);
+                                    else
+                                    {
+                                        tmp[lastId].Add(id);
+                                    }
                                 }
                             }
                         }
@@ -125,25 +132,32 @@ namespace Utils
                 foreach (ManagementObject queryObj in searcher.Get())
                 {
                     var deviceId = queryObj.GetPropertyValue("DeviceID") as string;
-                    if (deviceId != null && deviceId.Contains(pidvid))
+                    if (deviceId != null)
                     {
-                        var name = queryObj.GetPropertyValue("Name") as string;
-                        if (name != null)
+                        foreach (string vidPid in vidPids)
                         {
-                            var port = name.Split('(', ')').FirstOrDefault(x => x.StartsWith("COM"));
-                            if (port != null)
+                            if (deviceId.Contains(vidPid))
                             {
-                                foreach (var record in tmp)
+                                var name = queryObj.GetPropertyValue("Name") as string;
+                                if (name != null)
                                 {
-                                    foreach (var item in record.Value)
+                                    var port = name.Split('(', ')').FirstOrDefault(x => x.StartsWith("COM"));
+                                    if (port != null)
                                     {
-                                        if (deviceId.Contains(item))
+                                        foreach (var record in tmp)
                                         {
-                                            ret.Add(new Tuple<string, string>(port, record.Key));
+                                            foreach (var item in record.Value)
+                                            {
+                                                if (deviceId.Contains(item))
+                                                {
+                                                    ret.Add(new Tuple<string, string>(port, record.Key));
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
+
                         }
                     }
                 }
@@ -171,7 +185,7 @@ namespace Utils
                         if (prop.Value as string != null)
                         {
                             var val = (string)prop.Value;
-                            if (val.StartsWith(@"USB\VID_1366&PID_0105"))
+                            if (val.StartsWith(@"USB\VID_1366&PID_0105") || val.StartsWith(@"USB\VID_1366&PID_1024"))
                             {
                                 Console.WriteLine(indent + $"{prop.Name}: {val}");
                             }
