@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -101,10 +102,12 @@ namespace ZWave.Xml.HeaderGenerator
                 sw.WriteLine("  ROLE_TYPE_CONTROLLER_SUB_STATIC                                                 = 0x01,");
                 sw.WriteLine("  ROLE_TYPE_CONTROLLER_PORTABLE                                                   = 0x02,");
                 sw.WriteLine("  ROLE_TYPE_CONTROLLER_PORTABLE_REPORTING                                         = 0x03,");
-                sw.WriteLine("  ROLE_TYPE_END_NODE_PORTABLE                                                        = 0x04,");
-                sw.WriteLine("  ROLE_TYPE_END_NODE_ALWAYS_ON                                                       = 0x05,");
-                sw.WriteLine("  ROLE_TYPE_END_NODE_SLEEPING_REPORTING                                              = 0x06,");
-                sw.WriteLine("  ROLE_TYPE_END_NODE_SLEEPING_LISTENING                                              = 0x07,");
+                sw.WriteLine("  ROLE_TYPE_END_NODE_PORTABLE                                                     = 0x04,");
+                sw.WriteLine("  ROLE_TYPE_END_NODE_ALWAYS_ON                                                    = 0x05,");
+                sw.WriteLine("  ROLE_TYPE_END_NODE_SLEEPING_REPORTING                                           = 0x06,");
+                sw.WriteLine("  ROLE_TYPE_END_NODE_SLEEPING_LISTENING                                           = 0x07,");
+                sw.WriteLine("  ROLE_TYPE_END_NODE_NETWORK_AWARE                                                = 0x08,");
+                sw.WriteLine("  ROLE_TYPE_END_NODE_WAKE_ON_EVENT                                                = 0x09,");
                 sw.WriteLine("} ZWAVE_PLUS_ROLE_TYPES;");
                 sw.WriteLine("");
                 sw.WriteLine("/************* Z-Wave+ Icon Type identifiers **************/");
