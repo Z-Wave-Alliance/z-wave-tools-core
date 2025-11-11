@@ -53,6 +53,8 @@ namespace ZWave.Enums
         RZ13_BRD4209A,
 
         [Description("EFR32ZG23 868-915 MHz 14 dBm Radio Board")]
+        ZG23_BRD4204A,
+        [Description("EFR32ZG23 868-915 MHz 14 dBm Radio Board")]
         ZG23_BRD4204C,
         [Description("EFR32ZG23 868-915 MHz 14 dBm Radio Board")]
         ZG23_BRD4204D,

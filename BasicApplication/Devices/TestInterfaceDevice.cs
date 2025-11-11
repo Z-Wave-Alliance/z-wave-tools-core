@@ -1,11 +1,7 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Utils;
 using ZWave.BasicApplication.Operations;
 using ZWave.BasicApplication.Tasks;
@@ -13,7 +9,6 @@ using ZWave.Enums;
 using ZWave.Exceptions;
 using ZWave.Layers;
 using ZWave.Layers.Application;
-using static ZWave.BasicApplication.Devices.TestInterfaceDevice;
 
 namespace ZWave.BasicApplication.Devices
 {
@@ -411,8 +406,10 @@ namespace ZWave.BasicApplication.Devices
                                 break;
                         }
                         break;
+                    case ChipTypes.ZG23_BRD4204A:
                     case ChipTypes.ZG23_BRD4204C:
                     case ChipTypes.ZG23_BRD4204D:
+                    case ChipTypes.ZG23_BRD4210A:
                     case ChipTypes.ZGM230S_BRD4205A:
                     case ChipTypes.ZGM230S_BRD4205B:
                         switch (maskType)
