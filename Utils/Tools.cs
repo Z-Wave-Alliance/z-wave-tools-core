@@ -1617,7 +1617,7 @@ namespace Utils
         /// If the given minimum length is greater than the encoded given string, spaces will be added.
         /// Byte array will be shortened to the maximum length given.
         /// </summary>
-        public static byte[] GetAsciiBytes(string s, byte? minLength = null, byte? maxLength = null)
+        public static byte[] GetAsciiBytes(string s, int? minLength = null, int? maxLength = null)
         {
             return GetBytes(EncodingType.Ascii, s, minLength, maxLength);
         }
@@ -1627,7 +1627,7 @@ namespace Utils
         /// If the given minimum length is greater than the encoded given string, spaces will be added.
         /// Byte array will be shortened to the maximum length given.
         /// </summary>
-        public static byte[] GetOemExtendedAsciiBytes(string s, byte? minLength = null, byte? maxLength = null)
+        public static byte[] GetOemExtendedAsciiBytes(string s, int? minLength = null, int? maxLength = null)
         {
             return GetBytes(EncodingType.OemExtendedAscii, s, minLength, maxLength);
         }
@@ -1636,12 +1636,12 @@ namespace Utils
         /// If the given minimum length is greater than the encoded given string, spaces will be added.
         /// Byte array will be shortened to the maximum length given.
         /// </summary>
-        public static byte[] GetUtf16BigEndianBytes(string s, byte? minLength = null, byte? maxLength = null)
+        public static byte[] GetUtf16BigEndianBytes(string s, int? minLength = null, int? maxLength = null)
         {
             return GetBytes(EncodingType.Utf16BigEndian, s, minLength, maxLength);
         }
 
-        private static byte[] GetBytes(EncodingType encoding, string s, byte? minLength, byte? maxLength)
+        private static byte[] GetBytes(EncodingType encoding, string s, int? minLength, int? maxLength)
         {
             if (maxLength != null && minLength != null && minLength > maxLength)
             {
@@ -1653,7 +1653,7 @@ namespace Utils
             {
                 if (minLength != null)
                 {
-                    return new byte[(byte)minLength];
+                    return new byte[(int)minLength];
                 }
 
                 return new byte[0];
@@ -1674,12 +1674,12 @@ namespace Utils
                     if (minLength != null && minLength % 2 != 0)
                     {
                         // Given Min Length ({minLength}) is not an even value!
-                        minLength = (byte)((byte)minLength - 1);
+                        minLength = (int)minLength - 1;
                     }
                     if (maxLength != null && maxLength % 2 != 0)
                     {
                         // Given Max Length ({maxLength}) is not an even value!
-                        maxLength = (byte)((byte)maxLength - 1);
+                        maxLength = (int)maxLength - 1;
                     }
                     break;
                 default:
@@ -1715,7 +1715,7 @@ namespace Utils
             // Consider Maximum Length
             if (maxLength != null && maxLength < bytes.Length)
             {
-                return GetShortenedBytes(bytes, (byte)maxLength);
+                return GetShortenedBytes(bytes, (int)maxLength);
             }
 
             return bytes;
@@ -1725,7 +1725,7 @@ namespace Utils
         /// Shortens the byte array to the given maximum length.
         /// </summary>
         /// <returns>New byte array, not longer than 'maxLength'</returns>
-        public static byte[] GetShortenedBytes(byte[] bytes, byte maxLength)
+        public static byte[] GetShortenedBytes(byte[] bytes, int maxLength)
         {
             if (bytes == null)
             {
