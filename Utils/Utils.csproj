@@ -52,6 +52,7 @@
     <Compile Include="EnumDescriptionTypeConverter.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Events\EventArgs.cs" />
+    <Compile Include="Extensions\RandomNumberGeneratorExt.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="FileAccessMonitor.cs" />
     <Compile Include="IgnoreCaseEqualityComparer.cs" />
@@ -93,7 +94,6 @@
     <Compile Include="Extensions\EnumerableExt.cs" />
     <Compile Include="Extensions\ValueExt.cs" />
     <Compile Include="Extensions\RefTypeExt.cs" />
-    <Compile Include="Extensions\RNGCryptoServiceProviderExt.cs" />
     <Compile Include="Extensions\ShouldBeNotNullExtension.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="IntRef.cs" />

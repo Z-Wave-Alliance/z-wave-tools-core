@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ZWave.Security
 {
     public class SecurityS2CryptoProviderBase
     {
-        protected RNGCryptoServiceProvider _rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+        protected RandomNumberGenerator _randomNumberGenerator = RandomNumberGenerator.Create();
 
         public static int MaxMpanIterations = 5;
         public byte LastSentMulticastGroupId { get; protected set; }
@@ -21,7 +22,7 @@ namespace ZWave.Security
         protected byte[] GetEntropyInput()
         {
             byte[] entropy_input = new byte[SecurityS2Utils.PERSONALIZATION_SIZE];
-            _rngCryptoServiceProvider.GetBytes(entropy_input);
+            _randomNumberGenerator.GetBytes(entropy_input);
             return entropy_input;
         }
 
