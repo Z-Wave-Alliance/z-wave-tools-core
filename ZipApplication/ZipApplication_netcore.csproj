@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>ZWaveZipApplication</AssemblyName>
-		<TargetFrameworks>net6.0;net48</TargetFrameworks>
+		<TargetFrameworks>net10.0;net48</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
@@ -24,7 +24,7 @@
 		<Content Include="..\z-wave-blobs\z-wave-tools-core\ZipTransport\arm\libziptrans32.so" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="SSH.NET" Version="2020.0.2" />
+	  <PackageReference Include="SSH.NET" Version="2025.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Utils\Utils_netcore.csproj" />

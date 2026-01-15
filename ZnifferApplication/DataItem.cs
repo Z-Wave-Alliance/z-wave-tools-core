@@ -1,5 +1,7 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -780,14 +782,14 @@ namespace ZWave.ZnifferApplication
 
         public static DataItem DeepClone(DataItem obj)
         {
-            using (var ms = new MemoryStream())
+            if (obj == null)
             {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, obj);
-                ms.Position = 0;
-
-                return (DataItem)formatter.Deserialize(ms);
+                return null;
             }
+            // Initialize inner objects individually.
+            // Without 'ObjectCreationHandling.Replace' default constructor values would be added to result.
+            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+            return JsonConvert.DeserializeObject<ZWave.ZnifferApplication.DataItem>(JsonConvert.SerializeObject(obj), deserializeSettings);
         }
 
         public CipherDataItem Decrypt(SecurityManager securityManager)

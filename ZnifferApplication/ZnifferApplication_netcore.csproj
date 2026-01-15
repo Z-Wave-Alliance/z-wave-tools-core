@@ -2,9 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>ZWaveZnifferApplication</AssemblyName>
-    <TargetFrameworks>net6.0;net48</TargetFrameworks>
+    <TargetFrameworks>net10.0;net48</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
   <ItemGroup>
   	<ProjectReference Include="..\Utils\Utils_netcore.csproj" />
     <ProjectReference Include="..\ZWave\ZWave_netcore.csproj" />

@@ -2,15 +2,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Utils</AssemblyName>
-    <TargetFrameworks>net6.0;net48</TargetFrameworks>
+    <TargetFrameworks>net10.0;net48</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net48'">
+    <!-- for .NET (Core) -->
     <Compile Remove="WinBased\**" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
-    <PackageReference Include="System.IO.Packaging" Version="8.0.0" />
+    <PackageReference Include="System.IO.Packaging" Version="10.0.2" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <!-- for .NET Framework 4.8 -->
     <Reference Include="System.Management" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
