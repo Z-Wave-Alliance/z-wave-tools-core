@@ -72,6 +72,7 @@
     <Compile Include="FrameHeader\ParamValue.cs" />
     <Compile Include="FrameHeader\SpeedFilter.cs" />
     <Compile Include="FrameHeader\Validation.cs" />
+    <Compile Include="GeneratorUtils.cs" />
     <Compile Include="HeaderGenerator\CHGenerator.cs">
       <SubType>Code</SubType>
     </Compile>

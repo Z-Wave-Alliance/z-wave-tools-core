@@ -29,7 +29,7 @@ namespace ZWave.Xml.HeaderGenerator
         {
             using (FileStream fs = new FileStream(optionsDefaultFileName, FileMode.Create))
             {
-                StreamWriter sw = new StreamWriter(fs) { NewLine = LINE_ENDING };
+                StreamWriter sw = new StreamWriter(fs) { NewLine = NEW_LINE };
                 var commandClassPrev = "";
                 foreach (var cmdClass in CommandClassList)
                 {

@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,9 @@ namespace ZWave.Xml
 {
     internal class DefinitionConverter
     {
+        protected const string NEW_LINE = GeneratorUtils.NEW_LINE;
+        protected static Encoding defaultEncoding = Encoding.ASCII;
+
         public const string MsgLength = "MSG_LENGTH";
         public const string MsgMarker = "MSG_MARKER";
         public const string SpecificTypeNotUsed = "SPECIFIC_TYPE_NOT_USED";
@@ -87,18 +91,21 @@ namespace ZWave.Xml
             XmlWriterSettings sett = new XmlWriterSettings
             {
                 Indent = true,
-                NewLineChars = Environment.NewLine
+                NewLineChars = NEW_LINE,
+                Encoding = defaultEncoding
             };
             XmlSerializerNamespaces names = new XmlSerializerNamespaces();
             names.Add(string.Empty, string.Empty);
             XmlWriter writer = XmlWriter.Create(zWaveDefinitionFileName, sett);
             try
             {
+                writer.AddLicenseInfo();
                 _zwXmlNewSerializer.Serialize(writer, ZWaveDefinition, names);
                 ret = true;
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                ex.Message._EXLOG();
             }
             finally
             {
@@ -250,21 +257,25 @@ namespace ZWave.Xml
                 s.Message._EXLOG();
             }
             bool ret = false;
+
             XmlWriterSettings sett = new XmlWriterSettings
             {
                 Indent = true,
-                NewLineChars = Environment.NewLine
+                NewLineChars = NEW_LINE,
+                Encoding = defaultEncoding
             };
             XmlSerializerNamespaces names = new XmlSerializerNamespaces();
             names.Add(string.Empty, string.Empty);
             XmlWriter writer = XmlWriter.Create(zXmlDefinitionFileName, sett);
             try
             {
+                GeneratorUtils.AddLicenseInfo(writer);
                 _zwXmlOldSerializer.Serialize(writer, ZXmlDefinition, names);
                 ret = true;
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                ex.Message._EXLOG();
             }
             finally
             {
@@ -1348,7 +1359,6 @@ namespace ZWave.Xml
             return items;
         }
 
-
         private static param DowngradeParamBitmask(Param param)
         {
             param ret = DowngradeParamCommon(param);
@@ -1841,7 +1851,6 @@ namespace ZWave.Xml
             return ret;
         }
 
-
         private static param DowngradeParamCommon(Param param)
         {
             param ret = new param
@@ -1868,17 +1877,20 @@ namespace ZWave.Xml
             XmlWriterSettings sett = new XmlWriterSettings
             {
                 Indent = true,
-                NewLineChars = Environment.NewLine
+                NewLineChars = NEW_LINE,
+                Encoding = defaultEncoding,
             };
             XmlSerializerNamespaces names = new XmlSerializerNamespaces();
             names.Add(string.Empty, string.Empty);
             XmlWriter writer = XmlWriter.Create(ret, sett);
             try
             {
+                writer.AddLicenseInfo();
                 serializer.Serialize(writer, definition, names);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                ex.Message._EXLOG();
             }
             finally
             {

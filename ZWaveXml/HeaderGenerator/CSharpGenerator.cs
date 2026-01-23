@@ -75,8 +75,8 @@ namespace ZWave.Xml.HeaderGenerator
                     : cmdClass.Name;
                 using (FileStream fs = new FileStream(Path.Combine(folder ?? "", name + ".cs"), FileMode.Create))
                 {
-                    StreamWriter sw = new StreamWriter(fs) { NewLine = LINE_ENDING };
-                    GenerateLicenseInfo(sw);
+                    StreamWriter sw = new StreamWriter(fs) { NewLine = NEW_LINE };
+                    sw.AddLicenseInfo();
                     if (cmdClass.Command != null && cmdClass.Command.Count > 0)
                     {
                         GenerateUsingSection(sw);
@@ -112,12 +112,6 @@ namespace ZWave.Xml.HeaderGenerator
                     sw.Close();
                 }
             }
-        }
-
-        private static void GenerateLicenseInfo(StreamWriter sw)
-        {
-            sw.WriteLine($"/// SPDX-License-Identifier: BSD-3-Clause");
-            sw.WriteLine($"/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org");
         }
 
         private static void GenerateProperties(TextWriter sw, Command cmd)
@@ -1015,8 +1009,8 @@ namespace ZWave.Xml.HeaderGenerator
             }
             using (FileStream fs = new FileStream(Path.Combine(folder ?? "", expStrName), FileMode.Create))
             {
-                StreamWriter sw = new StreamWriter(fs) { NewLine = LINE_ENDING };
-                GenerateLicenseInfo(sw);
+                StreamWriter sw = new StreamWriter(fs) { NewLine = NEW_LINE };
+                sw.AddLicenseInfo();
                 sw.WriteLine("/// Generated file from the Z-Wave XML Editor.");
                 GenerateNamespaceBegin(sw, isZats);
 

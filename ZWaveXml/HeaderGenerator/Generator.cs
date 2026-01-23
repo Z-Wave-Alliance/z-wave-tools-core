@@ -15,7 +15,7 @@ namespace ZWave.Xml.HeaderGenerator
     /// </summary>
     public abstract class Generator
     {
-        protected const string LINE_ENDING = "\n"; // Unix line ending
+        protected const string NEW_LINE = GeneratorUtils.NEW_LINE;
 
         /// <summary>
         /// Reference to options class
