@@ -3,7 +3,7 @@
 SPDX-License-Identifier: BSD-3-Clause
 SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
 -->
-<zw_classes version="2.18.3">
+<zw_classes version="2.19.0">
   <bas_dev key="0x01" name="BASIC_TYPE_CONTROLLER" help="Controller" comment="Node is a portable controller" />
   <bas_dev key="0x04" name="BASIC_TYPE_ROUTING_END_NODE" help="Routing End Node" comment="Node is an End Node with routing capabilities" />
   <bas_dev key="0x03" name="BASIC_TYPE_END_NODE" help="End Node" comment="Node is an End Node" />
@@ -1257,215 +1257,6 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
     </cmd>
   </cmd_class>
   <cmd_class key="0x71" version="8" name="COMMAND_CLASS_NOTIFICATION" help="Command Class Notification">
-    <cmd key="0x04" name="NOTIFICATION_GET" help="Notification Get" support_mode="RX">
-      <param key="0x00" name="V1 Alarm Type" type="BYTE" />
-      <param key="0x01" name="Notification Type" type="CONST">
-        <const key="0x00" flagname="Reserved" flagmask="0x00" />
-        <const key="0x01" flagname="Smoke" flagmask="0x01" />
-        <const key="0x02" flagname="CO" flagmask="0x02" />
-        <const key="0x03" flagname="CO2" flagmask="0x03" />
-        <const key="0x04" flagname="Heat" flagmask="0x04" />
-        <const key="0x05" flagname="Water" flagmask="0x05" />
-        <const key="0x06" flagname="Access Control" flagmask="0x06" />
-        <const key="0x07" flagname="Home Security" flagmask="0x07" />
-        <const key="0x08" flagname="Power Management" flagmask="0x08" />
-        <const key="0x09" flagname="System" flagmask="0x09" />
-        <const key="0x0A" flagname="Emergency" flagmask="0x0A" />
-        <const key="0x0B" flagname="Clock" flagmask="0x0B" />
-        <const key="0x0C" flagname="Appliance" flagmask="0x0C" />
-        <const key="0x0D" flagname="Home Health" flagmask="0x0D" />
-        <const key="0x0E" flagname="Siren" flagmask="0x0E" />
-        <const key="0x0F" flagname="Water Valve" flagmask="0x0F" />
-        <const key="0x10" flagname="Weather Alarm" flagmask="0x10" />
-        <const key="0x11" flagname="Irrigation" flagmask="0x11" />
-        <const key="0x12" flagname="Gas Alarm" flagmask="0x12" />
-        <const key="0x13" flagname="Pest Control" flagmask="0x13" />
-        <const key="0x14" flagname="Light sensor" flagmask="0x14" />
-        <const key="0x15" flagname="Water Quality Monitoring" flagmask="0x15" />
-        <const key="0x16" flagname="Home monitoring" flagmask="0x16" />
-        <const key="0x17" flagname="First" flagmask="0xFF" />
-      </param>
-      <param key="0x02" name="Event" type="BYTE" />
-    </cmd>
-    <cmd key="0x05" name="NOTIFICATION_REPORT" help="Notification Report" support_mode="TX">
-      <param key="0x00" name="V1 Alarm Type" type="BYTE" />
-      <param key="0x01" name="V1 Alarm Level" type="BYTE" />
-      <param key="0x02" name="Reserved" type="BYTE" />
-      <param key="0x03" name="Notification Status" type="CONST">
-        <const key="0x00" flagname="Off" flagmask="0x00" />
-        <const key="0x01" flagname="No pending notifications" flagmask="0xFE" />
-        <const key="0x02" flagname="On" flagmask="0xFF" />
-      </param>
-      <param key="0x04" name="Notification Type" type="CONST">
-        <const key="0x00" flagname="Reserved" flagmask="0x00" />
-        <const key="0x01" flagname="Smoke" flagmask="0x01" />
-        <const key="0x02" flagname="CO" flagmask="0x02" />
-        <const key="0x03" flagname="CO2" flagmask="0x03" />
-        <const key="0x04" flagname="Heat" flagmask="0x04" />
-        <const key="0x05" flagname="Water" flagmask="0x05" />
-        <const key="0x06" flagname="Access Control" flagmask="0x06" />
-        <const key="0x07" flagname="Home Security" flagmask="0x07" />
-        <const key="0x08" flagname="Power Management" flagmask="0x08" />
-        <const key="0x09" flagname="System" flagmask="0x09" />
-        <const key="0x0A" flagname="Emergency" flagmask="0x0A" />
-        <const key="0x0B" flagname="Clock" flagmask="0x0B" />
-        <const key="0x0C" flagname="Appliance" flagmask="0x0C" />
-        <const key="0x0D" flagname="Home Health" flagmask="0x0D" />
-        <const key="0x0E" flagname="Siren" flagmask="0x0E" />
-        <const key="0x0F" flagname="Water Valve" flagmask="0x0F" />
-        <const key="0x10" flagname="Weather Alarm" flagmask="0x10" />
-        <const key="0x11" flagname="Irrigation" flagmask="0x11" />
-        <const key="0x12" flagname="Gas Alarm" flagmask="0x12" />
-        <const key="0x13" flagname="Pest Control" flagmask="0x13" />
-        <const key="0x14" flagname="Light sensor" flagmask="0x14" />
-        <const key="0x15" flagname="Water Quality Monitoring" flagmask="0x15" />
-        <const key="0x16" flagname="Home monitoring" flagmask="0x16" />
-        <const key="0x17" flagname="First" flagmask="0xFF" />
-      </param>
-      <param key="0x05" name="Event" type="BYTE" />
-      <param key="0x06" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Event Parameters Length" fieldmask="0x1F" />
-        <bitfield key="0x01" fieldname="Reserved2" fieldmask="0x60" shifter="5" />
-        <bitflag key="0x02" flagname="Sequence" flagmask="0x80" />
-      </param>
-      <param key="0x07" name="Event Parameter" type="VARIANT">
-        <variant paramoffs="6" sizemask="0x1F" />
-      </param>
-      <param key="0x08" name="Sequence Number" type="BYTE" />
-    </cmd>
-    <cmd key="0x06" name="NOTIFICATION_SET" help="Notification Set" support_mode="RX">
-      <param key="0x00" name="Notification Type" type="CONST">
-        <const key="0x00" flagname="Reserved" flagmask="0x00" />
-        <const key="0x01" flagname="Smoke" flagmask="0x01" />
-        <const key="0x02" flagname="CO" flagmask="0x02" />
-        <const key="0x03" flagname="CO2" flagmask="0x03" />
-        <const key="0x04" flagname="Heat" flagmask="0x04" />
-        <const key="0x05" flagname="Water" flagmask="0x05" />
-        <const key="0x06" flagname="Access Control" flagmask="0x06" />
-        <const key="0x07" flagname="Home Security" flagmask="0x07" />
-        <const key="0x08" flagname="Power Management" flagmask="0x08" />
-        <const key="0x09" flagname="System" flagmask="0x09" />
-        <const key="0x0A" flagname="Emergency" flagmask="0x0A" />
-        <const key="0x0B" flagname="Clock" flagmask="0x0B" />
-        <const key="0x0C" flagname="Appliance" flagmask="0x0C" />
-        <const key="0x0D" flagname="Home Health" flagmask="0x0D" />
-        <const key="0x0E" flagname="Siren" flagmask="0x0E" />
-        <const key="0x0F" flagname="Water Valve" flagmask="0x0F" />
-        <const key="0x10" flagname="Weather Alarm" flagmask="0x10" />
-        <const key="0x11" flagname="Irrigation" flagmask="0x11" />
-        <const key="0x12" flagname="Gas Alarm" flagmask="0x12" />
-        <const key="0x13" flagname="Pest Control" flagmask="0x13" />
-        <const key="0x14" flagname="Light sensor" flagmask="0x14" />
-        <const key="0x15" flagname="Water Quality Monitoring" flagmask="0x15" />
-        <const key="0x16" flagname="Home monitoring" flagmask="0x16" />
-        <const key="0x17" flagname="First" flagmask="0xFF" />
-      </param>
-      <param key="0x01" name="Notification Status" type="CONST">
-        <const key="0x00" flagname="Off" flagmask="0x00" />
-        <const key="0x01" flagname="No pending notifications" flagmask="0xFE" />
-        <const key="0x02" flagname="On" flagmask="0xFF" />
-      </param>
-    </cmd>
-    <cmd key="0x07" name="NOTIFICATION_SUPPORTED_GET" help="Notification Supported Get" support_mode="RX" />
-    <cmd key="0x08" name="NOTIFICATION_SUPPORTED_REPORT" help="Notification Supported Report" support_mode="TX">
-      <param key="0x00" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Number of Bit Masks" fieldmask="0x1F" />
-        <bitfield key="0x01" fieldname="Reserved" fieldmask="0x60" shifter="5" />
-        <bitflag key="0x02" flagname="V1 Alarm" flagmask="0x80" />
-      </param>
-      <param key="0x01" name="Bit Mask" type="BITMASK">
-        <bitmask key="0x00" paramoffs="0" lenmask="0x1F" />
-        <bitflag key="0x00" flagname="Reserved" flagmask="0x00" />
-        <bitflag key="0x01" flagname="Smoke" flagmask="0x01" />
-        <bitflag key="0x02" flagname="CO" flagmask="0x02" />
-        <bitflag key="0x03" flagname="CO2" flagmask="0x03" />
-        <bitflag key="0x04" flagname="Heat" flagmask="0x04" />
-        <bitflag key="0x05" flagname="Water" flagmask="0x05" />
-        <bitflag key="0x06" flagname="Access Control" flagmask="0x06" />
-        <bitflag key="0x07" flagname="Home Security" flagmask="0x07" />
-        <bitflag key="0x08" flagname="Power Management" flagmask="0x08" />
-        <bitflag key="0x09" flagname="System" flagmask="0x09" />
-        <bitflag key="0x0A" flagname="Emergency" flagmask="0x0A" />
-        <bitflag key="0x0B" flagname="Clock" flagmask="0x0B" />
-        <bitflag key="0x0C" flagname="Appliance" flagmask="0x0C" />
-        <bitflag key="0x0D" flagname="Home Health" flagmask="0x0D" />
-        <bitflag key="0x0E" flagname="Siren" flagmask="0x0E" />
-        <bitflag key="0x0F" flagname="Water Valve" flagmask="0x0F" />
-        <bitflag key="0x10" flagname="Weather Alarm" flagmask="0x10" />
-        <bitflag key="0x11" flagname="Irrigation" flagmask="0x11" />
-        <bitflag key="0x12" flagname="Gas Alarm" flagmask="0x12" />
-        <bitflag key="0x13" flagname="Pest Control" flagmask="0x13" />
-        <bitflag key="0x14" flagname="Light sensor" flagmask="0x14" />
-        <bitflag key="0x15" flagname="Water Quality Monitoring" flagmask="0x15" />
-        <bitflag key="0x16" flagname="Home monitoring" flagmask="0x16" />
-        <bitflag key="0x17" flagname="First" flagmask="0xFF" />
-      </param>
-    </cmd>
-    <cmd key="0x01" name="EVENT_SUPPORTED_GET" help="Event Supported Get" support_mode="RX">
-      <param key="0x00" name="Notification Type" type="CONST">
-        <const key="0x00" flagname="Reserved" flagmask="0x00" />
-        <const key="0x01" flagname="Smoke" flagmask="0x01" />
-        <const key="0x02" flagname="CO" flagmask="0x02" />
-        <const key="0x03" flagname="CO2" flagmask="0x03" />
-        <const key="0x04" flagname="Heat" flagmask="0x04" />
-        <const key="0x05" flagname="Water" flagmask="0x05" />
-        <const key="0x06" flagname="Access Control" flagmask="0x06" />
-        <const key="0x07" flagname="Home Security" flagmask="0x07" />
-        <const key="0x08" flagname="Power Management" flagmask="0x08" />
-        <const key="0x09" flagname="System" flagmask="0x09" />
-        <const key="0x0A" flagname="Emergency" flagmask="0x0A" />
-        <const key="0x0B" flagname="Clock" flagmask="0x0B" />
-        <const key="0x0C" flagname="Appliance" flagmask="0x0C" />
-        <const key="0x0D" flagname="Home Health" flagmask="0x0D" />
-        <const key="0x0E" flagname="Siren" flagmask="0x0E" />
-        <const key="0x0F" flagname="Water Valve" flagmask="0x0F" />
-        <const key="0x10" flagname="Weather Alarm" flagmask="0x10" />
-        <const key="0x11" flagname="Irrigation" flagmask="0x11" />
-        <const key="0x12" flagname="Gas Alarm" flagmask="0x12" />
-        <const key="0x13" flagname="Pest Control" flagmask="0x13" />
-        <const key="0x14" flagname="Light sensor" flagmask="0x14" />
-        <const key="0x15" flagname="Water Quality Monitoring" flagmask="0x15" />
-        <const key="0x16" flagname="Home monitoring" flagmask="0x16" />
-        <const key="0x17" flagname="First" flagmask="0xFF" />
-      </param>
-    </cmd>
-    <cmd key="0x02" name="EVENT_SUPPORTED_REPORT" help="Event Supported Report" support_mode="TX">
-      <param key="0x00" name="Notification Type" type="CONST">
-        <const key="0x00" flagname="Reserved" flagmask="0x00" />
-        <const key="0x01" flagname="Smoke" flagmask="0x01" />
-        <const key="0x02" flagname="CO" flagmask="0x02" />
-        <const key="0x03" flagname="CO2" flagmask="0x03" />
-        <const key="0x04" flagname="Heat" flagmask="0x04" />
-        <const key="0x05" flagname="Water" flagmask="0x05" />
-        <const key="0x06" flagname="Access Control" flagmask="0x06" />
-        <const key="0x07" flagname="Home Security" flagmask="0x07" />
-        <const key="0x08" flagname="Power Management" flagmask="0x08" />
-        <const key="0x09" flagname="System" flagmask="0x09" />
-        <const key="0x0A" flagname="Emergency" flagmask="0x0A" />
-        <const key="0x0B" flagname="Clock" flagmask="0x0B" />
-        <const key="0x0C" flagname="Appliance" flagmask="0x0C" />
-        <const key="0x0D" flagname="Home Health" flagmask="0x0D" />
-        <const key="0x0E" flagname="Siren" flagmask="0x0E" />
-        <const key="0x0F" flagname="Water Valve" flagmask="0x0F" />
-        <const key="0x10" flagname="Weather Alarm" flagmask="0x10" />
-        <const key="0x11" flagname="Irrigation" flagmask="0x11" />
-        <const key="0x12" flagname="Gas Alarm" flagmask="0x12" />
-        <const key="0x13" flagname="Pest Control" flagmask="0x13" />
-        <const key="0x14" flagname="Light sensor" flagmask="0x14" />
-        <const key="0x15" flagname="Water Quality Monitoring" flagmask="0x15" />
-        <const key="0x16" flagname="Home monitoring" flagmask="0x16" />
-        <const key="0x17" flagname="First" flagmask="0xFF" />
-      </param>
-      <param key="0x01" name="Properties1" type="STRUCT_BYTE">
-        <bitfield key="0x00" fieldname="Number of Bit Masks" fieldmask="0x1F" />
-        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xE0" shifter="5" />
-      </param>
-      <param key="0x02" name="Bit Mask" type="BITMASK">
-        <bitmask key="0x00" paramoffs="1" lenmask="0x1F" />
-      </param>
-    </cmd>
-  </cmd_class>
-  <cmd_class key="0x71" version="9" name="COMMAND_CLASS_NOTIFICATION" help="Command Class Notification">
     <cmd key="0x04" name="NOTIFICATION_GET" help="Notification Get" support_mode="RX">
       <param key="0x00" name="V1 Alarm Type" type="BYTE" />
       <param key="0x01" name="Notification Type" type="CONST">
@@ -14293,16 +14084,14 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
           <fieldenum value="Reserved" />
           <fieldenum value="Reserved" />
         </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitflag key="0x01" flagname="Supported Speed - 9.6 kbps" flagmask="0x08" />
+        <bitflag key="0x02" flagname="Supported Speed - 40 kbps" flagmask="0x10" />
+        <bitflag key="0x03" flagname="Reserved" flagmask="0x20" />
+        <bitflag key="0x04" flagname="Routing" flagmask="0x40" />
+        <bitflag key="0x05" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x02" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14314,7 +14103,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x03" name="Properties3" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Speed Extension - 100 kbps" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Speed Extension - Reserved" fieldmask="0x06" shifter="1" />
-        <bitfield key="0x02" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x04" name="Basic Device Class" type="BYTE" encaptype="BAS_DEV_REF" optionaloffs="0x02" optionalmask="0x02" />
       <param key="0x05" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14345,16 +14134,14 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
           <fieldenum value="Reserved" />
           <fieldenum value="Reserved" />
         </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitflag key="0x01" flagname="Supported Speed - 9.6 kbps" flagmask="0x08" />
+        <bitflag key="0x02" flagname="Supported Speed - 40 kbps" flagmask="0x10" />
+        <bitflag key="0x03" flagname="Reserved" flagmask="0x20" />
+        <bitflag key="0x04" flagname="Routing" flagmask="0x40" />
+        <bitflag key="0x05" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14366,7 +14153,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x02" name="Properties3" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Speed Extension - 100 kbps" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Speed Extension - Reserved" fieldmask="0x06" shifter="1" />
-        <bitfield key="0x02" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x03" name="Basic Device Class" type="BYTE" encaptype="BAS_DEV_REF" optionaloffs="0x01" optionalmask="0x02" />
       <param key="0x04" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14497,16 +14284,14 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
           <fieldenum value="Reserved" />
           <fieldenum value="Reserved" />
         </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitflag key="0x01" flagname="Supported Speed - 9.6 kbps" flagmask="0x08" />
+        <bitflag key="0x02" flagname="Supported Speed - 40 kbps" flagmask="0x10" />
+        <bitflag key="0x03" flagname="Reserved" flagmask="0x20" />
+        <bitflag key="0x04" flagname="Routing" flagmask="0x40" />
+        <bitflag key="0x05" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x03" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14518,7 +14303,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x04" name="Properties3" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Speed Extension - 100 kbps" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Speed Extension - Reserved" fieldmask="0x06" shifter="1" />
-        <bitfield key="0x02" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x05" name="Basic Device Class" type="BYTE" encaptype="BAS_DEV_REF" optionaloffs="0x03" optionalmask="0x02" />
       <param key="0x06" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14554,16 +14339,14 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
           <fieldenum value="Reserved" />
           <fieldenum value="Reserved" />
         </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitflag key="0x01" flagname="Supported Speed - 9.6 kbps" flagmask="0x08" />
+        <bitflag key="0x02" flagname="Supported Speed - 40 kbps" flagmask="0x10" />
+        <bitflag key="0x03" flagname="Reserved" flagmask="0x20" />
+        <bitflag key="0x04" flagname="Routing" flagmask="0x40" />
+        <bitflag key="0x05" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14575,7 +14358,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x02" name="Properties3" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Speed Extension - 100 kbps" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Speed Extension - Reserved" fieldmask="0x06" shifter="1" />
-        <bitfield key="0x02" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x03" name="Basic Device Class" type="BYTE" encaptype="BAS_DEV_REF" optionaloffs="0x01" optionalmask="0x02" />
       <param key="0x04" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14607,16 +14390,14 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
           <fieldenum value="Reserved" />
           <fieldenum value="Reserved" />
         </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitflag key="0x01" flagname="Supported Speed - 9.6 kbps" flagmask="0x08" />
+        <bitflag key="0x02" flagname="Supported Speed - 40 kbps" flagmask="0x10" />
+        <bitflag key="0x03" flagname="Reserved" flagmask="0x20" />
+        <bitflag key="0x04" flagname="Routing" flagmask="0x40" />
+        <bitflag key="0x05" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14628,7 +14409,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x02" name="Properties3" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Speed Extension - 100 kbps" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Speed Extension - Reserved" fieldmask="0x06" shifter="1" />
-        <bitfield key="0x02" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x03" name="Basic Device Class" type="BYTE" encaptype="BAS_DEV_REF" optionaloffs="0x01" optionalmask="0x02" />
       <param key="0x04" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14649,16 +14430,14 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
           <fieldenum value="Reserved" />
           <fieldenum value="Reserved" />
         </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitflag key="0x01" flagname="Supported Speed - 9.6 kbps" flagmask="0x08" />
+        <bitflag key="0x02" flagname="Supported Speed - 40 kbps" flagmask="0x10" />
+        <bitflag key="0x03" flagname="Reserved" flagmask="0x20" />
+        <bitflag key="0x04" flagname="Routing" flagmask="0x40" />
+        <bitflag key="0x05" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
         <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
         <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
@@ -14670,7 +14449,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x02" name="Properties3" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Speed Extension - 100 kbps" flagmask="0x01" />
         <bitfield key="0x01" fieldname="Speed Extension - Reserved" fieldmask="0x06" shifter="1" />
-        <bitfield key="0x02" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x03" name="Basic Device Class" type="BYTE" encaptype="BAS_DEV_REF" optionaloffs="0x01" optionalmask="0x02" />
       <param key="0x04" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14687,41 +14466,21 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
     </cmd>
     <cmd key="0x01" name="ZWAVE_LR_CMD_NODE_INFO_FRAME" help="Node Info" support_mode="RX" comment="INS14722-2">
       <param key="0x00" name="Properties1" type="STRUCT_BYTE">
-        <fieldenum key="0x00" fieldname="Protocol Version" fieldmask="0x07">
-          <fieldenum value="Reserved" />
-          <fieldenum value="Z-Wave Version 2.0" />
-          <fieldenum value="Z-Wave version ZDK 5.0x, ZDK 4.2x" />
-          <fieldenum value="Z-Wave version ZDK 4.5x and ZDK 6.0x" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-        </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
-        <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
-        <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
-        <bitflag key="0x04" flagname="Beam capability" flagmask="0x10" />
-        <bitflag key="0x05" flagname="Sensor 250ms" flagmask="0x20" />
-        <bitflag key="0x06" flagname="Sensor 1000ms" flagmask="0x40" />
-        <bitflag key="0x07" flagname="Optional functionality" flagmask="0x80" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0x3C" shifter="2" />
+        <bitflag key="0x03" flagname="Sensor 1000ms" flagmask="0x40" />
+        <bitflag key="0x04" flagname="Reserved4" flagmask="0x80" />
       </param>
       <param key="0x02" name="Properties3" type="STRUCT_BYTE">
-        <fieldenum key="0x00" fieldname="Speed Extension" fieldmask="0x07">
-          <fieldenum value="Reserved" />
-          <fieldenum value="100 kbps" />
-          <fieldenum value="200 kbps" />
-        </fieldenum>
-        <bitfield key="0x01" fieldname="Reserved2" fieldmask="0xF8" shifter="3" />
+        <bitflag key="0x00" flagname="Supported Speed - Reserved" flagmask="0x01" />
+        <bitflag key="0x01" flagname="Supported Speed - 100 kbps" flagmask="0x02" />
+        <bitflag key="0x02" flagname="Supported Speed - Reserved2" flagmask="0x04" />
+        <bitfield key="0x03" fieldname="Reserved5" fieldmask="0xF8" shifter="3" />
       </param>
       <param key="0x03" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
       <param key="0x04" name="Specific Device Class" type="BYTE" encaptype="SPEC_DEV_REF" />
@@ -14738,33 +14497,17 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
     </cmd>
     <cmd key="0x27" name="ZWAVE_LR_CMD_SMARTSTART_PRIME" help="SmartStart Prime" comment="INS14722-2">
       <param key="0x00" name="Properties1" type="STRUCT_BYTE">
-        <fieldenum key="0x00" fieldname="Protocol Version" fieldmask="0x07">
-          <fieldenum value="Reserved" />
-          <fieldenum value="Z-Wave Version 2.0" />
-          <fieldenum value="Z-Wave version ZDK 5.0x, ZDK 4.2x" />
-          <fieldenum value="Z-Wave version ZDK 4.5x and ZDK 6.0x" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-        </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
-        <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
-        <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
-        <bitflag key="0x04" flagname="Beam capability" flagmask="0x10" />
-        <bitflag key="0x05" flagname="Sensor 250ms" flagmask="0x20" />
-        <bitflag key="0x06" flagname="Sensor 1000ms" flagmask="0x40" />
-        <bitflag key="0x07" flagname="Optional functionality" flagmask="0x80" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0x0C" shifter="2" />
+        <bitflag key="0x03" flagname="Beam capability" flagmask="0x10" />
+        <bitflag key="0x04" flagname="Sensor 250ms" flagmask="0x20" />
+        <bitflag key="0x05" flagname="Sensor 1000ms" flagmask="0x40" />
+        <bitflag key="0x06" flagname="Reserved4" flagmask="0x80" />
       </param>
       <param key="0x02" name="Reserved" type="BYTE" />
       <param key="0x03" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -14776,33 +14519,17 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
     </cmd>
     <cmd key="0x28" name="ZWAVE_LR_CMD_SMARTSTART_INCLUDE" help="SmartStart Inclusion Request" comment="INS14722-2">
       <param key="0x00" name="Properties1" type="STRUCT_BYTE">
-        <fieldenum key="0x00" fieldname="Protocol Version" fieldmask="0x07">
-          <fieldenum value="Reserved" />
-          <fieldenum value="Z-Wave Version 2.0" />
-          <fieldenum value="Z-Wave version ZDK 5.0x, ZDK 4.2x" />
-          <fieldenum value="Z-Wave version ZDK 4.5x and ZDK 6.0x" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-          <fieldenum value="Reserved" />
-        </fieldenum>
-        <fieldenum key="0x01" fieldname="Max baud rate" fieldmask="0x38" shifter="3">
-          <fieldenum value="Reserved" />
-          <fieldenum value="9.6 kbps" />
-          <fieldenum value="40 kbps" />
-        </fieldenum>
-        <bitflag key="0x02" flagname="Routing" flagmask="0x40" />
-        <bitflag key="0x03" flagname="Listening" flagmask="0x80" />
+        <bitfield key="0x00" fieldname="Reserved" fieldmask="0x7F" />
+        <bitflag key="0x01" flagname="Listening" flagmask="0x80" />
       </param>
       <param key="0x01" name="Properties2" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="RFU" flagmask="0x01" />
+        <bitflag key="0x00" flagname="Reserved2" flagmask="0x01" />
         <bitflag key="0x01" flagname="Controller" flagmask="0x02" />
-        <bitflag key="0x02" flagname="Specific Device" flagmask="0x04" />
-        <bitflag key="0x03" flagname="Routing End Node" flagmask="0x08" />
-        <bitflag key="0x04" flagname="Beam capability" flagmask="0x10" />
-        <bitflag key="0x05" flagname="Sensor 250ms" flagmask="0x20" />
-        <bitflag key="0x06" flagname="Sensor 1000ms" flagmask="0x40" />
-        <bitflag key="0x07" flagname="Optional functionality" flagmask="0x80" />
+        <bitfield key="0x02" fieldname="Reserved3" fieldmask="0x0C" shifter="2" />
+        <bitflag key="0x03" flagname="Beam capability" flagmask="0x10" />
+        <bitflag key="0x04" flagname="Sensor 250ms" flagmask="0x20" />
+        <bitflag key="0x05" flagname="Sensor 1000ms" flagmask="0x40" />
+        <bitflag key="0x06" flagname="Reserved4" flagmask="0x80" />
       </param>
       <param key="0x02" name="Reserved" type="BYTE" />
       <param key="0x03" name="Generic Device Class" type="BYTE" encaptype="GEN_DEV_REF" />
@@ -17419,17 +17146,38 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       </param>
     </cmd>
     <cmd key="0x0F" name="NLS_NODE_LIST_GET" help="NLS Node List Get" support_mode="RX">
-      <param key="0x00" name="Request" type="BYTE" />
+      <param key="0x00" name="Properties1" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Start Node ID (MSB)" fieldmask="0x0F" />
+        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xF0" shifter="4" />
+      </param>
+      <param key="0x01" name="Start Node ID (LSB)" type="BYTE" />
     </cmd>
     <cmd key="0x10" name="NLS_NODE_LIST_REPORT" help="NLS Node List Report" support_mode="TX">
-      <param key="0x00" name="Properties1" type="STRUCT_BYTE">
-        <bitflag key="0x00" flagname="Last node" flagmask="0x01" />
-        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xFE" shifter="1" />
+      <param key="0x00" name="Number of Entries" type="BYTE" />
+      <variant_group key="0x01" name="vg1" paramOffs="0x00" sizemask="0xFF" sizeoffs="0x00">
+        <param key="0x00" name="Properties1" type="STRUCT_BYTE">
+          <bitfield key="0x00" fieldname="Node ID (MSB)" fieldmask="0x0F" />
+          <bitfield key="0x01" fieldname="Reserved" fieldmask="0x70" shifter="4" />
+          <bitflag key="0x02" flagname="NLS State" flagmask="0x80" />
+        </param>
+        <param key="0x01" name="Node ID (LSB)" type="BYTE" />
+        <param key="0x02" name="Granted Keys" type="BITMASK">
+          <bitmask key="0x00" paramoffs="255" lenmask="0x00" len="1" />
+          <bitflag key="0x00" flagname="Unauthenticated" flagmask="0x00" />
+          <bitflag key="0x01" flagname="Authenticated" flagmask="0x01" />
+          <bitflag key="0x02" flagname="Access" flagmask="0x02" />
+          <bitflag key="0x03" flagname="Reserved3" flagmask="0x03" />
+          <bitflag key="0x04" flagname="Reserved4" flagmask="0x04" />
+          <bitflag key="0x05" flagname="Reserved5" flagmask="0x05" />
+          <bitflag key="0x06" flagname="Reserved6" flagmask="0x06" />
+          <bitflag key="0x07" flagname="S0" flagmask="0x07" />
+        </param>
+      </variant_group>
+      <param key="0x02" name="Properties2" type="STRUCT_BYTE">
+        <bitfield key="0x00" fieldname="Next NLS Node ID (MSB)" fieldmask="0x0F" />
+        <bitfield key="0x01" fieldname="Reserved" fieldmask="0xF0" shifter="4" />
       </param>
-      <param key="0x01" name="ID (MSB) of node N" type="BYTE" />
-      <param key="0x02" name="ID (LSB) of node N" type="BYTE" />
-      <param key="0x03" name="Granted keys bitmask of node N" type="BYTE" />
-      <param key="0x04" name="NLS state of node N" type="BYTE" />
+      <param key="0x03" name="Next NLS Node ID (LSB)" type="BYTE" />
     </cmd>
     <cmd key="0x11" name="NLS_STATE_GET" help="NLS State Get" support_mode="RX" />
     <cmd key="0x12" name="NLS_STATE_REPORT" help="NLS State Report" support_mode="TX">

@@ -681,43 +681,20 @@ namespace ZWave.CommandClasses
         public partial class NLS_NODE_LIST_GET
         {
             public const byte ID = 0x0F;
-            public ByteValue request = 0;
-            public static implicit operator NLS_NODE_LIST_GET(byte[] data)
-            {
-                NLS_NODE_LIST_GET ret = new NLS_NODE_LIST_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.request = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NLS_NODE_LIST_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY_2_V2.ID);
-                ret.Add(ID);
-                if (command.request.HasValue) ret.Add(command.request);
-                return ret.ToArray();
-            }
-        }
-        public partial class NLS_NODE_LIST_REPORT
-        {
-            public const byte ID = 0x10;
             public struct Tproperties1
             {
                 private byte _value;
                 public bool HasValue { get; private set; }
                 public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte lastNode
+                public byte startNodeIdMsb
                 {
-                    get { return (byte)(_value >> 0 & 0x01); }
-                    set { HasValue = true; _value &= 0xFF - 0x01; _value += (byte)(value << 0 & 0x01); }
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
                 }
                 public byte reserved
                 {
-                    get { return (byte)(_value >> 1 & 0x7F); }
-                    set { HasValue = true; _value &= 0xFF - 0xFE; _value += (byte)(value << 1 & 0xFE); }
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
                 }
                 public static implicit operator Tproperties1(byte data)
                 {
@@ -732,21 +709,118 @@ namespace ZWave.CommandClasses
                 }
             }
             public Tproperties1 properties1 = 0;
-            public ByteValue idMsbOfNodeN = 0;
-            public ByteValue idLsbOfNodeN = 0;
-            public ByteValue grantedKeysBitmaskOfNodeN = 0;
-            public ByteValue nlsStateOfNodeN = 0;
+            public ByteValue startNodeIdLsb = 0;
+            public static implicit operator NLS_NODE_LIST_GET(byte[] data)
+            {
+                NLS_NODE_LIST_GET ret = new NLS_NODE_LIST_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.startNodeIdLsb = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NLS_NODE_LIST_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY_2_V2.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.startNodeIdLsb.HasValue) ret.Add(command.startNodeIdLsb);
+                return ret.ToArray();
+            }
+        }
+        public partial class NLS_NODE_LIST_REPORT
+        {
+            public const byte ID = 0x10;
+            public ByteValue numberOfEntries = 0;
+            public class TVG1
+            {
+                public struct Tproperties1
+                {
+                    private byte _value;
+                    public bool HasValue { get; private set; }
+                    public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                    public byte nodeIdMsb
+                    {
+                        get { return (byte)(_value >> 0 & 0x0F); }
+                        set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                    }
+                    public byte reserved
+                    {
+                        get { return (byte)(_value >> 4 & 0x07); }
+                        set { HasValue = true; _value &= 0xFF - 0x70; _value += (byte)(value << 4 & 0x70); }
+                    }
+                    public byte nlsState
+                    {
+                        get { return (byte)(_value >> 7 & 0x01); }
+                        set { HasValue = true; _value &= 0xFF - 0x80; _value += (byte)(value << 7 & 0x80); }
+                    }
+                    public static implicit operator Tproperties1(byte data)
+                    {
+                        Tproperties1 ret = new Tproperties1();
+                        ret._value = data;
+                        ret.HasValue = true;
+                        return ret;
+                    }
+                    public static implicit operator byte(Tproperties1 prm)
+                    {
+                        return prm._value;
+                    }
+                }
+                public Tproperties1 properties1 = 0;
+                public ByteValue nodeIdLsb = 0;
+                public ByteValue grantedKeys = 0;
+            }
+            public List<TVG1> vg1 = new List<TVG1>();
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte nextNlsNodeIdMsb
+                {
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public ByteValue nextNlsNodeIdLsb = 0;
             public static implicit operator NLS_NODE_LIST_REPORT(byte[] data)
             {
                 NLS_NODE_LIST_REPORT ret = new NLS_NODE_LIST_REPORT();
                 if (data != null)
                 {
                     int index = 2;
+                    ret.numberOfEntries = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.vg1 = new List<TVG1>();
+                    for (int j = 0; j < ret.numberOfEntries; j++)
+                    {
+                        TVG1 tmp = new TVG1();
+                        tmp.properties1 = data.Length > index ? (TVG1.Tproperties1)data[index++] : TVG1.Tproperties1.Empty;
+                        tmp.nodeIdLsb = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        tmp.grantedKeys = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        ret.vg1.Add(tmp);
+                    }
                     ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.idMsbOfNodeN = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.idLsbOfNodeN = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.grantedKeysBitmaskOfNodeN = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nlsStateOfNodeN = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nextNlsNodeIdLsb = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                 }
                 return ret;
             }
@@ -755,11 +829,18 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_SECURITY_2_V2.ID);
                 ret.Add(ID);
+                if (command.numberOfEntries.HasValue) ret.Add(command.numberOfEntries);
+                if (command.vg1 != null)
+                {
+                    foreach (var item in command.vg1)
+                    {
+                        if (item.properties1.HasValue) ret.Add(item.properties1);
+                        if (item.nodeIdLsb.HasValue) ret.Add(item.nodeIdLsb);
+                        if (item.grantedKeys.HasValue) ret.Add(item.grantedKeys);
+                    }
+                }
                 if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.idMsbOfNodeN.HasValue) ret.Add(command.idMsbOfNodeN);
-                if (command.idLsbOfNodeN.HasValue) ret.Add(command.idLsbOfNodeN);
-                if (command.grantedKeysBitmaskOfNodeN.HasValue) ret.Add(command.grantedKeysBitmaskOfNodeN);
-                if (command.nlsStateOfNodeN.HasValue) ret.Add(command.nlsStateOfNodeN);
+                if (command.nextNlsNodeIdLsb.HasValue) ret.Add(command.nextNlsNodeIdLsb);
                 return ret.ToArray();
             }
         }
