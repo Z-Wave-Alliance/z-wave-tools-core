@@ -33,7 +33,7 @@ namespace ZWave.Xml.HeaderGenerator
                 var commandClassPrev = "";
                 foreach (var cmdClass in CommandClassList)
                 {
-                    if (cmdClass.KeyId >= 0x20 && cmdClass.Name != commandClassPrev)
+                    if (cmdClass.Name != commandClassPrev)
                     {
                         if (cmdClass.Command != null && cmdClass.Command.Count > 0)
                         {

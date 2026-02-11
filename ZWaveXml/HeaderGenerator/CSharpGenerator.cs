@@ -66,10 +66,6 @@ namespace ZWave.Xml.HeaderGenerator
             CreateByteSpecifiedStruct(folder, isZats);
             foreach (var cmdClass in CommandClassList)
             {
-                if (!isZats && cmdClass.KeyId < 0x20)
-                {
-                    continue;
-                }
                 string name = cmdClass.Version > 1
                     ? Tools.FormatStr("{0}_V{1}", cmdClass.Name, cmdClass.Version)
                     : cmdClass.Name;
