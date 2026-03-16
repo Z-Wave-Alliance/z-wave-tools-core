@@ -18,6 +18,9 @@ namespace Utils
 {
     public class Tools
     {
+        public const string FRAME_DEFINITION_FILE_NAME = @"FrameDefinition.xml";
+        public const string ZWAVE_DEFINITION_FILE_NAME = @"zwave.xml";
+
         private static Thread _debugOutputWorker;
         private static bool _isDebugOutputCancelling;
         public static void StartDebugOutputWorker()
