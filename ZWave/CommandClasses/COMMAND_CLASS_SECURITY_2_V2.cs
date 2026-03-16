@@ -285,15 +285,20 @@ namespace ZWave.CommandClasses
                     get { return (byte)(_value >> 1 & 0x01); }
                     set { HasValue = true; _value &= 0xFF - 0x02; _value += (byte)(value << 1 & 0x02); }
                 }
-                public byte nlsSupport
+                public byte nlsAlpha
                 {
                     get { return (byte)(_value >> 2 & 0x01); }
                     set { HasValue = true; _value &= 0xFF - 0x04; _value += (byte)(value << 2 & 0x04); }
                 }
+                public byte nlsSupport
+                {
+                    get { return (byte)(_value >> 3 & 0x01); }
+                    set { HasValue = true; _value &= 0xFF - 0x08; _value += (byte)(value << 3 & 0x08); }
+                }
                 public byte reserved
                 {
-                    get { return (byte)(_value >> 3 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0xF8; _value += (byte)(value << 3 & 0xF8); }
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
                 }
                 public static implicit operator Tproperties1(byte data)
                 {

@@ -1090,22 +1090,6 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class ZWAVE_CMD_NOP
-        {
-            public const byte ID = 0x00;
-            public static implicit operator ZWAVE_CMD_NOP(byte[] data)
-            {
-                ZWAVE_CMD_NOP ret = new ZWAVE_CMD_NOP();
-                return ret;
-            }
-            public static implicit operator byte[](ZWAVE_CMD_NOP command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(ZWAVE_CMD_CLASS.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
         public partial class CMD_NOP_POWER
         {
             public const byte ID = 0x18;

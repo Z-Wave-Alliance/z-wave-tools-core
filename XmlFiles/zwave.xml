@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <!--
 SPDX-License-Identifier: BSD-3-Clause
 SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
 -->
-<zw_classes version="2.19.0">
+<zw_classes version="2.19.1">
   <bas_dev key="0x01" name="BASIC_TYPE_CONTROLLER" help="Controller" comment="Node is a portable controller" />
   <bas_dev key="0x04" name="BASIC_TYPE_ROUTING_END_NODE" help="Routing End Node" comment="Node is an End Node with routing capabilities" />
   <bas_dev key="0x03" name="BASIC_TYPE_END_NODE" help="End Node" comment="Node is an End Node" />
@@ -3676,9 +3676,13 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
         <const key="0x06" flagname="Invalid file header format" flagmask="0x06" />
         <const key="0x07" flagname="Insufficient memory" flagmask="0x07" />
         <const key="0x08" flagname="does not match the Hardware version" flagmask="0x08" />
-        <const key="0x09" flagname="successfully, waiting for activation" flagmask="0xFD" />
-        <const key="0x0A" flagname="successfully stored" flagmask="0xFE" />
-        <const key="0x0B" flagname="successfully" flagmask="0xFF" />
+        <const key="0x09" flagname="Invalid signature" flagmask="0x09" />
+        <const key="0x0A" flagname="Decryption failed" flagmask="0x0A" />
+        <const key="0x0B" flagname="Decompression failed" flagmask="0x0B" />
+        <const key="0x0C" flagname="Downgrade unsupported" flagmask="0x0C" />
+        <const key="0x0D" flagname="successfully, waiting for activation" flagmask="0xFD" />
+        <const key="0x0E" flagname="successfully stored" flagmask="0xFE" />
+        <const key="0x0F" flagname="successfully" flagmask="0xFF" />
       </param>
       <param key="0x01" name="WaitTime" type="WORD" />
     </cmd>
@@ -13935,7 +13939,7 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       </param>
     </cmd>
   </cmd_class>
-  <cmd_class key="0x01" version="1" name="ZWAVE_CMD_CLASS" help="Z-Wave protocol Command Class">
+  <cmd_class key="0x01" version="1" name="ZWAVE_CMD_CLASS" help="Command Class Z-Wave Protocol">
     <cmd key="0x17" name="ACCEPT_LOST" help="Accept Lost" comment="SDS10264-2">
       <param key="0x00" name="Accept Status" type="BYTE">
         <bitflag key="0x01" flagname="Request failed" flagmask="0x04" />
@@ -14176,7 +14180,6 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
         <const key="0x02" flagname="250ms wakeup beam" flagmask="0x02" />
       </param>
     </cmd>
-    <cmd key="0x00" name="ZWAVE_CMD_NOP" help="NOP" />
     <cmd key="0x18" name="CMD_NOP_POWER" help="NOP Power">
       <param key="0x00" name="Tx Power Register (Obsolete)" type="CONST">
         <const key="0x00" flagname="Not used" flagmask="0x00" />
@@ -17045,8 +17048,9 @@ SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
       <param key="0x00" name="Properties1" type="STRUCT_BYTE">
         <bitflag key="0x00" flagname="Echo" flagmask="0x01" />
         <bitflag key="0x01" flagname="Request CSA" flagmask="0x02" />
-        <bitflag key="0x02" flagname="NLS Support" flagmask="0x04" />
-        <bitfield key="0x03" fieldname="Reserved" fieldmask="0xF8" shifter="3" />
+        <bitflag key="0x02" flagname="NLS Alpha" flagmask="0x04" />
+        <bitflag key="0x03" flagname="NLS Support" flagmask="0x08" />
+        <bitfield key="0x04" fieldname="Reserved" fieldmask="0xF0" shifter="4" />
       </param>
       <param key="0x01" name="Supported KEX Schemes" type="BYTE" />
       <param key="0x02" name="Supported ECDH Profiles" type="BYTE" />
