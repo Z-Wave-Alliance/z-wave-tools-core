@@ -48,6 +48,7 @@
     <Compile Include="BitArray8.cs" />
     <Compile Include="BitMatrix.cs" />
     <Compile Include="CommandsComparator.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="DevicesSourceConfig.cs" />
     <Compile Include="EnumDescriptionTypeConverter.cs" />
     <Compile Include="EnumExtensions.cs" />
