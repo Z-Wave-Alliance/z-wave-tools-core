@@ -686,7 +686,7 @@ namespace ZWave.Xml.Application
             secureCommandClasses = secureCmdClasses.Count > 0 ? secureCmdClasses.ToArray() : null;
         }
 
-        public PayloadParseIssue ValidatePayloadLength(byte[] payload, byte expectedCCVersion, string sourceInfo = null)
+        public PayloadParseResult ValidatePayloadLength(byte[] payload, byte expectedCCVersion)
         {
             if (payload == null || payload.Length < 2)
                 return null;
@@ -694,47 +694,47 @@ namespace ZWave.Xml.Application
             byte cc = payload[0];
             byte cmd = payload[1];
 
-            if (!TryNormalizeWithZWaveDefinition(payload, expectedCCVersion, out byte[] normalized, out string details))
+            if (!TryNormalizeWithZWaveDefinition(payload, expectedCCVersion, out byte[] normalizedPayload, out ParseResultType resultType))
             {
-                var issue = new PayloadParseIssue
+                return new PayloadParseResult
                 {
-                    Type = ScriptParseIssueType.ParseFailed,
+                    Type = resultType,
                     CommandClassId = cc,
                     CommandId = cmd,
-                    PayloadLength = payload.Length,
-                    NormalizedLength = null,
-                    Payload = payload.ToArray(),
-                    Details = new List<string>() { details ??  "No parse candidate matched or normalization failed." },
-                    SourceInfo = sourceInfo
+                    CommandClassVersion = expectedCCVersion,
+                    OriginalPayload = payload,
+                    NormalizedPayload = null
                 };
-
-                return issue;
             }
 
-            if (normalized != null && normalized.Length != payload.Length)
+            if (normalizedPayload != null && normalizedPayload.Length != payload.Length)
             {
-                var issue = new PayloadParseIssue
+                return new PayloadParseResult
                 {
-                    Type = ScriptParseIssueType.TrailingBytes,
+                    Type = ParseResultType.LengthMismatch,
                     CommandClassId = cc,
                     CommandId = cmd,
-                    PayloadLength = payload.Length,
-                    NormalizedLength = normalized.Length,
-                    Payload = payload.ToArray(),
-                    Details = new List<string>() { "Received payload did not match the", "supported command class version." },
-                    SourceInfo = sourceInfo
+                    CommandClassVersion = expectedCCVersion,
+                    OriginalPayload = payload,
+                    NormalizedPayload = normalizedPayload
                 };
-
-                return issue;
             }
 
-            return null;
+            return new PayloadParseResult
+            {
+                Type = ParseResultType.Succsess,
+                CommandClassId = cc,
+                CommandId = cmd,
+                CommandClassVersion = expectedCCVersion,
+                OriginalPayload = payload,
+                NormalizedPayload = normalizedPayload
+            };
         }
 
-        private bool TryNormalizeWithZWaveDefinition(byte[] payload, byte expectedCCVersion, out byte[] normalized, out string details)
+        private bool TryNormalizeWithZWaveDefinition(byte[] payload, byte expectedCCVersion, out byte[] normalized, out ParseResultType resultType)
         {
             normalized = null;
-            details = null;
+            resultType = ParseResultType.ParseFailed;
 
             try
             {
@@ -743,7 +743,6 @@ namespace ZWave.Xml.Application
 
                 if (values == null || values.Length == 0)
                 {
-                    details = "ParseApplicationObject returned no values.";
                     return false;
                 }
 
@@ -759,7 +758,6 @@ namespace ZWave.Xml.Application
 
                 if (candidates.Count == 0)
                 {
-                    details = $"No parsed candidate matched CC=0x{cc:X2}, CMD=0x{cmd:X2}.";
                     return false;
                 }
 
@@ -774,22 +772,19 @@ namespace ZWave.Xml.Application
 
                     if (normalized == null || normalized.Length < 2)
                     {
-                        details = "FillCommand produced no valid payload.";
                         return false;
                     }
                 }
                 else
                 {
-                    var seenVersions = string.Join(",", candidates.Select(v => v.CommandClassDefinition.Version).Distinct().OrderBy(v => v));
-                    details = $"No candidate matched expected CC version {expectedCCVersion}. Seen versions: [{seenVersions}] for CC=0x{cc:X2}, CMD=0x{cmd:X2}.";
                     return false;
                 }
 
+                resultType = ParseResultType.Succsess;
                 return true;
             }
             catch (Exception ex)
             {
-                details = $"Normalization failed: {ex.Message}";
                 return false;
             }
         }
@@ -847,23 +842,22 @@ namespace ZWave.Xml.Application
             return ret.ToArray();
         }
 
-        public sealed class PayloadParseIssue
+        public sealed class PayloadParseResult
         {
-            public ScriptParseIssueType Type { get; set; }
+            public ParseResultType Type { get; set; }
+            public byte CommandClassVersion { get; set; }
             public byte CommandClassId { get; set; }
             public byte CommandId { get; set; }
-            public int PayloadLength { get; set; }
-            public int? NormalizedLength { get; set; }
-            public List<string> Details { get; set; }
-            public byte[] Payload { get; set; }
-            public DateTime TimestampUtc { get; set; } = DateTime.UtcNow;
-            public string SourceInfo { get; set; } // optional context (node/frame)
+            public byte[] OriginalPayload { get; set; }
+            public byte[] NormalizedPayload { get; set; }
         }
 
-        public enum ScriptParseIssueType
+        public enum ParseResultType
         {
-            TrailingBytes,
-            ParseFailed
+            LengthMismatch,
+            ParseFailed,
+            VersionMismatch,
+            Succsess
         }
     }
 }
