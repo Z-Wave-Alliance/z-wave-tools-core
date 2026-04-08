@@ -686,6 +686,10 @@ namespace ZWave.Xml.Application
             secureCommandClasses = secureCmdClasses.Count > 0 ? secureCmdClasses.ToArray() : null;
         }
 
+        /// <summary>
+        /// Validate a command's payload length is matching a specific command class version according to the Z-Wave definition.
+        /// This can, for example, be used to verify a command is matching the supported version advertised by a device.
+        /// </summary>
         public PayloadParseResult ValidatePayloadLength(byte[] payload, byte expectedCCVersion)
         {
             if (payload == null || payload.Length < 2)
@@ -722,7 +726,7 @@ namespace ZWave.Xml.Application
 
             return new PayloadParseResult
             {
-                Type = ParseResultType.Succsess,
+                Type = ParseResultType.Success,
                 CommandClassId = cc,
                 CommandId = cmd,
                 CommandClassVersion = expectedCCVersion,
@@ -780,7 +784,7 @@ namespace ZWave.Xml.Application
                     return false;
                 }
 
-                resultType = ParseResultType.Succsess;
+                resultType = ParseResultType.Success;
                 return true;
             }
             catch (Exception ex)
@@ -856,8 +860,7 @@ namespace ZWave.Xml.Application
         {
             LengthMismatch,
             ParseFailed,
-            VersionMismatch,
-            Succsess
+            Success
         }
     }
 }
