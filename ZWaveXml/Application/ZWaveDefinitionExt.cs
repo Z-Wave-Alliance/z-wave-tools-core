@@ -699,45 +699,33 @@ namespace ZWave.Xml.Application
 
             byte cc = payload[0];
             byte cmd = payload[1];
-            var normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
 
-            if (normalizeResult.Type != ParseResultType.Success)
+            var result = new PayloadParseResult
             {
-                return new PayloadParseResult
-                {
-                    Type = normalizeResult.Type,
-                    CommandClassId = cc,
-                    CommandId = cmd,
-                    CommandClassVersion = expectedCCVersion,
-                    OriginalPayload = payload,
-                    NormalizedPayload = null
-                };
-            }
-
-            byte[] normalizedPayload = normalizeResult.NormalizedPayload;
-
-            if (normalizedPayload != null && normalizedPayload.Length != payload.Length)
-            {
-                return new PayloadParseResult
-                {
-                    Type = ParseResultType.LengthMismatch,
-                    CommandClassId = cc,
-                    CommandId = cmd,
-                    CommandClassVersion = expectedCCVersion,
-                    OriginalPayload = payload,
-                    NormalizedPayload = normalizedPayload
-                };
-            }
-
-            return new PayloadParseResult
-            {
-                Type = ParseResultType.Success,
+                Type = ParseResultType.ParseFailed, // default/fallback
                 CommandClassId = cc,
                 CommandId = cmd,
                 CommandClassVersion = expectedCCVersion,
                 OriginalPayload = payload,
-                NormalizedPayload = normalizedPayload
+                NormalizedPayload = null
             };
+
+            var normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
+
+            if (normalizeResult.Type == ParseResultType.Success)
+            {
+                var normalizedPayload = normalizeResult.NormalizedPayload;
+                result.NormalizedPayload = normalizedPayload;
+                result.Type = (normalizedPayload != null && normalizedPayload.Length != payload.Length)
+                    ? ParseResultType.LengthMismatch
+                    : ParseResultType.Success;
+            }
+            else
+            {
+                result.Type = normalizeResult.Type;
+            }
+
+            return result;
         }
 
         private NormalizeResult NormalizeWithZWaveDefinition(byte[] payload, byte expectedCCVersion)
