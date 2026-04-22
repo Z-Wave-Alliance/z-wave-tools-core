@@ -693,16 +693,19 @@ namespace ZWave.Xml.Application
         public PayloadParseResult ValidatePayloadLength(byte[] payload, byte expectedCCVersion)
         {
             if (payload == null || payload.Length < 2)
+            {
                 return null;
+            }
 
             byte cc = payload[0];
             byte cmd = payload[1];
+            var normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
 
-            if (!TryNormalizeWithZWaveDefinition(payload, expectedCCVersion, out byte[] normalizedPayload, out ParseResultType resultType))
+            if (normalizeResult.Type != ParseResultType.Success)
             {
                 return new PayloadParseResult
                 {
-                    Type = resultType,
+                    Type = normalizeResult.Type,
                     CommandClassId = cc,
                     CommandId = cmd,
                     CommandClassVersion = expectedCCVersion,
@@ -710,6 +713,8 @@ namespace ZWave.Xml.Application
                     NormalizedPayload = null
                 };
             }
+
+            byte[] normalizedPayload = normalizeResult.NormalizedPayload;
 
             if (normalizedPayload != null && normalizedPayload.Length != payload.Length)
             {
@@ -735,10 +740,13 @@ namespace ZWave.Xml.Application
             };
         }
 
-        private bool TryNormalizeWithZWaveDefinition(byte[] payload, byte expectedCCVersion, out byte[] normalized, out ParseResultType resultType)
+        private NormalizeResult NormalizeWithZWaveDefinition(byte[] payload, byte expectedCCVersion)
         {
-            normalized = null;
-            resultType = ParseResultType.ParseFailed;
+            var result = new NormalizeResult
+            {
+                Type = ParseResultType.ParseFailed,
+                NormalizedPayload = null
+            };
 
             try
             {
@@ -747,7 +755,7 @@ namespace ZWave.Xml.Application
 
                 if (values == null || values.Length == 0)
                 {
-                    return false;
+                    return result;
                 }
 
                 byte cc = payload[0];
@@ -762,35 +770,41 @@ namespace ZWave.Xml.Application
 
                 if (candidates.Count == 0)
                 {
-                    return false;
+                    return result;
                 }
-
+                
                 // strict on known version
                 if (candidates.FirstOrDefault(v => v.CommandClassDefinition.Version == expectedCCVersion) is CommandClassValue candidate)
                 {
                     var paramValues = candidate.CommandValue.ParamValues?.ToList() ?? new List<ParamValue>();
-                    normalized = FillCommand(
+                    var normalized = FillCommand(
                         candidate.CommandClassDefinition,
                         candidate.CommandValue.CommandDefinition,
                         paramValues);
 
                     if (normalized == null || normalized.Length < 2)
                     {
-                        return false;
+                        return result;
                     }
-                }
-                else
-                {
-                    return false;
+
+                    result.Type = ParseResultType.Success;
+                    result.NormalizedPayload = normalized;
+
+                    return result;
                 }
 
-                resultType = ParseResultType.Success;
-                return true;
+                return result;
             }
-            catch (Exception ex)
+            catch
             {
-                return false;
+                return result;
             }
+        }
+
+        private sealed class NormalizeResult
+        {
+            public ParseResultType Type { get; set; }
+            public byte[] NormalizedPayload { get; set; }
         }
 
         private static void FillCommandInner(List<ParamValue> parameters, ref List<byte> data)
