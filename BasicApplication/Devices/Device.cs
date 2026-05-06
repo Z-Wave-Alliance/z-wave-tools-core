@@ -885,6 +885,20 @@ namespace ZWave.BasicApplication.Devices
 
         #endregion
 
+        #region GetProtocolInfo
+
+        public GetNodeProtocolInfoResult GetProtocolInfo(NodeTag node)
+        {
+            return (GetNodeProtocolInfoResult)Execute(new GetNodeProtocolInfoOperation(Network, node));
+        }
+
+        public ActionToken GetProtocolInfo(NodeTag node, Action<IActionItem> completedCallback)
+        {
+            return ExecuteAsync(new GetNodeProtocolInfoOperation(Network, node), completedCallback);
+        }
+
+        #endregion
+
         #region MemoryGetId
 
         public MemoryGetIdResult MemoryGetId()

@@ -161,20 +161,6 @@ namespace ZWave.BasicApplication.Devices
             }
         }
 
-        #region GetProtocolInfo
-
-        public GetNodeProtocolInfoResult GetProtocolInfo(NodeTag node)
-        {
-            return (GetNodeProtocolInfoResult)Execute(new GetNodeProtocolInfoOperation(_network, node));
-        }
-
-        public ActionToken GetProtocolInfo(NodeTag node, Action<IActionItem> completedCallback)
-        {
-            return ExecuteAsync(new GetNodeProtocolInfoOperation(_network, node), completedCallback);
-        }
-
-        #endregion
-
         #region AddNodeToNetwork
 
         public AddRemoveNodeResult AddNodeToNetwork(Modes mode, int timeoutMs)
