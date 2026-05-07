@@ -692,17 +692,17 @@ namespace ZWave.Xml.Application
         /// </summary>
         public PayloadParseResult ValidatePayloadLength(byte[] payload, byte expectedCCVersion)
         {
-            if (payload == null || payload.Length < 2)
+            if (payload == null || payload.Length < 1)
             {
                 return null;
             }
 
             byte cc = payload[0];
-            byte cmd = payload[1];
+            byte? cmd = payload.Length > 1 ? payload[1] : (byte?)null;
 
             var result = new PayloadParseResult
             {
-                Type = ParseResultType.ParseFailed, // default/fallback
+                Type = PayloadParseResultType.ParseFailed, // default/fallback
                 CommandClassId = cc,
                 CommandId = cmd,
                 CommandClassVersion = expectedCCVersion,
@@ -710,22 +710,22 @@ namespace ZWave.Xml.Application
                 NormalizedPayload = null
             };
 
-            var normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
+            NormalizeResult normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
 
             if (normalizeResult.Success)
             {
-                var normalizedPayload = normalizeResult.NormalizedPayload;
+                byte[] normalizedPayload = normalizeResult.NormalizedPayload;
                 result.NormalizedPayload = normalizedPayload;
 
                 if(normalizedPayload == null)
                 {
-                    result.Type = ParseResultType.ParseFailed;
+                    result.Type = PayloadParseResultType.ParseFailed;
                 }
                 else
                 {
                     result.Type = (normalizedPayload.Length != payload.Length)
-                        ? ParseResultType.LengthMismatch
-                        : ParseResultType.Success;
+                        ? PayloadParseResultType.LengthMismatch
+                        : PayloadParseResultType.Success;
                 }
             }
 
@@ -797,6 +797,11 @@ namespace ZWave.Xml.Application
         {
             public bool Success { get; set; }
             public byte[] NormalizedPayload { get; set; }
+
+            public static implicit operator bool(NormalizeResult val)
+            {
+                return val.Success;
+            }
         }
 
         private static void FillCommandInner(List<ParamValue> parameters, ref List<byte> data)
@@ -854,15 +859,19 @@ namespace ZWave.Xml.Application
 
         public sealed class PayloadParseResult
         {
-            public ParseResultType Type { get; set; }
-            public byte CommandClassVersion { get; set; }
+            public PayloadParseResultType Type { get; set; }
             public byte CommandClassId { get; set; }
-            public byte CommandId { get; set; }
+            public byte CommandClassVersion { get; set; }
+            /// <summary>
+            /// Command ID is optional because, for example, the classic NOP payload is one byte only
+            /// (i.e., CC ID 0x00) with no Command ID. In this case this field is null.
+            /// </summary>
+            public byte? CommandId { get; set; }
             public byte[] OriginalPayload { get; set; }
             public byte[] NormalizedPayload { get; set; }
         }
 
-        public enum ParseResultType
+        public enum PayloadParseResultType
         {
             Success,
             LengthMismatch,
