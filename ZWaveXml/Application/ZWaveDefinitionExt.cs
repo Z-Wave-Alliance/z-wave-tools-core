@@ -712,17 +712,21 @@ namespace ZWave.Xml.Application
 
             var normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
 
-            if (normalizeResult.Type == ParseResultType.Success)
+            if (normalizeResult.Success)
             {
                 var normalizedPayload = normalizeResult.NormalizedPayload;
                 result.NormalizedPayload = normalizedPayload;
-                result.Type = (normalizedPayload != null && normalizedPayload.Length != payload.Length)
-                    ? ParseResultType.LengthMismatch
-                    : ParseResultType.Success;
-            }
-            else
-            {
-                result.Type = normalizeResult.Type;
+
+                if(normalizedPayload == null)
+                {
+                    result.Type = ParseResultType.ParseFailed;
+                }
+                else
+                {
+                    result.Type = (normalizedPayload.Length != payload.Length)
+                        ? ParseResultType.LengthMismatch
+                        : ParseResultType.Success;
+                }
             }
 
             return result;
@@ -732,7 +736,7 @@ namespace ZWave.Xml.Application
         {
             var result = new NormalizeResult
             {
-                Type = ParseResultType.ParseFailed,
+                Success = false,
                 NormalizedPayload = null
             };
 
@@ -775,7 +779,7 @@ namespace ZWave.Xml.Application
                         return result;
                     }
 
-                    result.Type = ParseResultType.Success;
+                    result.Success = true;
                     result.NormalizedPayload = normalized;
 
                     return result;
@@ -791,7 +795,7 @@ namespace ZWave.Xml.Application
 
         private sealed class NormalizeResult
         {
-            public ParseResultType Type { get; set; }
+            public bool Success { get; set; }
             public byte[] NormalizedPayload { get; set; }
         }
 
@@ -860,9 +864,9 @@ namespace ZWave.Xml.Application
 
         public enum ParseResultType
         {
+            Success,
             LengthMismatch,
-            ParseFailed,
-            Success
+            ParseFailed
         }
     }
 }
