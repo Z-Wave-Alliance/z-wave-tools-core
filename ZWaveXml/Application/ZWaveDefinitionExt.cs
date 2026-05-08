@@ -773,7 +773,7 @@ namespace ZWave.Xml.Application
                         candidate.CommandValue.CommandDefinition,
                         paramValues);
 
-                    if (normalized == null || normalized.Length < 2)
+                    if (normalized == null || normalized.Length < 1)
                     {
                         return result;
                     }
