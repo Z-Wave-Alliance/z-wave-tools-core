@@ -711,7 +711,7 @@ namespace ZWave.Xml.Application
 
             NormalizeResult normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
 
-            if (normalizeResult.Success)
+            if (normalizeResult)
             {
                 byte[] normalizedPayload = normalizeResult.NormalizedPayload;
                 result.NormalizedPayload = normalizedPayload;
