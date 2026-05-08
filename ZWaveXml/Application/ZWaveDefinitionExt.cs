@@ -705,7 +705,6 @@ namespace ZWave.Xml.Application
                 Type = PayloadParseResultType.ParseFailed, // default/fallback
                 CommandClassId = cc,
                 CommandId = cmd,
-                CommandClassVersion = expectedCCVersion,
                 OriginalPayload = payload,
                 NormalizedPayload = null
             };
