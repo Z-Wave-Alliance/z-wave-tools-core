@@ -751,13 +751,13 @@ namespace ZWave.Xml.Application
                 }
 
                 byte cc = payload[0];
-                byte cmd = payload[1];
-                var candidates = values
+                byte? cmd = payload.Length > 1 ? payload[1] : (byte?)null;
+                List<CommandClassValue> candidates = values
                     .Where(v =>
                         v?.CommandClassDefinition != null &&
                         v.CommandValue?.CommandDefinition != null &&
                         v.CommandClassDefinition.KeyId == cc &&
-                        v.CommandValue.CommandDefinition.KeyId == cmd)
+                        (cmd == null || v.CommandValue.CommandDefinition.KeyId == cmd))
                     .ToList();
 
                 if (candidates.Count == 0)
