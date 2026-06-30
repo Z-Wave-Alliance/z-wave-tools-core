@@ -1,5 +1,6 @@
-/// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ using NUnit.Framework;
 using Utils;
 using System.Threading;
 using System.Diagnostics;
+// net7.0+ introduced System.Int128, which collides with Utils.Int128; alias it back.
+using Int128 = Utils.Int128;
 
 namespace UtilsTests
 {
