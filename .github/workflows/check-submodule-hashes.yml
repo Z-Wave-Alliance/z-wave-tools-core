@@ -1,6 +1,6 @@
 # YAML -*- mode: yaml; tab-width: 2; indent-tabs-mode: nil; coding: utf-8 -*-
 # SPDX-License-Identifier: BSD-3-Clause
-# SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
+# SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 
 name: Check Submodule References
 
@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repository with submodules
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 0  # required to retrieve the complete git history
