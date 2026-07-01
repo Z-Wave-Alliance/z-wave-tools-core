@@ -1,7 +1,7 @@
 # YAML -*- mode: yaml; tab-width: 2; indent-tabs-mode: nil; coding: utf-8 -*-
 # SPDX-License-Identifier: BSD-3-Clause
-# SPDX-FileCopyrightText: Z-Wave Alliance https://z-wavealliance.org
-# SPDX-FileCopyrightText: Trident IoT, LLC https://www.tridentiot.com
+# SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
+# SPDX-FileCopyrightText: Trident IoT, LLC <https://www.tridentiot.com>
 
 name: Build and Test Z-Wave Tools Core
 
@@ -25,12 +25,13 @@ jobs:
           debian_packages: reuse
 
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Legal check
         run: reuse lint
 
-  build-and-test-z-wave-tools-core:
+  build-and-test-with-dotnet-framework:
+    name: Build and test based on .NET Framework
     runs-on: windows-latest
     env:
       Configuration: Release
@@ -41,13 +42,13 @@ jobs:
         shell: powershell
     steps:
       - name: Checkout z-wave-tools-core
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           path: 'z-wave-tools-core'
-          submodules: true # https://github.com/Z-Wave-Alliance/z-wave-tools-core/issues/5
+          submodules: 'recursive'
 
       - name: Add MSBuild.exe to Path
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v3
 
       - name: Add VSTest.Console.exe to Path
         uses: darenm/Setup-VSTest@v1.2
@@ -91,3 +92,35 @@ jobs:
           vstest.console.exe /logger:$env:LOGGER_ARGS z-wave-tools-core\Tests\ZWaveTests\bin\Debug\ZWaveTests.dll
         env:
           LOGGER_ARGS: "console;verbosity=minimal"
+
+  build-and-test-with-dotnet-netcore:
+    name: Build and test based on .NET ("netcore")
+    runs-on: windows-latest
+    env:
+      Solution_Path: ${{ github.workspace}}\z-wave-tools-core\ZWaveDll_netcore.sln
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - name: Checkout z-wave-tools-core
+        uses: actions/checkout@v6
+        with:
+          path: 'z-wave-tools-core'
+          submodules: 'recursive'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore NuGet Packages for Z-Wave Tools Core .NET Solution
+        run: dotnet restore ${{env.Solution_Path}}
+
+      - name: Build Z-Wave Tools Core .NET Solution in Release
+        run: dotnet build ${{env.Solution_Path}} --configuration Release --no-restore --verbosity minimal
+
+      - name: Build Z-Wave Tools Core .NET Solution in Debug
+        run: dotnet build ${{env.Solution_Path}} --configuration Debug --no-restore --verbosity minimal
+
+      - name: Run NUnit Tests with dotnet test
+        run: dotnet test ${{env.Solution_Path}} --configuration Debug --no-build --verbosity minimal
