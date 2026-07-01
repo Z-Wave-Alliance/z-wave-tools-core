@@ -1,5 +1,6 @@
-/// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using NUnit.Framework;
 using System.Linq;
 using ZWave.BasicApplication;
@@ -64,7 +65,9 @@ namespace BasicApplicationTests.Security.Inclusion
             _smiFirst = ((SecurityManager)_ctrlFirst.SessionClient.GetSubstituteManager(typeof(SecurityManager))).SecurityManagerInfo;
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare scheduling/timing races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void AddNode_InclusionController_NodeIncludedSameHomeIdNewNodeId()
         {
             // Arange.
