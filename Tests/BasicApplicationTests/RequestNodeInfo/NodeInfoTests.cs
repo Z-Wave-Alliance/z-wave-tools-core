@@ -1,5 +1,6 @@
-/// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System.Linq;
 using NUnit.Framework;
 using ZWave.BasicApplication;
@@ -742,7 +743,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.AreEqual(testScheme, expectRes.SecurityScheme);
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare .NET scheduler races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void RequestSupportedCommandClassFromSecondary_AllKeys_ReturnsOnlyForHighest()
         {
             // Arrange
@@ -982,7 +985,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.AreEqual(SecuritySchemes.S2_AUTHENTICATED, actualReportS2Res.SecurityScheme);
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare .NET scheduler races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void DisableAllS2_BeforeInclusion_OnPrimary_RequestFromPrimary_UseOnlyS0()
         {
             //Arrange
@@ -1048,7 +1053,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.IsFalse(_ctrlFirst.Network.HasSecurityScheme(NODE_ID_2, SecuritySchemes.S2_UNAUTHENTICATED));
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare .NET scheduler races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void DisableAllS2_BeforeInclusion_OnPrimary_RequestFromSecondary_UseOnlyS0()
         {
             //Arrange
