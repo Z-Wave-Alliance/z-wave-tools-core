@@ -690,15 +690,15 @@ namespace ZWave.Xml.Application
         /// Validate a command's payload length is matching a specific command class version according to the Z-Wave definition.
         /// This can, for example, be used to verify a command is matching the supported version advertised by a device.
         /// </summary>
-        public PayloadParseResult ValidatePayloadLength(byte[] payload, byte expectedCCVersion)
+        public PayloadParseResult ValidatePayloadLength(byte[] origPayload, byte expectedCCVersion)
         {
-            if (payload == null || payload.Length < 1)
+            if (origPayload == null || origPayload.Length < 1)
             {
                 return null;
             }
 
-            byte cc = payload[0];
-            byte? cmd = payload.Length > 1 ? payload[1] : (byte?)null;
+            byte cc = origPayload[0];
+            byte? cmd = origPayload.Length > 1 ? origPayload[1] : (byte?)null;
 
             var result = new PayloadParseResult
             {
@@ -706,11 +706,11 @@ namespace ZWave.Xml.Application
                 CommandClassId = cc,
                 CommandClassVersion = expectedCCVersion,
                 CommandId = cmd,
-                OriginalPayload = payload,
+                OriginalPayload = origPayload,
                 NormalizedPayload = null
             };
 
-            NormalizeResult normalizeResult = NormalizeWithZWaveDefinition(payload, expectedCCVersion);
+            NormalizeResult normalizeResult = NormalizeWithZWaveDefinition(origPayload, expectedCCVersion);
 
             if (normalizeResult)
             {
@@ -723,7 +723,7 @@ namespace ZWave.Xml.Application
                 }
                 else
                 {
-                    result.Type = (normalizedPayload.Length != payload.Length)
+                    result.Type = (normalizedPayload.Length != origPayload.Length)
                         ? PayloadParseResultType.LengthMismatch
                         : PayloadParseResultType.Success;
                 }
@@ -732,7 +732,7 @@ namespace ZWave.Xml.Application
             return result;
         }
 
-        private NormalizeResult NormalizeWithZWaveDefinition(byte[] payload, byte expectedCCVersion)
+        private NormalizeResult NormalizeWithZWaveDefinition(byte[] origPayload, byte expectedCCVersion)
         {
             var result = new NormalizeResult
             {
@@ -743,15 +743,15 @@ namespace ZWave.Xml.Application
             try
             {
                 CommandClassValue[] values = null;
-                ParseApplicationObject(payload, out values);
+                ParseApplicationObject(origPayload, out values);
 
                 if (values == null || values.Length == 0)
                 {
                     return result;
                 }
 
-                byte cc = payload[0];
-                byte? cmd = payload.Length > 1 ? payload[1] : (byte?)null;
+                byte cc = origPayload[0];
+                byte? cmd = origPayload.Length > 1 ? origPayload[1] : (byte?)null;
                 List<CommandClassValue> candidates = values
                     .Where(v =>
                         v?.CommandClassDefinition != null &&
