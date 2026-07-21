@@ -717,15 +717,17 @@ namespace ZWave.Xml.Application
                 byte[] normalizedPayload = normalizeResult.NormalizedPayload;
                 result.NormalizedPayload = normalizedPayload;
 
-                if(normalizedPayload == null)
+                if (normalizedPayload == null || normalizedPayload.Length == 0)
                 {
                     result.Type = PayloadParseResultType.ParseFailed;
                 }
-                else
+                else if (origPayload.Length > normalizedPayload.Length)
                 {
-                    result.Type = (normalizedPayload.Length != origPayload.Length)
-                        ? PayloadParseResultType.LengthMismatch
-                        : PayloadParseResultType.Success;
+                    result.Type = PayloadParseResultType.PayloadTooLong;
+                }
+                else // Too short payload cannot be detected because the normalized payload cannot contain more than the original payload.
+                {
+                    result.Type = PayloadParseResultType.Success;
                 }
             }
 
@@ -874,7 +876,7 @@ namespace ZWave.Xml.Application
         public enum PayloadParseResultType
         {
             Success,
-            LengthMismatch,
+            PayloadTooLong,
             ParseFailed
         }
     }
