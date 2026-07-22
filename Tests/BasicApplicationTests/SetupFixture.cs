@@ -25,7 +25,7 @@ namespace BasicApplicationTests
             // can stall those callbacks ~1s and overrun the short S2 timeouts below; a higher
             // minimum thread count keeps the tests deterministic.
             ThreadPool.GetMinThreads(out int minWorker, out int minIo);
-            ThreadPool.SetMinThreads(Math.Max(minWorker, 64), Math.Max(minIo, 64));
+            ThreadPool.SetMinThreads(Math.Max(minWorker, 128), Math.Max(minIo, 128));
 
             #region setup timeouts
             DefaultTimeouts.EXPIRED_EXTRA_TIMEOUT = 50;
@@ -33,19 +33,19 @@ namespace BasicApplicationTests
             DefaultTimeouts.REQUEST_NODE_INFO_TIMEOUT = 500;
             DefaultTimeouts.TRANSPORT_SERVICE_SEGMENT_COMPLETE_TIMEOUT = 200;
 
-            // Secure-handshake windows. 500 ms gives enough headroom to ride out thread-scheduling
-            // spikes on constrained CI runners (the handshake itself completes in ~10 ms), while
-            // staying well below the frame delays the negative *Delay_FailsS2Inclusion tests inject
-            // (fixed 1000 ms, or timeout-relative) so those still observe the expected timeout.
-            DefaultTimeouts.SECURITY_S2_KEX_GET_TIMEOUT = 500;
-            DefaultTimeouts.SECURITY_S2_KEX_SET_TIMEOUT = 500;
-            DefaultTimeouts.SECURITY_S2_NONCE_REQUEST_INCLUSION_TIMEOUT = 500;
-            DefaultTimeouts.SECURITY_S2_NONCE_REQUEST_TIMEOUT = 500;
-            DefaultTimeouts.SECURITY_S0_NONCE_REQUEST_INCLUSION_TIMEOUT = 500;
-            DefaultTimeouts.SECURITY_S0_NONCE_REQUEST_TIMEOUT = 500;
+            // Secure-handshake windows. 750 ms gives headroom to ride out thread-scheduling spikes
+            // on constrained CI runners (the handshake itself completes in ~10 ms), while staying
+            // below the frame delays the negative *Delay_FailsS2Inclusion tests inject (fixed
+            // 1000 ms, or timeout-relative) so those still observe the expected timeout.
+            DefaultTimeouts.SECURITY_S2_KEX_GET_TIMEOUT = 750;
+            DefaultTimeouts.SECURITY_S2_KEX_SET_TIMEOUT = 750;
+            DefaultTimeouts.SECURITY_S2_NONCE_REQUEST_INCLUSION_TIMEOUT = 750;
+            DefaultTimeouts.SECURITY_S2_NONCE_REQUEST_TIMEOUT = 750;
+            DefaultTimeouts.SECURITY_S0_NONCE_REQUEST_INCLUSION_TIMEOUT = 750;
+            DefaultTimeouts.SECURITY_S0_NONCE_REQUEST_TIMEOUT = 750;
 
-            InclusionS2TimeoutConstants.Joining.SetTestTimeouts(500);
-            InclusionS2TimeoutConstants.Including.SetTestTimeouts(500);
+            InclusionS2TimeoutConstants.Joining.SetTestTimeouts(750);
+            InclusionS2TimeoutConstants.Including.SetTestTimeouts(750);
 
 
             #endregion

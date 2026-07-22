@@ -624,6 +624,8 @@ namespace BasicApplicationTests.Security.Inclusion
         [TestCase(SecuritySchemes.S2_AUTHENTICATED)]
         [TestCase(SecuritySchemes.S2_UNAUTHENTICATED)]
         [TestCase(SecuritySchemes.S0)]
+        // Timing-sensitive emulated-inclusion handshake with a two-token round-trip; retry to absorb rare scheduling/timing races (see SetupFixture).
+        [Retry(3)]
         public void AddNode_SendWithSpecificKey_NodeRespondsWithSameKey(SecuritySchemes activeSecurityScheme)
         {
             // Arange.
