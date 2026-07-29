@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
-/// SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org>
+/// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,14 +17,72 @@ namespace ZWave.Xml.Application
             DefinitionConverter conv = new DefinitionConverter(path, null);
             conv.UpgradeConvert(false);
             var ret = conv.ZWaveDefinition;
+            SortCommandClasses(ret?.CommandClasses);
             return ret;
         }
 
         public static void Save(ZWaveDefinition zWaveDefinition, string path)
         {
+            SortCommandClasses(zWaveDefinition?.CommandClasses);
             DefinitionConverter conv = new DefinitionConverter(null, null) { ZWaveDefinition = zWaveDefinition };
             conv.DowngradeConvert();
             conv.SaveZXmlDefinition(path);
+        }
+
+        /// <summary>
+        /// Brings the Command Classes into the canonical order of the Z-Wave XML file.
+        ///
+        /// Versions of one Command Class share a Key but may have been renamed over
+        /// time, so they are grouped by Key and the whole group is placed by the
+        /// display name of its most recent version. Example: 'Command Class Alarm'
+        /// V1/V2 sort next to 'Command Class Notification' V8 under 'N', not 'A'.
+        /// Within a Command Class, the commands are ordered by their Key, not by name.
+        ///
+        /// Load and Save apply this, so every reader and writer of the file agrees on
+        /// the layout. The collection is reordered in place, which keeps bound
+        /// collections such as the Editor's tree view working on the same instance.
+        /// </summary>
+        /// <param name="commandClasses">Command Classes to reorder, may be null</param>
+        public static void SortCommandClasses(IList<CommandClass> commandClasses)
+        {
+            if (commandClasses == null || commandClasses.Count == 0)
+            {
+                return;
+            }
+
+            List<CommandClass> sorted = commandClasses
+                .GroupBy(cmdClass => cmdClass.KeyId)
+                .OrderBy(group => group.OrderByDescending(cmdClass => cmdClass.Version).First().Text,
+                    StringComparer.OrdinalIgnoreCase)
+                .ThenBy(group => group.Key)
+                .SelectMany(group => group.OrderBy(cmdClass => cmdClass.Version))
+                .ToList();
+
+            commandClasses.Clear();
+            foreach (var cmdClass in sorted)
+            {
+                SortCommands(cmdClass.Command);
+                commandClasses.Add(cmdClass);
+            }
+        }
+
+        /// <summary>
+        /// Orders the commands of a Command Class by their Key, in place.
+        /// </summary>
+        /// <param name="commands">Commands to reorder, may be null</param>
+        private static void SortCommands(IList<Command> commands)
+        {
+            if (commands == null || commands.Count < 2)
+            {
+                return;
+            }
+
+            List<Command> sorted = commands.OrderBy(cmd => cmd.KeyId).ToList();
+            commands.Clear();
+            foreach (var cmd in sorted)
+            {
+                commands.Add(cmd);
+            }
         }
 
         public static cmd_class DowngradeCommandClass(CommandClass cmdClass)
