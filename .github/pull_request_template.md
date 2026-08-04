@@ -33,8 +33,7 @@ SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 - [ ] Bug fix (`fix`)
 - [ ] Editorial change (`chore`, `docs`, `style`, etc.)
 - [ ] Refactoring (`refactor`)
-- [ ] DevOps (`chore`)
-- [ ] Continuous integration (`ci`)
+- [ ] DevOps (`chore`, `ci`)
 - [ ] Breaking (`!`, `BREAKING CHANGE`)
 - [ ] Other (`build`, `perf`, `test`, etc.): (please describe)
 
