@@ -24,7 +24,8 @@ namespace ZWave.ZnifferApplication
 
         private static bool tmp = false;
         private static readonly int LengthIndexInHeader = 7;
-        private static readonly byte RegionIdMask = 0x0F;
+        // Region IDs up to EU_LR3 (0x11) need 5 bits
+        private static readonly byte RegionIdMask = 0x1F;
         private static readonly byte ChannelMask = 0x0F;
         private static readonly byte ProtocolMask = 0x0F;
         private static readonly byte ZWaveProtocol = 0x06;
@@ -38,8 +39,8 @@ namespace ZWave.ZnifferApplication
 
         /*
          * In these byte array we are storing information about the available frequencies which is presented
-         * in the ITU-T G.9959 specification (table A.1, A.2). The high nible stores the channel number and the
-         * low nible stores the region ID which can be found in the rail_zwave.h e.g RAIL_ZWAVE_REGIONID_EU.
+         * in the ITU-T G.9959 specification (table A.1, A.2). The high byte stores the channel number and the
+         * low byte stores the region ID which can be found in the rail_zwave.h e.g RAIL_ZWAVE_REGIONID_EU.
          */
         private static readonly ushort[] ChannelRegionsBaudLR = new ushort[]
         {
