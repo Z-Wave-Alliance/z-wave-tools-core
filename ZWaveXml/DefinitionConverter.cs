@@ -696,6 +696,13 @@ namespace ZWave.Xml
             string ret = null;
             foreach (var item in defineSetList)
             {
+                // The set Type decides how a parameter is written back (Full -> CONST,
+                // otherwise BYTE/bitflag) and whether the set reaches the C header, so sets
+                // of different types must never be shared even when their defines match.
+                if (item.Type != defineSet.Type)
+                {
+                    continue;
+                }
                 int mismatches = defineSet.Define.Count;
                 if (item.Define.Count != mismatches)
                 {
