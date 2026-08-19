@@ -40,6 +40,7 @@
     <Compile Include="DataItemTests.cs" />
     <Compile Include="FrameLayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PtiFrameClientTests.cs" />
     <Compile Include="PtiFrameParserTests.cs" />
     <Compile Include="S2DecodingTest.cs" />
   </ItemGroup>

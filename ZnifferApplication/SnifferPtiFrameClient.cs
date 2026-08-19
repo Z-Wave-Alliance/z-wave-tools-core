@@ -37,12 +37,19 @@ namespace ZWave.ZnifferApplication
                 if (tmpData != null && tmpData.Length > 4)
                 {
                     var index = 1;
-                    //check data starts with '[' and ends with ']'
-                    while (index > 0 && index < tmpData.Length
-                        && index + tmpData[index] < tmpData.Length
-                        && tmpData[index - 1] == 0x5B && tmpData[index + tmpData[index]] == 0x5D)
+                    // Parse all complete frames
+                    while (index + 1 < tmpData.Length)
                     {
-                        var data = new byte[tmpData[index] - 2];
+                        // Frame format: "[", <16 bit LE length>, <data>, "]"
+                        int frameLength = tmpData[index] | (tmpData[index + 1] << 8);
+                        if (frameLength < 3
+                            || index + frameLength >= tmpData.Length
+                            || tmpData[index - 1] != 0x5B
+                            || tmpData[index + frameLength] != 0x5D)
+                        {
+                            break;
+                        }
+                        var data = new byte[frameLength - 2];
                         Array.Copy(tmpData, index + 2, data, 0, data.Length);
                         var dchLength = data[0] == 2 ? DCH_LENGTH_VER2 : (data[0] == 3 ? DCH_LENGTH_VER3 : 0);
                         var apiType = ApiTypes.PtiDiagnostic;
@@ -69,7 +76,7 @@ namespace ZWave.ZnifferApplication
                             dataFrame.DataItem = dataItem;
                             OnFrameReceived(dataFrame);
                         }
-                        index += tmpData[index] + 2;
+                        index += frameLength + 2;
                     }
                 }
                 else
