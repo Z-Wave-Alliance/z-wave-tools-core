@@ -1,4 +1,4 @@
-/// SPDX-License-Identifier: BSD-3-Clause
+﻿/// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
 /// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
 using System;
@@ -18,6 +18,8 @@ namespace ZWave.Xml
 {
     internal class DefinitionConverter
     {
+        private static readonly char[] Digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
         protected const string NEW_LINE = GeneratorUtils.NEW_LINE;
         protected static Encoding defaultEncoding = Encoding.ASCII;
 
@@ -414,10 +416,9 @@ namespace ZWave.Xml
                 Version = byte.Parse(val.version)
             };
             IList<DefineSet> defineSetList = new List<DefineSet>();
-            int definesCounter = 0;
             if (val.cmd != null)
             {
-                IList<Command> commands = val.cmd.Select(item => UpgradeCommand(ret, item, ref defineSetList, ref definesCounter)).ToList();
+                IList<Command> commands = val.cmd.Select(item => UpgradeCommand(ret, item, ref defineSetList)).ToList();
                 if (commands.Count > 0)
                 {
                     ret.Command = new Collection<Command>(commands);
@@ -425,6 +426,7 @@ namespace ZWave.Xml
             }
             if (defineSetList.Count > 0)
             {
+                NameDefineSets(ret, defineSetList);
                 ret.DefineSet = new Collection<DefineSet>(defineSetList);
             }
             return ret;
@@ -485,8 +487,7 @@ namespace ZWave.Xml
             return ret;
         }
 
-        private Command UpgradeCommand(CommandClass cmdClass, object command, ref IList<DefineSet> defineSetList,
-            ref int definesCounter)
+        private Command UpgradeCommand(CommandClass cmdClass, object command, ref IList<DefineSet> defineSetList)
         {
             if (!(command is cmd))
                 return null;
@@ -507,8 +508,7 @@ namespace ZWave.Xml
                 byte structCount = 0;
                 foreach (var item in val.Items)
                 {
-                    Param p = UpgradeParam(cmdClass, ret, item, pars, null, ref defineSetList, ref definesCounter,
-                        ref structCount);
+                    Param p = UpgradeParam(cmdClass, ret, item, pars, null, ref defineSetList, ref structCount);
                     pars.Add(p);
                 }
                 if (pars.Count > 0)
@@ -518,7 +518,7 @@ namespace ZWave.Xml
         }
 
         private Param UpgradeParam(CommandClass cmdClass, Command cmd, object param, IList<Param> cmdParams,
-            IList<Param> vgParams, ref IList<DefineSet> defineSetList, ref int definesCounter, ref byte structCount)
+            IList<Param> vgParams, ref IList<DefineSet> defineSetList, ref byte structCount)
         {
             Param ret = null;
             var val = param as param;
@@ -545,7 +545,7 @@ namespace ZWave.Xml
                                 Type = zwDefineSetType.Unknown,
                                 Define = new Collection<Define>(defines)
                             };
-                            MergeDefineSet(ref defineSetList, defineSet, ref parameter, ref definesCounter);
+                            MergeDefineSet(ref defineSetList, defineSet, ref parameter);
                         }
                         ret = parameter;
                         break;
@@ -559,7 +559,7 @@ namespace ZWave.Xml
                                 Type = zwDefineSetType.Unknown,
                                 Define = new Collection<Define>(defines)
                             };
-                            MergeDefineSet(ref defineSetList, defineSet, ref parameter, ref definesCounter);
+                            MergeDefineSet(ref defineSetList, defineSet, ref parameter);
                         }
                         ret = parameter;
                         break;
@@ -573,7 +573,7 @@ namespace ZWave.Xml
                                 Type = zwDefineSetType.Full,
                                 Define = new Collection<Define>(defines)
                             };
-                            MergeDefineSet(ref defineSetList, defineSet, ref parameter, ref definesCounter);
+                            MergeDefineSet(ref defineSetList, defineSet, ref parameter);
                         }
                         ret = parameter;
                         break;
@@ -597,13 +597,12 @@ namespace ZWave.Xml
                                 Type = zwDefineSetType.Full,
                                 Define = new Collection<Define>(defines)
                             };
-                            MergeDefineSet(ref defineSetList, defineSet, ref parameter, ref definesCounter);
+                            MergeDefineSet(ref defineSetList, defineSet, ref parameter);
                         }
                         ret = parameter;
                         break;
                     case zwXmlParamType.STRUCT_BYTE:
-                        ret = UgradeParameterTypeStructByte(val, ref defineSetList, ref definesCounter,
-                            ref structCount);
+                        ret = UgradeParameterTypeStructByte(val, ref defineSetList, ref structCount);
                         break;
                     case zwXmlParamType.VARIANT:
                         ret = UgradeParameterTypeVariant(val, cmdParams, vgParams);
@@ -621,7 +620,7 @@ namespace ZWave.Xml
             }
             else if (vg != null)
             {
-                ret = UpgradeVariantGroup(cmdClass, cmd, vg, vgParams ?? cmdParams, ref defineSetList, ref definesCounter);
+                ret = UpgradeVariantGroup(cmdClass, cmd, vg, vgParams ?? cmdParams, ref defineSetList);
             }
 
             bool hasNameAlready = false;
@@ -667,17 +666,217 @@ namespace ZWave.Xml
             return ret;
         }
 
-        private static void MergeDefineSet(ref IList<DefineSet> defineSetList, DefineSet defineSet, ref Param parameter,
-            ref int counter)
+        private static void MergeDefineSet(ref IList<DefineSet> defineSetList, DefineSet defineSet, ref Param parameter)
         {
             string str = ContainDefineSet(defineSetList, defineSet);
             if (str == null)
             {
-                str = ContainDefineSetName(defineSetList, parameter.Name) ? parameter.Name + ++counter : parameter.Name;
+                // Provisional only: NameDefineSets gives the set its final name once the
+                // whole Command Class is known, so this just has to be unique until then.
+                str = parameter.Name;
+                for (int i = 1; ContainDefineSetName(defineSetList, str); i++)
+                {
+                    str = parameter.Name + i;
+                }
                 defineSet.Name = str;
                 defineSetList.Add(defineSet);
             }
             parameter.Defines = str;
+        }
+
+        /// <summary>
+        /// Gives the define sets of a Command Class names that follow from their content
+        /// alone, never from the order in which the commands appear in the file.
+        ///
+        /// A set is named after the parameter that uses it; where several parameters with
+        /// different names share one set, the first name in ordinal order wins. Sets that
+        /// end up with the same name are then ordered by their defines and numbered, so
+        /// the first keeps the plain name and the others get a '1', '2', ... suffix. The
+        /// numbering runs over the whole Command Class and gives way to the plain names, so
+        /// a numbered name never takes the name a parameter carries outright.
+        ///
+        /// These names reach the generated C headers as enum type names, so deriving them
+        /// from the file layout renames public types whenever the file is reordered, which
+        /// is what sorting the commands by Key used to do.
+        /// </summary>
+        /// <param name="cmdClass">Command Class the sets belong to, with its commands set</param>
+        /// <param name="defineSetList">Define sets to name, carrying provisional names</param>
+        private static void NameDefineSets(CommandClass cmdClass, IList<DefineSet> defineSetList)
+        {
+            // Parameters point at their set by the provisional name, so collect them by it.
+            var users = new Dictionary<string, IList<Param>>(StringComparer.Ordinal);
+            foreach (Param param in EnumerateParams(cmdClass))
+            {
+                if (string.IsNullOrEmpty(param.Defines))
+                {
+                    continue;
+                }
+                if (!users.TryGetValue(param.Defines, out IList<Param> list))
+                {
+                    users[param.Defines] = list = new List<Param>();
+                }
+                list.Add(param);
+            }
+
+            // The names are handed out for the whole Command Class at once: a numbered name
+            // such as 'level1' can be the plain name of another set, so numbering each name
+            // on its own leaves the two indistinguishable. The groups are taken in ordinal
+            // order of their names, which follow from the content, so the outcome does not
+            // depend on the order the file put the sets in.
+            var taken = new HashSet<string>(StringComparer.Ordinal);
+            var finalNames = new Dictionary<DefineSet, string>();
+            var numbered = new List<KeyValuePair<string, DefineSet>>();
+
+            // A name a parameter carries outright is claimed first, so it is never handed to
+            // the numbered set of another name and only the sets that share a name move.
+            foreach (var group in defineSetList
+                .GroupBy(item => BaseDefineSetName(item, users), StringComparer.Ordinal)
+                .OrderBy(item => item.Key, StringComparer.Ordinal))
+            {
+                IList<DefineSet> ordered = group.OrderBy(DefineSetContentKey, StringComparer.Ordinal).ToList();
+                if (taken.Add(DefineSetNameKey(group.Key)))
+                {
+                    finalNames[ordered[0]] = group.Key;
+                    ordered.RemoveAt(0);
+                }
+                foreach (DefineSet defineSet in ordered)
+                {
+                    numbered.Add(new KeyValuePair<string, DefineSet>(group.Key, defineSet));
+                }
+            }
+
+            foreach (KeyValuePair<string, DefineSet> item in numbered)
+            {
+                string name = item.Key;
+                for (int i = 1; !taken.Add(DefineSetNameKey(name)); i++)
+                {
+                    name = item.Key + i;
+                }
+                finalNames[item.Value] = name;
+            }
+
+            // Rename only once every final name is known: one set may take over the
+            // provisional name of another.
+            foreach (DefineSet defineSet in defineSetList)
+            {
+                string name = finalNames[defineSet];
+                if (users.TryGetValue(defineSet.Name, out IList<Param> list))
+                {
+                    foreach (Param param in list)
+                    {
+                        param.Defines = name;
+                    }
+                }
+                defineSet.Name = name;
+            }
+
+            // The header generator emits the enums in this order, so keep it off the file
+            // layout as well.
+            List<DefineSet> sorted = defineSetList.OrderBy(item => item.Name, StringComparer.Ordinal).ToList();
+            defineSetList.Clear();
+            foreach (DefineSet defineSet in sorted)
+            {
+                defineSetList.Add(defineSet);
+            }
+        }
+
+        /// <summary>
+        /// Picks the unnumbered name of a define set: the ordinal-first name among the
+        /// parameters using it, so it does not matter which one the walk reached first.
+        /// </summary>
+        /// <param name="defineSet">Define set to name, carrying its provisional name</param>
+        /// <param name="users">Parameters of the Command Class, by provisional set name</param>
+        /// <returns>name to use before numbering</returns>
+        private static string BaseDefineSetName(DefineSet defineSet, IDictionary<string, IList<Param>> users)
+        {
+            if (users.TryGetValue(defineSet.Name, out IList<Param> list))
+            {
+                string ret = list.Select(param => param.Name)
+                    .Where(name => !string.IsNullOrEmpty(name))
+                    .OrderBy(name => name, StringComparer.Ordinal)
+                    .FirstOrDefault();
+                if (ret != null)
+                {
+                    return ret;
+                }
+            }
+            // No parameter refers to the set - keep its provisional name, minus the suffix.
+            return defineSet.Name == null ? string.Empty : defineSet.Name.TrimEnd(Digits);
+        }
+
+        /// <summary>
+        /// Folds a define set name the way the generated header does: the header turns the
+        /// name into an upper case C identifier, so two names that reach it as one and the
+        /// same identifier must not both be handed out.
+        /// </summary>
+        /// <param name="name">define set name to fold</param>
+        /// <returns>name as the header sees it</returns>
+        private static string DefineSetNameKey(string name)
+        {
+            return Tools.MakeLegalUpperCaseIdentifier(name ?? string.Empty);
+        }
+
+        /// <summary>
+        /// Renders a define set as a string that depends on its content only, used to bring
+        /// the sets that share a name into a stable order.
+        /// </summary>
+        /// <param name="defineSet">Define set to render</param>
+        /// <returns>content of the set as a comparable string</returns>
+        private static string DefineSetContentKey(DefineSet defineSet)
+        {
+            StringBuilder ret = new StringBuilder();
+            ret.Append((int)defineSet.Type).Append('|');
+            foreach (Define define in defineSet.Define
+                .OrderBy(item => item.KeyId)
+                .ThenBy(item => item.Name, StringComparer.Ordinal))
+            {
+                ret.Append(define.KeyId.ToString("X2")).Append('=').Append(define.Name).Append(';');
+            }
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// Walks every parameter of a Command Class, including the children of variant
+        /// groups and of struct byte parameters.
+        /// </summary>
+        /// <param name="cmdClass">Command Class to walk</param>
+        /// <returns>every parameter below the Command Class</returns>
+        private static IEnumerable<Param> EnumerateParams(CommandClass cmdClass)
+        {
+            if (cmdClass.Command == null)
+            {
+                yield break;
+            }
+            foreach (Command cmd in cmdClass.Command)
+            {
+                if (cmd.Param == null)
+                {
+                    continue;
+                }
+                foreach (Param param in cmd.Param)
+                {
+                    foreach (Param item in EnumerateParams(param))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<Param> EnumerateParams(Param param)
+        {
+            yield return param;
+            if (param.Param1 == null)
+            {
+                yield break;
+            }
+            foreach (Param child in param.Param1)
+            {
+                foreach (Param item in EnumerateParams(child))
+                {
+                    yield return item;
+                }
+            }
         }
 
         private static bool ContainDefineSetName(IEnumerable<DefineSet> defineSetList, string name)
@@ -857,7 +1056,7 @@ namespace ZWave.Xml
         }
 
         private static Param UgradeParameterTypeStructByte(param val, ref IList<DefineSet> defineSetList,
-            ref int definesCounter, ref byte structCount)
+            ref byte structCount)
         {
             Param ret = UpgradeParameterCommon(val);
             ret.Mode = ParamModes.Property;
@@ -933,7 +1132,7 @@ namespace ZWave.Xml
                                 Type = zwDefineSetType.Full,
                                 Define = new Collection<Define>(defines)
                             };
-                            MergeDefineSet(ref defineSetList, defineSet, ref p, ref definesCounter);
+                            MergeDefineSet(ref defineSetList, defineSet, ref p);
                         }
                     }
                     ret.Param1.Add(p);
@@ -1169,7 +1368,7 @@ namespace ZWave.Xml
         }
 
         private Param UpgradeVariantGroup(CommandClass cmdClass, Command cmd, object variantGroup,
-            IList<Param> cmdParams, ref IList<DefineSet> defineSetList, ref int definesCounter)
+            IList<Param> cmdParams, ref IList<DefineSet> defineSetList)
         {
             if (!(variantGroup is variant_group))
                 return null;
@@ -1201,8 +1400,7 @@ namespace ZWave.Xml
                 byte structCount = 0;
                 foreach (var item in val.Items)
                 {
-                    Param p = UpgradeParam(cmdClass, cmd, item, cmdParams, pars, ref defineSetList, ref definesCounter,
-                        ref structCount);
+                    Param p = UpgradeParam(cmdClass, cmd, item, cmdParams, pars, ref defineSetList, ref structCount);
                     pars.Add(p);
                 }
                 if (pars.Count > 0)

@@ -65,6 +65,7 @@
     <Compile Include="SessionLayer\QueueTests.cs" />
     <Compile Include="StorageAttachmentTests.cs" />
     <Compile Include="DefineSetHeaderTests.cs" />
+    <Compile Include="DefineSetNamingTests.cs" />
     <Compile Include="StorageHeaderTests.cs" />
     <Compile Include="TimeoutManagerTests.cs" />
     <Compile Include="TransportClientBaseTests.cs" />
