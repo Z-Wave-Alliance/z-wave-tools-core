@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>ZWaveTests</AssemblyName>
 		<TargetFrameworks>net10.0;net48</TargetFrameworks>
@@ -12,6 +12,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Utils\Utils_netcore.csproj" />
 		<ProjectReference Include="..\..\ZWave\ZWave_netcore.csproj" />
+		<ProjectReference Include="..\..\ZWaveXml\ZWaveXml_netcore.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Castle.Core" Version="5.1.1" />

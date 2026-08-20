@@ -64,6 +64,7 @@
     <Compile Include="SessionClientTests.cs" />
     <Compile Include="SessionLayer\QueueTests.cs" />
     <Compile Include="StorageAttachmentTests.cs" />
+    <Compile Include="DefineSetHeaderTests.cs" />
     <Compile Include="StorageHeaderTests.cs" />
     <Compile Include="TimeoutManagerTests.cs" />
     <Compile Include="TransportClientBaseTests.cs" />
@@ -76,6 +77,10 @@
     <ProjectReference Include="..\..\ZWave\ZWave.csproj">
       <Project>{B214D482-57EB-42BE-AEC7-D64850F56514}</Project>
       <Name>ZWave</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZWaveXml\ZWaveXml.csproj">
+      <Project>{FEB030F9-A44A-4C72-9C28-C8FA186995FB}</Project>
+      <Name>ZWaveXml</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
