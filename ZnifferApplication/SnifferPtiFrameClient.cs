@@ -141,6 +141,7 @@ namespace ZWave.ZnifferApplication
 
         public void ResetParser()
         {
+            receivingBuffer.Clear();
         }
 
         public bool SendFrames(ActionHandlerResult frameData)

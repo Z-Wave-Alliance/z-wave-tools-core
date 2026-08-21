@@ -111,6 +111,18 @@ namespace ZnifferApplicationTests
             Assert.AreEqual(new[] { FrameLength(20) }, received);
         }
 
+        [Test]
+        public void HandleData_GarbageBuffer_ProducesNoFrames()
+        {
+            var buffer = new byte[] { 0xFF, 0xFE, 0x01, 0x02, 0x03, 0x5B, 0x00, 0x00, 0xAA, 0xBB };
+
+            var received = new List<int>();
+            var frameClient = new SnifferPtiFrameLayer(null).CreateClient(1);
+            frameClient.ReceiveFrameCallback = x => received.Add(x.Buffer.Length);
+            frameClient.HandleData(new DataChunk(buffer, 0, false, ApiTypes.Pti), true);
+            Assert.IsEmpty(received);
+        }
+
         /// <summary>
         /// Feeds one buffer holding a frame per given payload length in segments of
         /// the given size, and returns the length of each frame the client handed back.
