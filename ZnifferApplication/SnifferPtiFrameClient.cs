@@ -17,6 +17,8 @@ namespace ZWave.ZnifferApplication
     {
         private Action<IDataFrame> transmitCallback;
         private FrameDefinition frameDefinition;
+        private readonly List<byte> receivingBuffer = new List<byte>();
+        const int MAX_FRAMED_LENGTH = ushort.MaxValue + 3;
 
         public SnifferPtiFrameClient(Action<IDataFrame> transmitCallback, FrameDefinition frameDefinition)
         {
@@ -34,19 +36,36 @@ namespace ZWave.ZnifferApplication
             if (dc.ApiType == ApiTypes.Pti)
             {
                 byte[] tmpData = dc.GetDataBuffer();
-                if (tmpData != null && tmpData.Length > 4)
+                if (tmpData != null && tmpData.Length > 0)
                 {
+                    // A frame can be split over several chunks, so parse what is left
+                    // of the previous chunk together with the new data.
+                    if (receivingBuffer.Count > 0)
+                    {
+                        receivingBuffer.AddRange(tmpData);
+                        tmpData = receivingBuffer.ToArray();
+                    }
+
                     var index = 1;
+                    var isDesynchronized = false;
                     // Parse all complete frames
                     while (index + 1 < tmpData.Length)
                     {
                         // Frame format: "[", <16 bit LE length>, <data>, "]"
                         int frameLength = tmpData[index] | (tmpData[index + 1] << 8);
-                        if (frameLength < 3
-                            || index + frameLength >= tmpData.Length
-                            || tmpData[index - 1] != 0x5B
-                            || tmpData[index + frameLength] != 0x5D)
+                        if (frameLength < 3 || tmpData[index - 1] != 0x5B)
                         {
+                            isDesynchronized = true;
+                            break;
+                        }
+                        if (index + frameLength >= tmpData.Length)
+                        {
+                            // The frame is not complete yet, wait for the next chunk.
+                            break;
+                        }
+                        if (tmpData[index + frameLength] != 0x5D)
+                        {
+                            isDesynchronized = true;
                             break;
                         }
                         var data = new byte[frameLength - 2];
@@ -77,6 +96,18 @@ namespace ZWave.ZnifferApplication
                             OnFrameReceived(dataFrame);
                         }
                         index += frameLength + 2;
+                    }
+
+                    // Everything before index - 1 was consumed by complete frames,
+                    // keep the rest until the chunk carrying its tail arrives.
+                    receivingBuffer.Clear();
+                    var remaining = tmpData.Length - (index - 1);
+                    if (!isDesynchronized && remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
+                    {
+                        for (int i = index - 1; i < tmpData.Length; i++)
+                        {
+                            receivingBuffer.Add(tmpData[i]);
+                        }
                     }
                 }
                 else

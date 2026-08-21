@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: BSD-3-Clause
 /// SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org>
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using ZWave.Enums;
@@ -88,6 +89,53 @@ namespace ZnifferApplicationTests
             Assert.AreEqual(
                 new[] { FrameLength(20), FrameLength(300), FrameLength(20) },
                 ParseFrameLengths(20, 300, 20));
+        }
+
+        /// <summary>
+        /// Feeds one buffer holding a frame per given payload length in segments of
+        /// the given size, and returns the length of each frame the client handed back.
+        /// </summary>
+        private static List<int> ParseFrameLengthsInSegments(int segmentSize, params int[] payloadLengths)
+        {
+            var buffer = new List<byte>();
+            foreach (var payloadLength in payloadLengths)
+            {
+                buffer.AddRange(BuildFramedPtiFrame(payloadLength));
+            }
+
+            var received = new List<int>();
+            var frameClient = new SnifferPtiFrameLayer(null).CreateClient(1);
+            frameClient.ReceiveFrameCallback = x => received.Add(x.Buffer.Length);
+            for (int offset = 0; offset < buffer.Count; offset += segmentSize)
+            {
+                var segment = buffer.GetRange(offset, Math.Min(segmentSize, buffer.Count - offset));
+                frameClient.HandleData(new DataChunk(segment.ToArray(), 0, false, ApiTypes.Pti), true);
+            }
+            return received;
+        }
+
+        [Test]
+        public void HandleData_FrameSplitOverSegments_IsParsed()
+        {
+            Assert.AreEqual(
+                new[] { FrameLength(2000) },
+                ParseFrameLengthsInSegments(1024, 2000));
+        }
+
+        [Test]
+        public void HandleData_FramesSplitOverUnalignedSegments_AllAreParsed()
+        {
+            Assert.AreEqual(
+                new[] { FrameLength(20), FrameLength(2000), FrameLength(20) },
+                ParseFrameLengthsInSegments(1024, 20, 2000, 20));
+        }
+
+        [Test]
+        public void HandleData_FrameSplitByteByByte_IsParsed()
+        {
+            Assert.AreEqual(
+                new[] { FrameLength(300) },
+                ParseFrameLengthsInSegments(1, 300));
         }
     }
 }
