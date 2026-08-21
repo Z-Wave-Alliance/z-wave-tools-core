@@ -101,12 +101,16 @@ namespace ZWave.ZnifferApplication
                     // Everything before index - 1 was consumed by complete frames,
                     // keep the rest until the chunk carrying its tail arrives.
                     receivingBuffer.Clear();
-                    var remaining = tmpData.Length - (index - 1);
-                    if (!isDesynchronized && remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
+                    if (isDesynchronized)
                     {
-                        for (int i = index - 1; i < tmpData.Length; i++)
+                        $"!!PTI desync at index {index}: {tmpData.GetHex()}"._DLOG();
+                    }
+                    else
+                    {
+                        var remaining = tmpData.Length - (index - 1);
+                        if (remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
                         {
-                            receivingBuffer.Add(tmpData[i]);
+                            receivingBuffer.AddRange(new ArraySegment<byte>(tmpData, index - 1, remaining));
                         }
                     }
                 }
