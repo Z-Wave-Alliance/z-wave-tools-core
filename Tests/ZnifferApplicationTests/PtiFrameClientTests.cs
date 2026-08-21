@@ -91,6 +91,26 @@ namespace ZnifferApplicationTests
                 ParseFrameLengths(20, 300, 20));
         }
 
+        [Test]
+        public void HandleData_CorruptFrameFollowedByValidFrame_Resyncs()
+        {
+            var buffer = new List<byte>();
+            // Corrupt frame: valid "[" and length, but wrong "]" position
+            buffer.Add(0x5B);
+            buffer.Add(0x05);
+            buffer.Add(0x00);
+            buffer.AddRange(new byte[] { 0xFF, 0xFF, 0xFF });
+            buffer.Add(0x00); // should be 0x5D but isn't
+            // Valid frame after the corrupt one
+            buffer.AddRange(BuildFramedPtiFrame(20));
+
+            var received = new List<int>();
+            var frameClient = new SnifferPtiFrameLayer(null).CreateClient(1);
+            frameClient.ReceiveFrameCallback = x => received.Add(x.Buffer.Length);
+            frameClient.HandleData(new DataChunk(buffer.ToArray(), 0, false, ApiTypes.Pti), true);
+            Assert.AreEqual(new[] { FrameLength(20) }, received);
+        }
+
         /// <summary>
         /// Feeds one buffer holding a frame per given payload length in segments of
         /// the given size, and returns the length of each frame the client handed back.

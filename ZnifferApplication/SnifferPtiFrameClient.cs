@@ -47,7 +47,6 @@ namespace ZWave.ZnifferApplication
                     }
 
                     var index = 1;
-                    var isDesynchronized = false;
                     // Parse all complete frames
                     while (index + 1 < tmpData.Length)
                     {
@@ -55,8 +54,8 @@ namespace ZWave.ZnifferApplication
                         int frameLength = tmpData[index] | (tmpData[index + 1] << 8);
                         if (frameLength < 3 || tmpData[index - 1] != 0x5B)
                         {
-                            isDesynchronized = true;
-                            break;
+                            index = ScanForNextFrame(tmpData, index);
+                            continue;
                         }
                         if (index + frameLength >= tmpData.Length)
                         {
@@ -65,8 +64,8 @@ namespace ZWave.ZnifferApplication
                         }
                         if (tmpData[index + frameLength] != 0x5D)
                         {
-                            isDesynchronized = true;
-                            break;
+                            index = ScanForNextFrame(tmpData, index);
+                            continue;
                         }
                         var data = new byte[frameLength - 2];
                         Array.Copy(tmpData, index + 2, data, 0, data.Length);
@@ -101,17 +100,10 @@ namespace ZWave.ZnifferApplication
                     // Everything before index - 1 was consumed by complete frames,
                     // keep the rest until the chunk carrying its tail arrives.
                     receivingBuffer.Clear();
-                    if (isDesynchronized)
+                    var remaining = tmpData.Length - (index - 1);
+                    if (remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
                     {
-                        $"!!PTI desync at index {index}: {tmpData.GetHex()}"._DLOG();
-                    }
-                    else
-                    {
-                        var remaining = tmpData.Length - (index - 1);
-                        if (remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
-                        {
-                            receivingBuffer.AddRange(new ArraySegment<byte>(tmpData, index - 1, remaining));
-                        }
+                        receivingBuffer.AddRange(new ArraySegment<byte>(tmpData, index - 1, remaining));
                     }
                 }
                 else
@@ -119,6 +111,22 @@ namespace ZWave.ZnifferApplication
                     $"!!{tmpData.GetHex()}"._DLOG();
                 }
             }
+        }
+
+        /// <summary>
+        /// Scans forward from <paramref name="index"/> to find the next 0x5B frame
+        /// start marker and returns the position of the length field after it.
+        /// Returns <c>tmpData.Length</c> if no marker is found, which ends the loop.
+        /// </summary>
+        private static int ScanForNextFrame(byte[] tmpData, int index)
+        {
+            $"!!PTI desync at index {index}: {tmpData.GetHex()}"._DLOG();
+            for (int i = index; i < tmpData.Length; i++)
+            {
+                if (tmpData[i] == 0x5B)
+                    return i + 1;
+            }
+            return tmpData.Length;
         }
 
         private void OnFrameReceived(DataFrame dataFrame)
