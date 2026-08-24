@@ -30,7 +30,26 @@ namespace ZWave.BasicApplication.Operations
             _securityS0CryptoProvider = securityS0CryptoProvider;
         }
 
+        // A request from a node is ignored while our reply to that node's previous request is
+        // still in flight. The guard is keyed on the reply action's own state rather than on its
+        // CompletedCallback: SessionClient dispatches callbacks via the thread pool, so a
+        // callback-based reset lags the completion and a legitimate follow-up NONCE_GET arriving
+        // a few milliseconds later (e.g. NetworkKeyVerify followed by SchemeReport during S0
+        // inclusion) was silently dropped, leaving the requester to time out.
         NodeTag handlingNonceGetFromNode = NodeTag.Empty;
+        ActionBase handlingNonceGetReply;
+
+        private bool IsReplyPending(NodeTag node)
+        {
+            if (handlingNonceGetFromNode != node || handlingNonceGetReply == null)
+                return false;
+            var state = handlingNonceGetReply.Token.State;
+            return state != ActionStates.Cancelled &&
+                state != ActionStates.Completed &&
+                state != ActionStates.Expired &&
+                state != ActionStates.Failed;
+        }
+
         protected override void OnHandledInternal(DataReceivedUnit ou)
         {
             ou.SetNextActionItems();
@@ -49,15 +68,11 @@ namespace ZWave.BasicApplication.Operations
                         if (!isMulticastFrame && !isBroadcastFrame &&
                             (command[1] == COMMAND_CLASS_SECURITY.SECURITY_NONCE_GET.ID ||
                             command[1] == COMMAND_CLASS_SECURITY.SECURITY_MESSAGE_ENCAPSULATION_NONCE_GET.ID) &&
-                            handlingNonceGetFromNode != ReceivedAchData.SrcNode)
+                            !IsReplyPending(ReceivedAchData.SrcNode))
                         {
                             handlingNonceGetFromNode = ReceivedAchData.SrcNode;
                             var destNodeId = ReceivedAchData.DstNode.Id > 0 ? ReceivedAchData.DstNode : _securityManagerInfo.Network.NodeTag;
-                            if (_securityManagerInfo.IsSenderNonceS0Disabled)
-                            {
-                                handlingNonceGetFromNode = NodeTag.Empty;
-                            }
-                            else
+                            if (!_securityManagerInfo.IsSenderNonceS0Disabled)
                             {
                                 dataToSend = _securityS0CryptoProvider.GenerateNonceReport(new OrdinalPeerNodeId(ReceivedAchData.SrcNode, destNodeId));
                             }
@@ -67,7 +82,7 @@ namespace ZWave.BasicApplication.Operations
                                 Thread.Sleep(_securityManagerInfo.DelaysS0[SecurityS0Delays.NonceReport]);
                             }
                         }
-                        else if (command[1] == COMMAND_CLASS_SECURITY.SECURITY_COMMANDS_SUPPORTED_GET.ID && handlingNonceGetFromNode != ReceivedAchData.SrcNode)
+                        else if (command[1] == COMMAND_CLASS_SECURITY.SECURITY_COMMANDS_SUPPORTED_GET.ID && !IsReplyPending(ReceivedAchData.SrcNode))
                         {
                             handlingNonceGetFromNode = ReceivedAchData.SrcNode;
                             var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
@@ -123,16 +138,18 @@ namespace ZWave.BasicApplication.Operations
                                 var action = x as ActionBase;
                                 if (action != null)
                                 {
-                                    handlingNonceGetFromNode = NodeTag.Empty;
                                     SpecificResult.TotalCount++;
                                     if (action.Result.State != ActionStates.Completed)
                                         SpecificResult.FailCount++;
                                 }
                             };
+                            handlingNonceGetReply = sendData;
                             ou.SetNextActionItems(sendData);
                         }
                         else
                         {
+                            handlingNonceGetFromNode = NodeTag.Empty;
+                            handlingNonceGetReply = null;
                             ou.SetNextActionItems();
                         }
                     }

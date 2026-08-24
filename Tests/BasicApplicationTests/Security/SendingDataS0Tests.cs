@@ -114,5 +114,40 @@ namespace BasicApplicationTests.Security.SendingData
                 FrameLogRecord.Create(NODE_ID_0, NODE_ID_2, COMMAND_CLASS_SECURITY.SECURITY_MESSAGE_ENCAPSULATION.ID)
             });
         }
+
+        [Test]
+        public void D_SecureSendData_TwoConsecutiveSends_EveryNonceGetIsAnswered()
+        {
+            // Arrange. The receiver ignores a NONCE_GET while its reply to the sender's previous
+            // NONCE_GET is still in flight; the second send below issues its NONCE_GET right after
+            // the first reply completed, so it must be answered instead of being dropped.
+            byte[] firstCmd = CreateDataAsBasicSet();
+            byte[] secondCmd = new COMMAND_CLASS_BASIC.BASIC_GET();
+            var expectFirst = _ctrlSecond.ExpectData(firstCmd, EXPECT_TIMEOUT, null);
+            var expectSecond = _ctrlSecond.ExpectData(secondCmd, EXPECT_TIMEOUT, null);
+
+            // Act.
+            var firstRes = _ctrlFirst.SendData(NODE_ID_2, firstCmd, TXO);
+            var secondRes = _ctrlFirst.SendData(NODE_ID_2, secondCmd, TXO);
+            var expectFirstRes = (ExpectDataResult)expectFirst.WaitCompletedSignal();
+            var expectSecondRes = (ExpectDataResult)expectSecond.WaitCompletedSignal();
+
+            // Assert.
+            Assert.IsTrue(firstRes);
+            Assert.IsTrue(secondRes);
+            Assert.IsNotNull(expectFirstRes.Command);
+            Assert.IsNotNull(expectSecondRes.Command);
+            Assert.IsTrue(expectFirstRes.Command.SequenceEqual(firstCmd));
+            Assert.IsTrue(expectSecondRes.Command.SequenceEqual(secondCmd));
+            AssertCmdSequence(_ctrlFirst.SessionId, new FrameLogRecord[]
+            {
+                FrameLogRecord.Create(NODE_ID_0, NODE_ID_2, COMMAND_CLASS_SECURITY.SECURITY_NONCE_GET.ID),
+                FrameLogRecord.Create(NODE_ID_2, NODE_ID_0, COMMAND_CLASS_SECURITY.SECURITY_NONCE_REPORT.ID),
+                FrameLogRecord.Create(NODE_ID_0, NODE_ID_2, COMMAND_CLASS_SECURITY.SECURITY_MESSAGE_ENCAPSULATION.ID),
+                FrameLogRecord.Create(NODE_ID_0, NODE_ID_2, COMMAND_CLASS_SECURITY.SECURITY_NONCE_GET.ID),
+                FrameLogRecord.Create(NODE_ID_2, NODE_ID_0, COMMAND_CLASS_SECURITY.SECURITY_NONCE_REPORT.ID),
+                FrameLogRecord.Create(NODE_ID_0, NODE_ID_2, COMMAND_CLASS_SECURITY.SECURITY_MESSAGE_ENCAPSULATION.ID)
+            });
+        }
     }
 }
