@@ -18,6 +18,8 @@ namespace ZWave.ZnifferApplication
         private Action<IDataFrame> transmitCallback;
         private FrameDefinition frameDefinition;
         private readonly List<byte> receivingBuffer = new List<byte>();
+        const byte FRAME_START = 0x5B; // '['
+        const byte FRAME_END = 0x5D;   // ']'
         const int MAX_FRAMED_LENGTH = ushort.MaxValue + 3;
 
         public SnifferPtiFrameClient(Action<IDataFrame> transmitCallback, FrameDefinition frameDefinition)
@@ -29,8 +31,6 @@ namespace ZWave.ZnifferApplication
         public ushort SessionId { get; set; }
         public Action<CustomDataFrame> ReceiveFrameCallback { get; set; }
         public Func<byte[], int> SendDataCallback { get; set; }
-        const int DCH_LENGTH_VER2 = 11;
-        const int DCH_LENGTH_VER3 = 18;
         public void HandleData(DataChunk dc, bool isFromFile)
         {
             if (dc.ApiType == ApiTypes.Pti)
@@ -38,8 +38,7 @@ namespace ZWave.ZnifferApplication
                 byte[] tmpData = dc.GetDataBuffer();
                 if (tmpData != null && tmpData.Length > 0)
                 {
-                    // A frame can be split over several chunks, so parse what is left
-                    // of the previous chunk together with the new data.
+                    // Prepend leftover bytes from the previous chunk
                     if (receivingBuffer.Count > 0)
                     {
                         receivingBuffer.AddRange(tmpData);
@@ -47,46 +46,41 @@ namespace ZWave.ZnifferApplication
                     }
 
                     var index = 1;
+                    var desyncCount = 0;
+                    var firstDesyncIndex = -1;
+                    var hasFrameStart = true;
                     // Parse all complete frames
                     while (index + 1 < tmpData.Length)
                     {
                         // Frame format: "[", <16 bit LE length>, <data>, "]"
                         int frameLength = tmpData[index] | (tmpData[index + 1] << 8);
-                        if (frameLength < 3 || tmpData[index - 1] != 0x5B)
+                        var isDesynchronized = frameLength < 3 || tmpData[index - 1] != FRAME_START;
+                        if (!isDesynchronized)
                         {
-                            index = ScanForNextFrame(tmpData, index);
-                            continue;
+                            if (index + frameLength >= tmpData.Length)
+                            {
+                                // Wait only while the visible bytes still look like a real frame start
+                                if (IsPlausibleFrameStart(tmpData, index))
+                                    break;
+                                isDesynchronized = true;
+                            }
+                            else if (tmpData[index + frameLength] != FRAME_END)
+                            {
+                                isDesynchronized = true;
+                            }
                         }
-                        if (index + frameLength >= tmpData.Length)
+                        if (isDesynchronized)
                         {
-                            // The frame is not complete yet, wait for the next chunk.
-                            break;
-                        }
-                        if (tmpData[index + frameLength] != 0x5D)
-                        {
-                            index = ScanForNextFrame(tmpData, index);
+                            if (firstDesyncIndex < 0)
+                                firstDesyncIndex = index;
+                            desyncCount++;
+                            index = ScanForNextFrame(tmpData, index, out hasFrameStart);
                             continue;
                         }
                         var data = new byte[frameLength - 2];
                         Array.Copy(tmpData, index + 2, data, 0, data.Length);
-                        var dchLength = data[0] == 2 ? DCH_LENGTH_VER2 : (data[0] == 3 ? DCH_LENGTH_VER3 : 0);
-                        var apiType = ApiTypes.PtiDiagnostic;
-                        // check that data is big enough to contain preamble and postamble
-                        if (dchLength > 0 && data.Length > dchLength + 6)
-                        {
-                            if ((data[dchLength] == 0xF8 && data[data.Length - 6] == 0xF9)
-                             || (data[dchLength] == 0xFC && data[data.Length - 5] == 0xFD))
-                            {
-                                apiType = ApiTypes.Pti;
-                            }
-                            else if ((data[dchLength] == 0xF8 && data[12] == 0x55) //Beam Tag
-                                || (data[dchLength] == 0xFC && data[12] == 0x55))
-                            {
-                                apiType = ApiTypes.Pti;
-                            }
-                        }
                         var dataFrame = new DataFrame(SessionId, DataFrameTypes.Data, isFromFile, false, DateTime.Now);
-                        var dataItem = PtiFrameParser.GetDataItem(apiType, DateTime.Now, frameDefinition, SessionId, data);
+                        var dataItem = PtiFrameParser.GetDataItem(ApiTypes.Pti, DateTime.Now, frameDefinition, SessionId, data);
                         if (dataItem != null)
                         {
                             dataFrame.ApiType = dataItem.ApiType;
@@ -97,11 +91,15 @@ namespace ZWave.ZnifferApplication
                         index += frameLength + 2;
                     }
 
-                    // Everything before index - 1 was consumed by complete frames,
-                    // keep the rest until the chunk carrying its tail arrives.
+                    if (desyncCount > 0)
+                    {
+                        $"!!PTI desync at index {firstDesyncIndex} of {tmpData.Length}, {desyncCount} candidate(s) skipped"._DLOG();
+                    }
+
+                    // Retain the unconsumed tail for the next chunk
                     receivingBuffer.Clear();
                     var remaining = tmpData.Length - (index - 1);
-                    if (remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
+                    if (hasFrameStart && remaining > 0 && remaining <= MAX_FRAMED_LENGTH)
                     {
                         receivingBuffer.AddRange(new ArraySegment<byte>(tmpData, index - 1, remaining));
                     }
@@ -114,18 +112,34 @@ namespace ZWave.ZnifferApplication
         }
 
         /// <summary>
+        /// Returns whether the visible prefix still looks like a valid DCH frame start.
+        /// Bytes beyond the buffer are treated as plausible.
+        /// </summary>
+        private static bool IsPlausibleFrameStart(byte[] tmpData, int index)
+        {
+            var versionIndex = index + 2;
+            if (versionIndex >= tmpData.Length)
+                return true;
+            return tmpData[versionIndex] == 2 || tmpData[versionIndex] == 3;
+        }
+
+        /// <summary>
         /// Scans forward from <paramref name="index"/> to find the next 0x5B frame
         /// start marker and returns the position of the length field after it.
-        /// Returns <c>tmpData.Length</c> if no marker is found, which ends the loop.
+        /// Sets <paramref name="hasFrameStart"/> to false and returns
+        /// <c>tmpData.Length</c> if no marker is found, which ends the loop.
         /// </summary>
-        private static int ScanForNextFrame(byte[] tmpData, int index)
+        private static int ScanForNextFrame(byte[] tmpData, int index, out bool hasFrameStart)
         {
-            $"!!PTI desync at index {index}: {tmpData.GetHex()}"._DLOG();
             for (int i = index; i < tmpData.Length; i++)
             {
-                if (tmpData[i] == 0x5B)
+                if (tmpData[i] == FRAME_START)
+                {
+                    hasFrameStart = true;
                     return i + 1;
+                }
             }
+            hasFrameStart = false;
             return tmpData.Length;
         }
 
