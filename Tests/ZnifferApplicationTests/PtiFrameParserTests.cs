@@ -30,7 +30,11 @@ namespace ZnifferApplicationTests
 
         /// Builds one DCH version 2 PTI frame received on <paramref name="channel"/>
         /// of <paramref name="region"/>, carrying a 10 byte Z-Wave payload.
-        private static byte[] BuildPtiFrame(byte region, byte channel)
+        private static byte[] BuildPtiFrame(
+            byte region,
+            byte channel,
+            byte rssi = 0x40,
+            byte appendedInfoCfg = 0x00)
         {
             var data = new byte[DchHeaderLength + 10 + AppendixLength];
             data[0] = DchVersion2;
@@ -41,17 +45,26 @@ namespace ZnifferApplicationTests
                 data[DchHeaderLength + i] = (byte)(i + 1);
             }
             data[data.Length - 6] = HwRxSuccess;
-            data[data.Length - 5] = 0x40; // RSSI
+            data[data.Length - 5] = rssi;
             data[data.Length - 4] = region;
             data[data.Length - 3] = channel;
             data[data.Length - 2] = ZWaveProtocol;
+            data[data.Length - 1] = appendedInfoCfg;
             return data;
         }
 
-        private static DataItem Parse(byte region, byte channel)
+        private static DataItem Parse(
+            byte region,
+            byte channel,
+            byte rssi = 0x40,
+            byte appendedInfoCfg = 0x00)
         {
             return PtiFrameParser.GetDataItem(
-                ApiTypes.Pti, DateTime.Now, null, 1, BuildPtiFrame(region, channel));
+                ApiTypes.Pti,
+                DateTime.Now,
+                null,
+                1,
+                BuildPtiFrame(region, channel, rssi, appendedInfoCfg));
         }
 
         [TestCase(RegionEuLr2, 3)]
@@ -76,6 +89,42 @@ namespace ZnifferApplicationTests
 
             Assert.AreEqual(region, dataItem.Frequency);
             Assert.AreEqual(speed, dataItem.Speed);
+        }
+
+        [Test]
+        public void GetDataItem_AppendedInfoVersion0_KeepsRawRssi()
+        {
+            const byte rawRssi = 0x40;
+            var dataItem = Parse(RegionEu, 0, rawRssi, appendedInfoCfg: 0x00);
+
+            Assert.AreEqual(rawRssi, dataItem.Rssi);
+            Assert.AreEqual((sbyte)rawRssi, (sbyte)dataItem.Rssi);
+        }
+
+        [TestCase(0x01)]
+        [TestCase(0x07)]
+        public void GetDataItem_AppendedInfoVersionAtLeast1_SubtractsRssiCompensation(byte appendedInfoCfg)
+        {
+            const byte rawRssi = 0x40; // +64 as signed
+            const byte expectedRssi = unchecked((byte)(64 - 0x32)); // +14 dBm
+
+            var dataItem = Parse(RegionEu, 0, rawRssi, appendedInfoCfg);
+
+            Assert.AreEqual(expectedRssi, dataItem.Rssi);
+            Assert.AreEqual(14, (sbyte)dataItem.Rssi);
+        }
+
+        [Test]
+        public void GetDataItem_AppendedInfoVersionAtLeast1_PreservesNegativeRssiAsSignedByte()
+        {
+            // Raw -20 dBm (0xEC), compensated: -20 - 50 = -70 dBm (0xBA)
+            const byte rawRssi = 0xEC;
+            const byte expectedRssi = unchecked((byte)(-20 - 0x32));
+
+            var dataItem = Parse(RegionEu, 0, rawRssi, appendedInfoCfg: 0x01);
+
+            Assert.AreEqual(expectedRssi, dataItem.Rssi);
+            Assert.AreEqual(-70, (sbyte)dataItem.Rssi);
         }
     }
 }

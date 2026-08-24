@@ -118,6 +118,10 @@ namespace ZWave.ZnifferApplication
         private const byte HWTxSuccess = 0xFD; // Tx Success
         private const byte HWRxAbort = 0xFA;   // Rx Abort
         private const byte HWTxAbort = 0xFE;   // Tx Abort
+        // EFR32 PTI APPENDED_INFO RSSI (RX only): from version 1, subtract 0x32 to get dBm.
+        // Serial Zniffer 4.x UART RSSI is a legacy 0–63 scale and must not use this.
+        private const byte PtiRssiCompensation = 0x32;
+        private const byte PtiAppendedInfoVersionMask = 0x07;
         private static DataItem CreateDataItem(ApiTypes dcApiType, DateTime timeStamp, FrameDefinition frameDefinition, ushort sessionId, byte[] data)
         {
             DataItem dataItem = null;
@@ -177,7 +181,9 @@ namespace ZWave.ZnifferApplication
                 var protocol = data[data.Length - AfterDataLength + ProtocolOffset] & ProtocolMask;
                 byte region = (byte)(data[data.Length - AfterDataLength + RegionIdOffset] & RegionIdMask);
                 var channel = (byte)(data[data.Length - AfterDataLength + ChannelOffset] & ChannelMask);
-                var rssi = (byte)(RssiOffset > 0 ? data[data.Length - AfterDataLength + RssiOffset] : 0);
+                var rssi = RssiOffset > 0
+                    ? ConvertPtiRxRssi(data[data.Length - AfterDataLength + RssiOffset], data[data.Length - 1])
+                    : (byte)0;
                 ushort key = (ushort)((channel << 8) + region);
                 var packetLength = data.Length - BeforeDataLength - AfterDataLength;
                 if (protocol == ZWaveProtocol) // && rssi != 0xF9 && rssi != 0xFA (ZNF-389)
@@ -229,6 +235,17 @@ namespace ZWave.ZnifferApplication
                 }
             }
             return dataItem;
+        }
+
+        private static byte ConvertPtiRxRssi(byte rawRssi, byte appendedInfoCfg)
+        {
+            int rssiDbm = (sbyte)rawRssi;
+            byte version = (byte)(appendedInfoCfg & PtiAppendedInfoVersionMask);
+            if (version >= 1)
+            {
+                rssiDbm -= PtiRssiCompensation;
+            }
+            return (byte)rssiDbm;
         }
 
         private static ushort ParseWakeUpBeamsCounter(int frameLength, byte[] data, int dataOffset, int dataLength)
