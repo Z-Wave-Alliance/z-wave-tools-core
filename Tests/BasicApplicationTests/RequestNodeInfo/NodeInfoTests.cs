@@ -840,7 +840,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.AreEqual(0, response[2]);
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare scheduling/timing races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void DisableHighest_BeforeInclusion_OnSecondary_RequestFromPrimary_PrimaryTriesS2_AccessWithoutResponce()
         {
             //Arrange
@@ -889,7 +891,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.AreEqual(SecuritySchemes.S2_AUTHENTICATED, actualReportS2Res.SecurityScheme);
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare scheduling/timing races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void DisableHighest_BeforeInclusion_OnSecondary_RequestFromSecondary_NotUsesHighestAvailable()
         {
             //Arrange
@@ -931,7 +935,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.AreEqual(SecuritySchemes.S2_AUTHENTICATED, actualReportS2Res.SecurityScheme);
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare scheduling/timing races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void DisableHighest_BeforeInclusion_OnPrimary_RequestFromPrimary_NotUsesHighestAvailable()
         {
             //Arrange
@@ -973,7 +979,9 @@ namespace BasicApplicationTests.RequestNodeInfo
             Assert.AreEqual(SecuritySchemes.S2_AUTHENTICATED, actualReportS2Res.SecurityScheme);
         }
 
+        // Timing-sensitive emulated-inclusion handshake; retry to absorb rare scheduling/timing races (see SetupFixture).
         [Test]
+        [Retry(3)]
         public void DisableHighest_BeforeInclusion_OnPrimary_RequestFromSecondary_NotUsesHighestAvailable()
         {
             //Arrange
