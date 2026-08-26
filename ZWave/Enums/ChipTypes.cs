@@ -64,6 +64,8 @@ namespace ZWave.Enums
         ZGM230S_BRD4205B,
         [Description("ZGM230 +14 dBm Dev Kit Board")]
         ZGM230_BRD2603A,
+        [Description("ZGM230 +14 dBm Dev Kit Board")]
+        ZGM230_BRD2603C,
         [Description("EFR32ZG23 868-915 MHz 20 dBm Radio Board")]
         ZG23_BRD4210A,
         [Description("EFR32xG28 868/915 MHz +14 dBm + 2.4 GHz +10 dBm Radio Board")]
