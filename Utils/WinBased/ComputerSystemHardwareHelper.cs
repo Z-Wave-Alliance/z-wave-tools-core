@@ -1,5 +1,6 @@
-/// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Silicon Laboratories Inc. https://www.silabs.com
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -70,106 +71,17 @@ namespace Utils
             }
         }
 
+        /// <summary>
+        /// Returns (port name, J-Link serial number) for every connected Gamma board.
+        /// </summary>
+        /// <remarks>
+        /// Retained for the .NET Framework callers of this class. The implementation lives in
+        /// <see cref="JLinkBoardLocator"/> so that .NET (Core) consumers - which do not compile
+        /// this Windows only file - share the very same matching logic on Windows and Linux.
+        /// </remarks>
         public static List<Tuple<string, string>> GetGammaSourceAndSerial()
         {
-            var vidPids = new List<string>()
-            {
-                @"VID_1366&PID_0105",   // SEGGER legacy driver "JLink CDC UART Port"
-                @"VID_1366&PID_1024"    // WinUSB driver
-            };
-            Dictionary<string, List<string>> tmp = new Dictionary<string, List<string>>();
-            List<Tuple<string, string>> ret = new List<Tuple<string, string>>();
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(
-                    "root\\CIMV2",
-                    @"SELECT * FROM Win32_USBControllerDevice");
-            try
-            {
-                string lastId = "";
-                foreach (ManagementObject queryObj in searcher.Get())
-                {
-                    try
-                    {
-                        var dependent = queryObj.GetPropertyValue("Dependent") as string;
-                        if (dependent != null)
-                        {
-                            foreach (string vidPid in vidPids)
-                            {
-                                if (dependent.Contains(vidPid))
-                                {
-                                    string id = dependent.Substring(dependent.IndexOf(vidPid) + vidPid.Length).Replace(@"\\", @"\");
-                                    id = id.Trim('\\', '\"');
-                                    if (!id.StartsWith("&"))
-                                    {
-                                        id = id.TrimStart('0');
-                                        if (!tmp.ContainsKey(id))
-                                        {
-                                            tmp.Add(id, new List<string>());
-                                            lastId = id;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        tmp[lastId].Add(id);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception) { }
-                }
-            }
-            catch (ManagementException) { }
-            finally
-            {
-                searcher.Dispose();
-            }
-
-            searcher = new ManagementObjectSearcher(
-                  "root\\CIMV2",
-                  @"SELECT * FROM Win32_PnPEntity WHERE ClassGuid = '{4D36E978-E325-11CE-BFC1-08002BE10318}'");
-            try
-            {
-                foreach (ManagementObject queryObj in searcher.Get())
-                {
-                    var deviceId = queryObj.GetPropertyValue("DeviceID") as string;
-                    if (deviceId != null)
-                    {
-                        foreach (string vidPid in vidPids)
-                        {
-                            if (deviceId.Contains(vidPid))
-                            {
-                                var name = queryObj.GetPropertyValue("Name") as string;
-                                if (name != null)
-                                {
-                                    var port = name.Split('(', ')').FirstOrDefault(x => x.StartsWith("COM"));
-                                    if (port != null)
-                                    {
-                                        foreach (var record in tmp)
-                                        {
-                                            foreach (var item in record.Value)
-                                            {
-                                                if (deviceId.Contains(item))
-                                                {
-                                                    ret.Add(new Tuple<string, string>(port, record.Key));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-            catch (ManagementException) { }
-            finally
-            {
-                searcher.Dispose();
-            }
-
-
-            return ret;
+            return JLinkBoardLocator.GetBoardLinks();
         }
 
         private static void GetRelated(string indent, ManagementObject obj, string selfId)

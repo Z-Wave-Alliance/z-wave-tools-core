@@ -7,9 +7,14 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' != 'net48'">
     <!-- for .NET (Core) -->
+    <!-- WinBased holds Windows only WMI/registry helpers and stays out of the .NET (Core) build.
+         The J-Link board lookup under JLink/ is cross platform and is compiled for every target. -->
     <Compile Remove="WinBased\**" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
     <PackageReference Include="System.IO.Packaging" Version="10.0.2" />
+    <!-- Windows only at run time, but restores and publishes for every RID (incl. linux-x64).
+         JLinkBoardLocator guards every call with RuntimeInformation.IsOSPlatform. -->
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <!-- for .NET Framework 4.8 -->

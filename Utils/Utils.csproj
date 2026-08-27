@@ -78,6 +78,10 @@
     <Compile Include="UI\Logging\LogSettings.cs" />
     <Compile Include="UI\NotifyCommandData.cs" />
     <Compile Include="UI\Wrappers\SelectableItem.cs" />
+    <Compile Include="JLink\JLinkBoardLocator.cs" />
+    <Compile Include="JLink\JLinkBoardLocatorUnix.cs" />
+    <Compile Include="JLink\JLinkBoardLocatorWindows.cs" />
+    <Compile Include="JLink\JLinkUsbMatcher.cs" />
     <Compile Include="WinBased\SerialPortMontiorHelper.cs" />
     <Compile Include="WinBased\ComputerSystemHardwareHelper.cs" />
     <Compile Include="SizeLimitedTable.cs" />
