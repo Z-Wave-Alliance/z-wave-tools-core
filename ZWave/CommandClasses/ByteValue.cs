@@ -1,5 +1,5 @@
-/// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 /// Generated file from the Z-Wave XML Editor.
 namespace ZWave.CommandClasses
 {
