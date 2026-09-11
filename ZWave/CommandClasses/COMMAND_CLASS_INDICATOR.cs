@@ -8,6 +8,29 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x87;
         public const byte VERSION = 1;
+        public partial class INDICATOR_SET
+        {
+            public const byte ID = 0x01;
+            public ByteValue value = 0;
+            public static implicit operator INDICATOR_SET(byte[] data)
+            {
+                INDICATOR_SET ret = new INDICATOR_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.value = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](INDICATOR_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_INDICATOR.ID);
+                ret.Add(ID);
+                if (command.value.HasValue) ret.Add(command.value);
+                return ret.ToArray();
+            }
+        }
         public partial class INDICATOR_GET
         {
             public const byte ID = 0x02;
@@ -39,29 +62,6 @@ namespace ZWave.CommandClasses
                 return ret;
             }
             public static implicit operator byte[](INDICATOR_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_INDICATOR.ID);
-                ret.Add(ID);
-                if (command.value.HasValue) ret.Add(command.value);
-                return ret.ToArray();
-            }
-        }
-        public partial class INDICATOR_SET
-        {
-            public const byte ID = 0x01;
-            public ByteValue value = 0;
-            public static implicit operator INDICATOR_SET(byte[] data)
-            {
-                INDICATOR_SET ret = new INDICATOR_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.value = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](INDICATOR_SET command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_INDICATOR.ID);

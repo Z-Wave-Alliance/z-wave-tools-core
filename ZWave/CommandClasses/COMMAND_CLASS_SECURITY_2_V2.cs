@@ -789,7 +789,7 @@ namespace ZWave.CommandClasses
                     get { return (byte)(_value >> 0 & 0x0F); }
                     set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
                 }
-                public byte reserved
+                public byte reserved2
                 {
                     get { return (byte)(_value >> 4 & 0x0F); }
                     set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }

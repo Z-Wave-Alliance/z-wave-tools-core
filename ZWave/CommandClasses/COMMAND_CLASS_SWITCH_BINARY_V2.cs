@@ -8,6 +8,32 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x25;
         public const byte VERSION = 2;
+        public partial class SWITCH_BINARY_SET
+        {
+            public const byte ID = 0x01;
+            public ByteValue targetValue = 0;
+            public ByteValue duration = 0;
+            public static implicit operator SWITCH_BINARY_SET(byte[] data)
+            {
+                SWITCH_BINARY_SET ret = new SWITCH_BINARY_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.targetValue = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.duration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SWITCH_BINARY_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SWITCH_BINARY_V2.ID);
+                ret.Add(ID);
+                if (command.targetValue.HasValue) ret.Add(command.targetValue);
+                if (command.duration.HasValue) ret.Add(command.duration);
+                return ret.ToArray();
+            }
+        }
         public partial class SWITCH_BINARY_GET
         {
             public const byte ID = 0x02;
@@ -48,32 +74,6 @@ namespace ZWave.CommandClasses
                 ret.Add(COMMAND_CLASS_SWITCH_BINARY_V2.ID);
                 ret.Add(ID);
                 if (command.currentValue.HasValue) ret.Add(command.currentValue);
-                if (command.targetValue.HasValue) ret.Add(command.targetValue);
-                if (command.duration.HasValue) ret.Add(command.duration);
-                return ret.ToArray();
-            }
-        }
-        public partial class SWITCH_BINARY_SET
-        {
-            public const byte ID = 0x01;
-            public ByteValue targetValue = 0;
-            public ByteValue duration = 0;
-            public static implicit operator SWITCH_BINARY_SET(byte[] data)
-            {
-                SWITCH_BINARY_SET ret = new SWITCH_BINARY_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.targetValue = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.duration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SWITCH_BINARY_SET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SWITCH_BINARY_V2.ID);
-                ret.Add(ID);
                 if (command.targetValue.HasValue) ret.Add(command.targetValue);
                 if (command.duration.HasValue) ret.Add(command.duration);
                 return ret.ToArray();

@@ -8,58 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x2C;
         public const byte VERSION = 1;
-        public partial class SCENE_ACTUATOR_CONF_GET
-        {
-            public const byte ID = 0x02;
-            public ByteValue sceneId = 0;
-            public static implicit operator SCENE_ACTUATOR_CONF_GET(byte[] data)
-            {
-                SCENE_ACTUATOR_CONF_GET ret = new SCENE_ACTUATOR_CONF_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.sceneId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SCENE_ACTUATOR_CONF_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SCENE_ACTUATOR_CONF.ID);
-                ret.Add(ID);
-                if (command.sceneId.HasValue) ret.Add(command.sceneId);
-                return ret.ToArray();
-            }
-        }
-        public partial class SCENE_ACTUATOR_CONF_REPORT
-        {
-            public const byte ID = 0x03;
-            public ByteValue sceneId = 0;
-            public ByteValue level = 0;
-            public ByteValue dimmingDuration = 0;
-            public static implicit operator SCENE_ACTUATOR_CONF_REPORT(byte[] data)
-            {
-                SCENE_ACTUATOR_CONF_REPORT ret = new SCENE_ACTUATOR_CONF_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.sceneId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.level = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.dimmingDuration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SCENE_ACTUATOR_CONF_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SCENE_ACTUATOR_CONF.ID);
-                ret.Add(ID);
-                if (command.sceneId.HasValue) ret.Add(command.sceneId);
-                if (command.level.HasValue) ret.Add(command.level);
-                if (command.dimmingDuration.HasValue) ret.Add(command.dimmingDuration);
-                return ret.ToArray();
-            }
-        }
         public partial class SCENE_ACTUATOR_CONF_SET
         {
             public const byte ID = 0x01;
@@ -116,6 +64,58 @@ namespace ZWave.CommandClasses
                 if (command.dimmingDuration.HasValue) ret.Add(command.dimmingDuration);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.level.HasValue) ret.Add(command.level);
+                return ret.ToArray();
+            }
+        }
+        public partial class SCENE_ACTUATOR_CONF_GET
+        {
+            public const byte ID = 0x02;
+            public ByteValue sceneId = 0;
+            public static implicit operator SCENE_ACTUATOR_CONF_GET(byte[] data)
+            {
+                SCENE_ACTUATOR_CONF_GET ret = new SCENE_ACTUATOR_CONF_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.sceneId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SCENE_ACTUATOR_CONF_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SCENE_ACTUATOR_CONF.ID);
+                ret.Add(ID);
+                if (command.sceneId.HasValue) ret.Add(command.sceneId);
+                return ret.ToArray();
+            }
+        }
+        public partial class SCENE_ACTUATOR_CONF_REPORT
+        {
+            public const byte ID = 0x03;
+            public ByteValue sceneId = 0;
+            public ByteValue level = 0;
+            public ByteValue dimmingDuration = 0;
+            public static implicit operator SCENE_ACTUATOR_CONF_REPORT(byte[] data)
+            {
+                SCENE_ACTUATOR_CONF_REPORT ret = new SCENE_ACTUATOR_CONF_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.sceneId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.level = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.dimmingDuration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SCENE_ACTUATOR_CONF_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SCENE_ACTUATOR_CONF.ID);
+                ret.Add(ID);
+                if (command.sceneId.HasValue) ret.Add(command.sceneId);
+                if (command.level.HasValue) ret.Add(command.level);
+                if (command.dimmingDuration.HasValue) ret.Add(command.dimmingDuration);
                 return ret.ToArray();
             }
         }

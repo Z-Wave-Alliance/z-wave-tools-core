@@ -24,55 +24,6 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class SECURITY_PANEL_ZONE_STATE_GET
-        {
-            public const byte ID = 0x05;
-            public ByteValue zoneNumber = 0;
-            public static implicit operator SECURITY_PANEL_ZONE_STATE_GET(byte[] data)
-            {
-                SECURITY_PANEL_ZONE_STATE_GET ret = new SECURITY_PANEL_ZONE_STATE_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.zoneNumber = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_PANEL_ZONE_STATE_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY_PANEL_ZONE.ID);
-                ret.Add(ID);
-                if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_PANEL_ZONE_STATE_REPORT
-        {
-            public const byte ID = 0x06;
-            public ByteValue zoneNumber = 0;
-            public ByteValue zoneState = 0;
-            public static implicit operator SECURITY_PANEL_ZONE_STATE_REPORT(byte[] data)
-            {
-                SECURITY_PANEL_ZONE_STATE_REPORT ret = new SECURITY_PANEL_ZONE_STATE_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.zoneNumber = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.zoneState = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_PANEL_ZONE_STATE_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY_PANEL_ZONE.ID);
-                ret.Add(ID);
-                if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
-                if (command.zoneState.HasValue) ret.Add(command.zoneState);
-                return ret.ToArray();
-            }
-        }
         public partial class SECURITY_PANEL_ZONE_SUPPORTED_REPORT
         {
             public const byte ID = 0x02;
@@ -169,6 +120,55 @@ namespace ZWave.CommandClasses
                 ret.Add(ID);
                 if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
                 if (command.zoneType.HasValue) ret.Add(command.zoneType);
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_PANEL_ZONE_STATE_GET
+        {
+            public const byte ID = 0x05;
+            public ByteValue zoneNumber = 0;
+            public static implicit operator SECURITY_PANEL_ZONE_STATE_GET(byte[] data)
+            {
+                SECURITY_PANEL_ZONE_STATE_GET ret = new SECURITY_PANEL_ZONE_STATE_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.zoneNumber = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_PANEL_ZONE_STATE_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY_PANEL_ZONE.ID);
+                ret.Add(ID);
+                if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_PANEL_ZONE_STATE_REPORT
+        {
+            public const byte ID = 0x06;
+            public ByteValue zoneNumber = 0;
+            public ByteValue zoneState = 0;
+            public static implicit operator SECURITY_PANEL_ZONE_STATE_REPORT(byte[] data)
+            {
+                SECURITY_PANEL_ZONE_STATE_REPORT ret = new SECURITY_PANEL_ZONE_STATE_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.zoneNumber = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.zoneState = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_PANEL_ZONE_STATE_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY_PANEL_ZONE.ID);
+                ret.Add(ID);
+                if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
+                if (command.zoneState.HasValue) ret.Add(command.zoneState);
                 return ret.ToArray();
             }
         }

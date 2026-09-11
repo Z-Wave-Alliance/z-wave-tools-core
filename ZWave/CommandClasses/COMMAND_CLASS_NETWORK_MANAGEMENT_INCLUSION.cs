@@ -8,61 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x34;
         public const byte VERSION = 1;
-        public partial class FAILED_NODE_REMOVE
-        {
-            public const byte ID = 0x07;
-            public ByteValue seqNo = 0;
-            public ByteValue nodeId = 0;
-            public static implicit operator FAILED_NODE_REMOVE(byte[] data)
-            {
-                FAILED_NODE_REMOVE ret = new FAILED_NODE_REMOVE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](FAILED_NODE_REMOVE command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.nodeId.HasValue) ret.Add(command.nodeId);
-                return ret.ToArray();
-            }
-        }
-        public partial class FAILED_NODE_REMOVE_STATUS
-        {
-            public const byte ID = 0x08;
-            public ByteValue seqNo = 0;
-            public ByteValue status = 0;
-            public ByteValue nodeId = 0;
-            public static implicit operator FAILED_NODE_REMOVE_STATUS(byte[] data)
-            {
-                FAILED_NODE_REMOVE_STATUS ret = new FAILED_NODE_REMOVE_STATUS();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](FAILED_NODE_REMOVE_STATUS command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.status.HasValue) ret.Add(command.status);
-                if (command.nodeId.HasValue) ret.Add(command.nodeId);
-                return ret.ToArray();
-            }
-        }
         public partial class NODE_ADD
         {
             public const byte ID = 0x01;
@@ -267,6 +212,61 @@ namespace ZWave.CommandClasses
                 if (command.seqNo.HasValue) ret.Add(command.seqNo);
                 if (command.status.HasValue) ret.Add(command.status);
                 if (command.nodeid.HasValue) ret.Add(command.nodeid);
+                return ret.ToArray();
+            }
+        }
+        public partial class FAILED_NODE_REMOVE
+        {
+            public const byte ID = 0x07;
+            public ByteValue seqNo = 0;
+            public ByteValue nodeId = 0;
+            public static implicit operator FAILED_NODE_REMOVE(byte[] data)
+            {
+                FAILED_NODE_REMOVE ret = new FAILED_NODE_REMOVE();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](FAILED_NODE_REMOVE command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.nodeId.HasValue) ret.Add(command.nodeId);
+                return ret.ToArray();
+            }
+        }
+        public partial class FAILED_NODE_REMOVE_STATUS
+        {
+            public const byte ID = 0x08;
+            public ByteValue seqNo = 0;
+            public ByteValue status = 0;
+            public ByteValue nodeId = 0;
+            public static implicit operator FAILED_NODE_REMOVE_STATUS(byte[] data)
+            {
+                FAILED_NODE_REMOVE_STATUS ret = new FAILED_NODE_REMOVE_STATUS();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](FAILED_NODE_REMOVE_STATUS command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.status.HasValue) ret.Add(command.status);
+                if (command.nodeId.HasValue) ret.Add(command.nodeId);
                 return ret.ToArray();
             }
         }

@@ -372,7 +372,7 @@ namespace ZWave.CommandClasses
                     get { return (byte)(_value >> 0 & 0x07); }
                     set { HasValue = true; _value &= 0xFF - 0x07; _value += (byte)(value << 0 & 0x07); }
                 }
-                public byte reserved
+                public byte reserved2
                 {
                     get { return (byte)(_value >> 3 & 0x1F); }
                     set { HasValue = true; _value &= 0xFF - 0xF8; _value += (byte)(value << 3 & 0xF8); }
@@ -589,7 +589,7 @@ namespace ZWave.CommandClasses
                     get { return (byte)(_value >> 0 & 0x07); }
                     set { HasValue = true; _value &= 0xFF - 0x07; _value += (byte)(value << 0 & 0x07); }
                 }
-                public byte reserved
+                public byte reserved2
                 {
                     get { return (byte)(_value >> 3 & 0x1F); }
                     set { HasValue = true; _value &= 0xFF - 0xF8; _value += (byte)(value << 3 & 0xF8); }
@@ -760,7 +760,7 @@ namespace ZWave.CommandClasses
                     get { return (byte)(_value >> 0 & 0x07); }
                     set { HasValue = true; _value &= 0xFF - 0x07; _value += (byte)(value << 0 & 0x07); }
                 }
-                public byte reserved
+                public byte reserved2
                 {
                     get { return (byte)(_value >> 3 & 0x1F); }
                     set { HasValue = true; _value &= 0xFF - 0xF8; _value += (byte)(value << 3 & 0xF8); }
@@ -944,7 +944,7 @@ namespace ZWave.CommandClasses
                     get { return (byte)(_value >> 0 & 0x07); }
                     set { HasValue = true; _value &= 0xFF - 0x07; _value += (byte)(value << 0 & 0x07); }
                 }
-                public byte reserved
+                public byte reserved2
                 {
                     get { return (byte)(_value >> 3 & 0x1F); }
                     set { HasValue = true; _value &= 0xFF - 0xF8; _value += (byte)(value << 3 & 0xF8); }

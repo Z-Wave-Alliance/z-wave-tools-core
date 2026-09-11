@@ -8,6 +8,451 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x3D;
         public const byte VERSION = 3;
+        public partial class METER_TBL_TABLE_POINT_ADM_NO_GET
+        {
+            public const byte ID = 0x01;
+            public static implicit operator METER_TBL_TABLE_POINT_ADM_NO_GET(byte[] data)
+            {
+                METER_TBL_TABLE_POINT_ADM_NO_GET ret = new METER_TBL_TABLE_POINT_ADM_NO_GET();
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_TABLE_POINT_ADM_NO_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_TABLE_POINT_ADM_NO_REPORT
+        {
+            public const byte ID = 0x02;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte numberOfCharacters
+                {
+                    get { return (byte)(_value >> 0 & 0x1F); }
+                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 5 & 0x07); }
+                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> meterPointAdmNumberCharacter = new List<byte>();
+            public static implicit operator METER_TBL_TABLE_POINT_ADM_NO_REPORT(byte[] data)
+            {
+                METER_TBL_TABLE_POINT_ADM_NO_REPORT ret = new METER_TBL_TABLE_POINT_ADM_NO_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.meterPointAdmNumberCharacter = new List<byte>();
+                    for (int i = 0; i < ret.properties1.numberOfCharacters; i++)
+                    {
+                        if (data.Length > index) ret.meterPointAdmNumberCharacter.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_TABLE_POINT_ADM_NO_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.meterPointAdmNumberCharacter != null)
+                {
+                    foreach (var tmp in command.meterPointAdmNumberCharacter)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_TABLE_ID_GET
+        {
+            public const byte ID = 0x03;
+            public static implicit operator METER_TBL_TABLE_ID_GET(byte[] data)
+            {
+                METER_TBL_TABLE_ID_GET ret = new METER_TBL_TABLE_ID_GET();
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_TABLE_ID_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_TABLE_ID_REPORT
+        {
+            public const byte ID = 0x04;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte numberOfCharacters
+                {
+                    get { return (byte)(_value >> 0 & 0x1F); }
+                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 5 & 0x07); }
+                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> meterIdCharacter = new List<byte>();
+            public static implicit operator METER_TBL_TABLE_ID_REPORT(byte[] data)
+            {
+                METER_TBL_TABLE_ID_REPORT ret = new METER_TBL_TABLE_ID_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.meterIdCharacter = new List<byte>();
+                    for (int i = 0; i < ret.properties1.numberOfCharacters; i++)
+                    {
+                        if (data.Length > index) ret.meterIdCharacter.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_TABLE_ID_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.meterIdCharacter != null)
+                {
+                    foreach (var tmp in command.meterIdCharacter)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_TABLE_CAPABILITY_GET
+        {
+            public const byte ID = 0x05;
+            public static implicit operator METER_TBL_TABLE_CAPABILITY_GET(byte[] data)
+            {
+                METER_TBL_TABLE_CAPABILITY_GET ret = new METER_TBL_TABLE_CAPABILITY_GET();
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_TABLE_CAPABILITY_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_TABLE_CAPABILITY_REPORT
+        {
+            public const byte ID = 0x06;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte meterType
+                {
+                    get { return (byte)(_value >> 0 & 0x3F); }
+                    set { HasValue = true; _value &= 0xFF - 0x3F; _value += (byte)(value << 0 & 0x3F); }
+                }
+                public byte rateType
+                {
+                    get { return (byte)(_value >> 6 & 0x03); }
+                    set { HasValue = true; _value &= 0xFF - 0xC0; _value += (byte)(value << 6 & 0xC0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public struct Tproperties2
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties2 Empty { get { return new Tproperties2() { _value = 0, HasValue = false }; } }
+                public byte payMeter
+                {
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
+                }
+                public static implicit operator Tproperties2(byte data)
+                {
+                    Tproperties2 ret = new Tproperties2();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties2 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties2 properties2 = 0;
+            public const byte datasetSupportedBytesCount = 3;
+            public byte[] datasetSupported = new byte[datasetSupportedBytesCount];
+            public const byte datasetHistorySupportedBytesCount = 3;
+            public byte[] datasetHistorySupported = new byte[datasetHistorySupportedBytesCount];
+            public const byte dataHistorySupportedBytesCount = 3;
+            public byte[] dataHistorySupported = new byte[dataHistorySupportedBytesCount];
+            public static implicit operator METER_TBL_TABLE_CAPABILITY_REPORT(byte[] data)
+            {
+                METER_TBL_TABLE_CAPABILITY_REPORT ret = new METER_TBL_TABLE_CAPABILITY_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.properties2 = data.Length > index ? (Tproperties2)data[index++] : Tproperties2.Empty;
+                    ret.datasetSupported = (data.Length - index) >= datasetSupportedBytesCount ? new byte[datasetSupportedBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.datasetSupported[0] = data[index++];
+                    if (data.Length > index) ret.datasetSupported[1] = data[index++];
+                    if (data.Length > index) ret.datasetSupported[2] = data[index++];
+                    ret.datasetHistorySupported = (data.Length - index) >= datasetHistorySupportedBytesCount ? new byte[datasetHistorySupportedBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.datasetHistorySupported[0] = data[index++];
+                    if (data.Length > index) ret.datasetHistorySupported[1] = data[index++];
+                    if (data.Length > index) ret.datasetHistorySupported[2] = data[index++];
+                    ret.dataHistorySupported = (data.Length - index) >= dataHistorySupportedBytesCount ? new byte[dataHistorySupportedBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.dataHistorySupported[0] = data[index++];
+                    if (data.Length > index) ret.dataHistorySupported[1] = data[index++];
+                    if (data.Length > index) ret.dataHistorySupported[2] = data[index++];
+                }
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_TABLE_CAPABILITY_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.properties2.HasValue) ret.Add(command.properties2);
+                if (command.datasetSupported != null)
+                {
+                    foreach (var tmp in command.datasetSupported)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.datasetHistorySupported != null)
+                {
+                    foreach (var tmp in command.datasetHistorySupported)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.dataHistorySupported != null)
+                {
+                    foreach (var tmp in command.dataHistorySupported)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_STATUS_SUPPORTED_GET
+        {
+            public const byte ID = 0x07;
+            public static implicit operator METER_TBL_STATUS_SUPPORTED_GET(byte[] data)
+            {
+                METER_TBL_STATUS_SUPPORTED_GET ret = new METER_TBL_STATUS_SUPPORTED_GET();
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_STATUS_SUPPORTED_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_STATUS_SUPPORTED_REPORT
+        {
+            public const byte ID = 0x08;
+            public const byte supportedOperatingStatusBytesCount = 3;
+            public byte[] supportedOperatingStatus = new byte[supportedOperatingStatusBytesCount];
+            public ByteValue statusEventLogDepth = 0;
+            public static implicit operator METER_TBL_STATUS_SUPPORTED_REPORT(byte[] data)
+            {
+                METER_TBL_STATUS_SUPPORTED_REPORT ret = new METER_TBL_STATUS_SUPPORTED_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.supportedOperatingStatus = (data.Length - index) >= supportedOperatingStatusBytesCount ? new byte[supportedOperatingStatusBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.supportedOperatingStatus[0] = data[index++];
+                    if (data.Length > index) ret.supportedOperatingStatus[1] = data[index++];
+                    if (data.Length > index) ret.supportedOperatingStatus[2] = data[index++];
+                    ret.statusEventLogDepth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_STATUS_SUPPORTED_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                if (command.supportedOperatingStatus != null)
+                {
+                    foreach (var tmp in command.supportedOperatingStatus)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.statusEventLogDepth.HasValue) ret.Add(command.statusEventLogDepth);
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_STATUS_DEPTH_GET
+        {
+            public const byte ID = 0x09;
+            public ByteValue statusEventLogDepth = 0;
+            public static implicit operator METER_TBL_STATUS_DEPTH_GET(byte[] data)
+            {
+                METER_TBL_STATUS_DEPTH_GET ret = new METER_TBL_STATUS_DEPTH_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.statusEventLogDepth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_STATUS_DEPTH_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                if (command.statusEventLogDepth.HasValue) ret.Add(command.statusEventLogDepth);
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_TBL_STATUS_DATE_GET
+        {
+            public const byte ID = 0x0A;
+            public ByteValue maximumReports = 0;
+            public const byte startYearBytesCount = 2;
+            public byte[] startYear = new byte[startYearBytesCount];
+            public ByteValue startMonth = 0;
+            public ByteValue startDay = 0;
+            public ByteValue startHourLocalTime = 0;
+            public ByteValue startMinuteLocalTime = 0;
+            public ByteValue startSecondLocalTime = 0;
+            public const byte stopYearBytesCount = 2;
+            public byte[] stopYear = new byte[stopYearBytesCount];
+            public ByteValue stopMonth = 0;
+            public ByteValue stopDay = 0;
+            public ByteValue stopHourLocalTime = 0;
+            public ByteValue stopMinuteLocalTime = 0;
+            public ByteValue stopSecondLocalTime = 0;
+            public static implicit operator METER_TBL_STATUS_DATE_GET(byte[] data)
+            {
+                METER_TBL_STATUS_DATE_GET ret = new METER_TBL_STATUS_DATE_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.maximumReports = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.startYear = (data.Length - index) >= startYearBytesCount ? new byte[startYearBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.startYear[0] = data[index++];
+                    if (data.Length > index) ret.startYear[1] = data[index++];
+                    ret.startMonth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.startDay = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.startHourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.startMinuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.startSecondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.stopYear = (data.Length - index) >= stopYearBytesCount ? new byte[stopYearBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.stopYear[0] = data[index++];
+                    if (data.Length > index) ret.stopYear[1] = data[index++];
+                    ret.stopMonth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.stopDay = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.stopHourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.stopMinuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.stopSecondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](METER_TBL_STATUS_DATE_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
+                ret.Add(ID);
+                if (command.maximumReports.HasValue) ret.Add(command.maximumReports);
+                if (command.startYear != null)
+                {
+                    foreach (var tmp in command.startYear)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.startMonth.HasValue) ret.Add(command.startMonth);
+                if (command.startDay.HasValue) ret.Add(command.startDay);
+                if (command.startHourLocalTime.HasValue) ret.Add(command.startHourLocalTime);
+                if (command.startMinuteLocalTime.HasValue) ret.Add(command.startMinuteLocalTime);
+                if (command.startSecondLocalTime.HasValue) ret.Add(command.startSecondLocalTime);
+                if (command.stopYear != null)
+                {
+                    foreach (var tmp in command.stopYear)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.stopMonth.HasValue) ret.Add(command.stopMonth);
+                if (command.stopDay.HasValue) ret.Add(command.stopDay);
+                if (command.stopHourLocalTime.HasValue) ret.Add(command.stopHourLocalTime);
+                if (command.stopMinuteLocalTime.HasValue) ret.Add(command.stopMinuteLocalTime);
+                if (command.stopSecondLocalTime.HasValue) ret.Add(command.stopSecondLocalTime);
+                return ret.ToArray();
+            }
+        }
         public partial class METER_TBL_STATUS_REPORT
         {
             public const byte ID = 0x0B;
@@ -119,158 +564,6 @@ namespace ZWave.CommandClasses
                         if (item.secondLocalTime.HasValue) ret.Add(item.secondLocalTime);
                     }
                 }
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_STATUS_DATE_GET
-        {
-            public const byte ID = 0x0A;
-            public ByteValue maximumReports = 0;
-            public const byte startYearBytesCount = 2;
-            public byte[] startYear = new byte[startYearBytesCount];
-            public ByteValue startMonth = 0;
-            public ByteValue startDay = 0;
-            public ByteValue startHourLocalTime = 0;
-            public ByteValue startMinuteLocalTime = 0;
-            public ByteValue startSecondLocalTime = 0;
-            public const byte stopYearBytesCount = 2;
-            public byte[] stopYear = new byte[stopYearBytesCount];
-            public ByteValue stopMonth = 0;
-            public ByteValue stopDay = 0;
-            public ByteValue stopHourLocalTime = 0;
-            public ByteValue stopMinuteLocalTime = 0;
-            public ByteValue stopSecondLocalTime = 0;
-            public static implicit operator METER_TBL_STATUS_DATE_GET(byte[] data)
-            {
-                METER_TBL_STATUS_DATE_GET ret = new METER_TBL_STATUS_DATE_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.maximumReports = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.startYear = (data.Length - index) >= startYearBytesCount ? new byte[startYearBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.startYear[0] = data[index++];
-                    if (data.Length > index) ret.startYear[1] = data[index++];
-                    ret.startMonth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.startDay = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.startHourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.startMinuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.startSecondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.stopYear = (data.Length - index) >= stopYearBytesCount ? new byte[stopYearBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.stopYear[0] = data[index++];
-                    if (data.Length > index) ret.stopYear[1] = data[index++];
-                    ret.stopMonth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.stopDay = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.stopHourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.stopMinuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.stopSecondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_STATUS_DATE_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                if (command.maximumReports.HasValue) ret.Add(command.maximumReports);
-                if (command.startYear != null)
-                {
-                    foreach (var tmp in command.startYear)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.startMonth.HasValue) ret.Add(command.startMonth);
-                if (command.startDay.HasValue) ret.Add(command.startDay);
-                if (command.startHourLocalTime.HasValue) ret.Add(command.startHourLocalTime);
-                if (command.startMinuteLocalTime.HasValue) ret.Add(command.startMinuteLocalTime);
-                if (command.startSecondLocalTime.HasValue) ret.Add(command.startSecondLocalTime);
-                if (command.stopYear != null)
-                {
-                    foreach (var tmp in command.stopYear)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.stopMonth.HasValue) ret.Add(command.stopMonth);
-                if (command.stopDay.HasValue) ret.Add(command.stopDay);
-                if (command.stopHourLocalTime.HasValue) ret.Add(command.stopHourLocalTime);
-                if (command.stopMinuteLocalTime.HasValue) ret.Add(command.stopMinuteLocalTime);
-                if (command.stopSecondLocalTime.HasValue) ret.Add(command.stopSecondLocalTime);
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_STATUS_DEPTH_GET
-        {
-            public const byte ID = 0x09;
-            public ByteValue statusEventLogDepth = 0;
-            public static implicit operator METER_TBL_STATUS_DEPTH_GET(byte[] data)
-            {
-                METER_TBL_STATUS_DEPTH_GET ret = new METER_TBL_STATUS_DEPTH_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.statusEventLogDepth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_STATUS_DEPTH_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                if (command.statusEventLogDepth.HasValue) ret.Add(command.statusEventLogDepth);
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_STATUS_SUPPORTED_GET
-        {
-            public const byte ID = 0x07;
-            public static implicit operator METER_TBL_STATUS_SUPPORTED_GET(byte[] data)
-            {
-                METER_TBL_STATUS_SUPPORTED_GET ret = new METER_TBL_STATUS_SUPPORTED_GET();
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_STATUS_SUPPORTED_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_STATUS_SUPPORTED_REPORT
-        {
-            public const byte ID = 0x08;
-            public const byte supportedOperatingStatusBytesCount = 3;
-            public byte[] supportedOperatingStatus = new byte[supportedOperatingStatusBytesCount];
-            public ByteValue statusEventLogDepth = 0;
-            public static implicit operator METER_TBL_STATUS_SUPPORTED_REPORT(byte[] data)
-            {
-                METER_TBL_STATUS_SUPPORTED_REPORT ret = new METER_TBL_STATUS_SUPPORTED_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.supportedOperatingStatus = (data.Length - index) >= supportedOperatingStatusBytesCount ? new byte[supportedOperatingStatusBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.supportedOperatingStatus[0] = data[index++];
-                    if (data.Length > index) ret.supportedOperatingStatus[1] = data[index++];
-                    if (data.Length > index) ret.supportedOperatingStatus[2] = data[index++];
-                    ret.statusEventLogDepth = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_STATUS_SUPPORTED_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                if (command.supportedOperatingStatus != null)
-                {
-                    foreach (var tmp in command.supportedOperatingStatus)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.statusEventLogDepth.HasValue) ret.Add(command.statusEventLogDepth);
                 return ret.ToArray();
             }
         }
@@ -708,299 +1001,6 @@ namespace ZWave.CommandClasses
                                 ret.Add(tmp);
                             }
                         }
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_TABLE_CAPABILITY_REPORT
-        {
-            public const byte ID = 0x06;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte meterType
-                {
-                    get { return (byte)(_value >> 0 & 0x3F); }
-                    set { HasValue = true; _value &= 0xFF - 0x3F; _value += (byte)(value << 0 & 0x3F); }
-                }
-                public byte rateType
-                {
-                    get { return (byte)(_value >> 6 & 0x03); }
-                    set { HasValue = true; _value &= 0xFF - 0xC0; _value += (byte)(value << 6 & 0xC0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public struct Tproperties2
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties2 Empty { get { return new Tproperties2() { _value = 0, HasValue = false }; } }
-                public byte payMeter
-                {
-                    get { return (byte)(_value >> 0 & 0x0F); }
-                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 4 & 0x0F); }
-                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
-                }
-                public static implicit operator Tproperties2(byte data)
-                {
-                    Tproperties2 ret = new Tproperties2();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties2 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties2 properties2 = 0;
-            public const byte datasetSupportedBytesCount = 3;
-            public byte[] datasetSupported = new byte[datasetSupportedBytesCount];
-            public const byte datasetHistorySupportedBytesCount = 3;
-            public byte[] datasetHistorySupported = new byte[datasetHistorySupportedBytesCount];
-            public const byte dataHistorySupportedBytesCount = 3;
-            public byte[] dataHistorySupported = new byte[dataHistorySupportedBytesCount];
-            public static implicit operator METER_TBL_TABLE_CAPABILITY_REPORT(byte[] data)
-            {
-                METER_TBL_TABLE_CAPABILITY_REPORT ret = new METER_TBL_TABLE_CAPABILITY_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.properties2 = data.Length > index ? (Tproperties2)data[index++] : Tproperties2.Empty;
-                    ret.datasetSupported = (data.Length - index) >= datasetSupportedBytesCount ? new byte[datasetSupportedBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.datasetSupported[0] = data[index++];
-                    if (data.Length > index) ret.datasetSupported[1] = data[index++];
-                    if (data.Length > index) ret.datasetSupported[2] = data[index++];
-                    ret.datasetHistorySupported = (data.Length - index) >= datasetHistorySupportedBytesCount ? new byte[datasetHistorySupportedBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.datasetHistorySupported[0] = data[index++];
-                    if (data.Length > index) ret.datasetHistorySupported[1] = data[index++];
-                    if (data.Length > index) ret.datasetHistorySupported[2] = data[index++];
-                    ret.dataHistorySupported = (data.Length - index) >= dataHistorySupportedBytesCount ? new byte[dataHistorySupportedBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.dataHistorySupported[0] = data[index++];
-                    if (data.Length > index) ret.dataHistorySupported[1] = data[index++];
-                    if (data.Length > index) ret.dataHistorySupported[2] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_TABLE_CAPABILITY_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.properties2.HasValue) ret.Add(command.properties2);
-                if (command.datasetSupported != null)
-                {
-                    foreach (var tmp in command.datasetSupported)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.datasetHistorySupported != null)
-                {
-                    foreach (var tmp in command.datasetHistorySupported)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.dataHistorySupported != null)
-                {
-                    foreach (var tmp in command.dataHistorySupported)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_TABLE_CAPABILITY_GET
-        {
-            public const byte ID = 0x05;
-            public static implicit operator METER_TBL_TABLE_CAPABILITY_GET(byte[] data)
-            {
-                METER_TBL_TABLE_CAPABILITY_GET ret = new METER_TBL_TABLE_CAPABILITY_GET();
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_TABLE_CAPABILITY_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_TABLE_ID_GET
-        {
-            public const byte ID = 0x03;
-            public static implicit operator METER_TBL_TABLE_ID_GET(byte[] data)
-            {
-                METER_TBL_TABLE_ID_GET ret = new METER_TBL_TABLE_ID_GET();
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_TABLE_ID_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_TABLE_ID_REPORT
-        {
-            public const byte ID = 0x04;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte numberOfCharacters
-                {
-                    get { return (byte)(_value >> 0 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 5 & 0x07); }
-                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public IList<byte> meterIdCharacter = new List<byte>();
-            public static implicit operator METER_TBL_TABLE_ID_REPORT(byte[] data)
-            {
-                METER_TBL_TABLE_ID_REPORT ret = new METER_TBL_TABLE_ID_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.meterIdCharacter = new List<byte>();
-                    for (int i = 0; i < ret.properties1.numberOfCharacters; i++)
-                    {
-                        if (data.Length > index) ret.meterIdCharacter.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_TABLE_ID_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.meterIdCharacter != null)
-                {
-                    foreach (var tmp in command.meterIdCharacter)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_TABLE_POINT_ADM_NO_GET
-        {
-            public const byte ID = 0x01;
-            public static implicit operator METER_TBL_TABLE_POINT_ADM_NO_GET(byte[] data)
-            {
-                METER_TBL_TABLE_POINT_ADM_NO_GET ret = new METER_TBL_TABLE_POINT_ADM_NO_GET();
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_TABLE_POINT_ADM_NO_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class METER_TBL_TABLE_POINT_ADM_NO_REPORT
-        {
-            public const byte ID = 0x02;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte numberOfCharacters
-                {
-                    get { return (byte)(_value >> 0 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 5 & 0x07); }
-                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public IList<byte> meterPointAdmNumberCharacter = new List<byte>();
-            public static implicit operator METER_TBL_TABLE_POINT_ADM_NO_REPORT(byte[] data)
-            {
-                METER_TBL_TABLE_POINT_ADM_NO_REPORT ret = new METER_TBL_TABLE_POINT_ADM_NO_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.meterPointAdmNumberCharacter = new List<byte>();
-                    for (int i = 0; i < ret.properties1.numberOfCharacters; i++)
-                    {
-                        if (data.Length > index) ret.meterPointAdmNumberCharacter.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](METER_TBL_TABLE_POINT_ADM_NO_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_TBL_MONITOR_V3.ID);
-                ret.Add(ID);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.meterPointAdmNumberCharacter != null)
-                {
-                    foreach (var tmp in command.meterPointAdmNumberCharacter)
-                    {
-                        ret.Add(tmp);
                     }
                 }
                 return ret.ToArray();

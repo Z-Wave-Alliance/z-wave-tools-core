@@ -8,137 +8,26 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x62;
         public const byte VERSION = 2;
-        public partial class DOOR_LOCK_CONFIGURATION_GET
+        public partial class DOOR_LOCK_OPERATION_SET
         {
-            public const byte ID = 0x05;
-            public static implicit operator DOOR_LOCK_CONFIGURATION_GET(byte[] data)
+            public const byte ID = 0x01;
+            public ByteValue doorLockMode = 0;
+            public static implicit operator DOOR_LOCK_OPERATION_SET(byte[] data)
             {
-                DOOR_LOCK_CONFIGURATION_GET ret = new DOOR_LOCK_CONFIGURATION_GET();
-                return ret;
-            }
-            public static implicit operator byte[](DOOR_LOCK_CONFIGURATION_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_DOOR_LOCK_V2.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class DOOR_LOCK_CONFIGURATION_REPORT
-        {
-            public const byte ID = 0x06;
-            public ByteValue operationType = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte insideDoorHandlesEnabled
-                {
-                    get { return (byte)(_value >> 0 & 0x0F); }
-                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
-                }
-                public byte outsideDoorHandlesEnabled
-                {
-                    get { return (byte)(_value >> 4 & 0x0F); }
-                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public ByteValue lockTimeoutMinutes = 0;
-            public ByteValue lockTimeoutSeconds = 0;
-            public static implicit operator DOOR_LOCK_CONFIGURATION_REPORT(byte[] data)
-            {
-                DOOR_LOCK_CONFIGURATION_REPORT ret = new DOOR_LOCK_CONFIGURATION_REPORT();
+                DOOR_LOCK_OPERATION_SET ret = new DOOR_LOCK_OPERATION_SET();
                 if (data != null)
                 {
                     int index = 2;
-                    ret.operationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.lockTimeoutMinutes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.lockTimeoutSeconds = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.doorLockMode = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                 }
                 return ret;
             }
-            public static implicit operator byte[](DOOR_LOCK_CONFIGURATION_REPORT command)
+            public static implicit operator byte[](DOOR_LOCK_OPERATION_SET command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_DOOR_LOCK_V2.ID);
                 ret.Add(ID);
-                if (command.operationType.HasValue) ret.Add(command.operationType);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.lockTimeoutMinutes.HasValue) ret.Add(command.lockTimeoutMinutes);
-                if (command.lockTimeoutSeconds.HasValue) ret.Add(command.lockTimeoutSeconds);
-                return ret.ToArray();
-            }
-        }
-        public partial class DOOR_LOCK_CONFIGURATION_SET
-        {
-            public const byte ID = 0x04;
-            public ByteValue operationType = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte insideDoorHandlesEnabled
-                {
-                    get { return (byte)(_value >> 0 & 0x0F); }
-                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
-                }
-                public byte outsideDoorHandlesEnabled
-                {
-                    get { return (byte)(_value >> 4 & 0x0F); }
-                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public ByteValue lockTimeoutMinutes = 0;
-            public ByteValue lockTimeoutSeconds = 0;
-            public static implicit operator DOOR_LOCK_CONFIGURATION_SET(byte[] data)
-            {
-                DOOR_LOCK_CONFIGURATION_SET ret = new DOOR_LOCK_CONFIGURATION_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.operationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.lockTimeoutMinutes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.lockTimeoutSeconds = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](DOOR_LOCK_CONFIGURATION_SET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_DOOR_LOCK_V2.ID);
-                ret.Add(ID);
-                if (command.operationType.HasValue) ret.Add(command.operationType);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.lockTimeoutMinutes.HasValue) ret.Add(command.lockTimeoutMinutes);
-                if (command.lockTimeoutSeconds.HasValue) ret.Add(command.lockTimeoutSeconds);
+                if (command.doorLockMode.HasValue) ret.Add(command.doorLockMode);
                 return ret.ToArray();
             }
         }
@@ -220,26 +109,137 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class DOOR_LOCK_OPERATION_SET
+        public partial class DOOR_LOCK_CONFIGURATION_SET
         {
-            public const byte ID = 0x01;
-            public ByteValue doorLockMode = 0;
-            public static implicit operator DOOR_LOCK_OPERATION_SET(byte[] data)
+            public const byte ID = 0x04;
+            public ByteValue operationType = 0;
+            public struct Tproperties1
             {
-                DOOR_LOCK_OPERATION_SET ret = new DOOR_LOCK_OPERATION_SET();
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte insideDoorHandlesEnabled
+                {
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                }
+                public byte outsideDoorHandlesEnabled
+                {
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public ByteValue lockTimeoutMinutes = 0;
+            public ByteValue lockTimeoutSeconds = 0;
+            public static implicit operator DOOR_LOCK_CONFIGURATION_SET(byte[] data)
+            {
+                DOOR_LOCK_CONFIGURATION_SET ret = new DOOR_LOCK_CONFIGURATION_SET();
                 if (data != null)
                 {
                     int index = 2;
-                    ret.doorLockMode = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.operationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.lockTimeoutMinutes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.lockTimeoutSeconds = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                 }
                 return ret;
             }
-            public static implicit operator byte[](DOOR_LOCK_OPERATION_SET command)
+            public static implicit operator byte[](DOOR_LOCK_CONFIGURATION_SET command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_DOOR_LOCK_V2.ID);
                 ret.Add(ID);
-                if (command.doorLockMode.HasValue) ret.Add(command.doorLockMode);
+                if (command.operationType.HasValue) ret.Add(command.operationType);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.lockTimeoutMinutes.HasValue) ret.Add(command.lockTimeoutMinutes);
+                if (command.lockTimeoutSeconds.HasValue) ret.Add(command.lockTimeoutSeconds);
+                return ret.ToArray();
+            }
+        }
+        public partial class DOOR_LOCK_CONFIGURATION_GET
+        {
+            public const byte ID = 0x05;
+            public static implicit operator DOOR_LOCK_CONFIGURATION_GET(byte[] data)
+            {
+                DOOR_LOCK_CONFIGURATION_GET ret = new DOOR_LOCK_CONFIGURATION_GET();
+                return ret;
+            }
+            public static implicit operator byte[](DOOR_LOCK_CONFIGURATION_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_DOOR_LOCK_V2.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class DOOR_LOCK_CONFIGURATION_REPORT
+        {
+            public const byte ID = 0x06;
+            public ByteValue operationType = 0;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte insideDoorHandlesEnabled
+                {
+                    get { return (byte)(_value >> 0 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0x0F; _value += (byte)(value << 0 & 0x0F); }
+                }
+                public byte outsideDoorHandlesEnabled
+                {
+                    get { return (byte)(_value >> 4 & 0x0F); }
+                    set { HasValue = true; _value &= 0xFF - 0xF0; _value += (byte)(value << 4 & 0xF0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public ByteValue lockTimeoutMinutes = 0;
+            public ByteValue lockTimeoutSeconds = 0;
+            public static implicit operator DOOR_LOCK_CONFIGURATION_REPORT(byte[] data)
+            {
+                DOOR_LOCK_CONFIGURATION_REPORT ret = new DOOR_LOCK_CONFIGURATION_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.operationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.lockTimeoutMinutes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.lockTimeoutSeconds = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](DOOR_LOCK_CONFIGURATION_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_DOOR_LOCK_V2.ID);
+                ret.Add(ID);
+                if (command.operationType.HasValue) ret.Add(command.operationType);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.lockTimeoutMinutes.HasValue) ret.Add(command.lockTimeoutMinutes);
+                if (command.lockTimeoutSeconds.HasValue) ret.Add(command.lockTimeoutSeconds);
                 return ret.ToArray();
             }
         }

@@ -8,45 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x94;
         public const byte VERSION = 4;
-        public partial class SIMPLE_AV_CONTROL_GET
-        {
-            public const byte ID = 0x02;
-            public static implicit operator SIMPLE_AV_CONTROL_GET(byte[] data)
-            {
-                SIMPLE_AV_CONTROL_GET ret = new SIMPLE_AV_CONTROL_GET();
-                return ret;
-            }
-            public static implicit operator byte[](SIMPLE_AV_CONTROL_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SIMPLE_AV_CONTROL_V4.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class SIMPLE_AV_CONTROL_REPORT
-        {
-            public const byte ID = 0x03;
-            public ByteValue numberOfReports = 0;
-            public static implicit operator SIMPLE_AV_CONTROL_REPORT(byte[] data)
-            {
-                SIMPLE_AV_CONTROL_REPORT ret = new SIMPLE_AV_CONTROL_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.numberOfReports = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SIMPLE_AV_CONTROL_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SIMPLE_AV_CONTROL_V4.ID);
-                ret.Add(ID);
-                if (command.numberOfReports.HasValue) ret.Add(command.numberOfReports);
-                return ret.ToArray();
-            }
-        }
         public partial class SIMPLE_AV_CONTROL_SET
         {
             public const byte ID = 0x01;
@@ -137,6 +98,45 @@ namespace ZWave.CommandClasses
                         }
                     }
                 }
+                return ret.ToArray();
+            }
+        }
+        public partial class SIMPLE_AV_CONTROL_GET
+        {
+            public const byte ID = 0x02;
+            public static implicit operator SIMPLE_AV_CONTROL_GET(byte[] data)
+            {
+                SIMPLE_AV_CONTROL_GET ret = new SIMPLE_AV_CONTROL_GET();
+                return ret;
+            }
+            public static implicit operator byte[](SIMPLE_AV_CONTROL_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SIMPLE_AV_CONTROL_V4.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class SIMPLE_AV_CONTROL_REPORT
+        {
+            public const byte ID = 0x03;
+            public ByteValue numberOfReports = 0;
+            public static implicit operator SIMPLE_AV_CONTROL_REPORT(byte[] data)
+            {
+                SIMPLE_AV_CONTROL_REPORT ret = new SIMPLE_AV_CONTROL_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.numberOfReports = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SIMPLE_AV_CONTROL_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SIMPLE_AV_CONTROL_V4.ID);
+                ret.Add(ID);
+                if (command.numberOfReports.HasValue) ret.Add(command.numberOfReports);
                 return ret.ToArray();
             }
         }

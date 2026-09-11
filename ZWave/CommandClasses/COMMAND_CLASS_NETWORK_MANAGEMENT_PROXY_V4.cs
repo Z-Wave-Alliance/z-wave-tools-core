@@ -8,6 +8,122 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x52;
         public const byte VERSION = 4;
+        public partial class NODE_LIST_GET
+        {
+            public const byte ID = 0x01;
+            public ByteValue seqNo = 0;
+            public static implicit operator NODE_LIST_GET(byte[] data)
+            {
+                NODE_LIST_GET ret = new NODE_LIST_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NODE_LIST_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY_V4.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                return ret.ToArray();
+            }
+        }
+        public partial class NODE_LIST_REPORT
+        {
+            public const byte ID = 0x02;
+            public ByteValue seqNo = 0;
+            public ByteValue status = 0;
+            public ByteValue nodeListControllerId = 0;
+            public const byte nodeListDataBytesCount = 29;
+            public byte[] nodeListData = new byte[nodeListDataBytesCount];
+            public const byte extendedNodeListLengthBytesCount = 2;
+            public byte[] extendedNodeListLength = new byte[extendedNodeListLengthBytesCount];
+            public IList<byte> extendedNodeList = new List<byte>();
+            public static implicit operator NODE_LIST_REPORT(byte[] data)
+            {
+                NODE_LIST_REPORT ret = new NODE_LIST_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeListControllerId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeListData = (data.Length - index) >= nodeListDataBytesCount ? new byte[nodeListDataBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.nodeListData[0] = data[index++];
+                    if (data.Length > index) ret.nodeListData[1] = data[index++];
+                    if (data.Length > index) ret.nodeListData[2] = data[index++];
+                    if (data.Length > index) ret.nodeListData[3] = data[index++];
+                    if (data.Length > index) ret.nodeListData[4] = data[index++];
+                    if (data.Length > index) ret.nodeListData[5] = data[index++];
+                    if (data.Length > index) ret.nodeListData[6] = data[index++];
+                    if (data.Length > index) ret.nodeListData[7] = data[index++];
+                    if (data.Length > index) ret.nodeListData[8] = data[index++];
+                    if (data.Length > index) ret.nodeListData[9] = data[index++];
+                    if (data.Length > index) ret.nodeListData[10] = data[index++];
+                    if (data.Length > index) ret.nodeListData[11] = data[index++];
+                    if (data.Length > index) ret.nodeListData[12] = data[index++];
+                    if (data.Length > index) ret.nodeListData[13] = data[index++];
+                    if (data.Length > index) ret.nodeListData[14] = data[index++];
+                    if (data.Length > index) ret.nodeListData[15] = data[index++];
+                    if (data.Length > index) ret.nodeListData[16] = data[index++];
+                    if (data.Length > index) ret.nodeListData[17] = data[index++];
+                    if (data.Length > index) ret.nodeListData[18] = data[index++];
+                    if (data.Length > index) ret.nodeListData[19] = data[index++];
+                    if (data.Length > index) ret.nodeListData[20] = data[index++];
+                    if (data.Length > index) ret.nodeListData[21] = data[index++];
+                    if (data.Length > index) ret.nodeListData[22] = data[index++];
+                    if (data.Length > index) ret.nodeListData[23] = data[index++];
+                    if (data.Length > index) ret.nodeListData[24] = data[index++];
+                    if (data.Length > index) ret.nodeListData[25] = data[index++];
+                    if (data.Length > index) ret.nodeListData[26] = data[index++];
+                    if (data.Length > index) ret.nodeListData[27] = data[index++];
+                    if (data.Length > index) ret.nodeListData[28] = data[index++];
+                    ret.extendedNodeListLength = (data.Length - index) >= extendedNodeListLengthBytesCount ? new byte[extendedNodeListLengthBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.extendedNodeListLength[0] = data[index++];
+                    if (data.Length > index) ret.extendedNodeListLength[1] = data[index++];
+                    ret.extendedNodeList = new List<byte>();
+                    for (int i = 0; i < (ret.extendedNodeListLength[0] << 8) + ret.extendedNodeListLength[1]; i++)
+                    {
+                        if (data.Length > index) ret.extendedNodeList.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NODE_LIST_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY_V4.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.status.HasValue) ret.Add(command.status);
+                if (command.nodeListControllerId.HasValue) ret.Add(command.nodeListControllerId);
+                if (command.nodeListData != null)
+                {
+                    foreach (var tmp in command.nodeListData)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.extendedNodeListLength != null)
+                {
+                    foreach (var tmp in command.extendedNodeListLength)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.extendedNodeList != null)
+                {
+                    foreach (var tmp in command.extendedNodeList)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
         public partial class NODE_INFO_CACHED_GET
         {
             public const byte ID = 0x03;
@@ -207,122 +323,6 @@ namespace ZWave.CommandClasses
                 if (command.commandClass != null)
                 {
                     foreach (var tmp in command.commandClass)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class NODE_LIST_GET
-        {
-            public const byte ID = 0x01;
-            public ByteValue seqNo = 0;
-            public static implicit operator NODE_LIST_GET(byte[] data)
-            {
-                NODE_LIST_GET ret = new NODE_LIST_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NODE_LIST_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY_V4.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                return ret.ToArray();
-            }
-        }
-        public partial class NODE_LIST_REPORT
-        {
-            public const byte ID = 0x02;
-            public ByteValue seqNo = 0;
-            public ByteValue status = 0;
-            public ByteValue nodeListControllerId = 0;
-            public const byte nodeListDataBytesCount = 29;
-            public byte[] nodeListData = new byte[nodeListDataBytesCount];
-            public const byte extendedNodeListLengthBytesCount = 2;
-            public byte[] extendedNodeListLength = new byte[extendedNodeListLengthBytesCount];
-            public IList<byte> extendedNodeList = new List<byte>();
-            public static implicit operator NODE_LIST_REPORT(byte[] data)
-            {
-                NODE_LIST_REPORT ret = new NODE_LIST_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeListControllerId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeListData = (data.Length - index) >= nodeListDataBytesCount ? new byte[nodeListDataBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.nodeListData[0] = data[index++];
-                    if (data.Length > index) ret.nodeListData[1] = data[index++];
-                    if (data.Length > index) ret.nodeListData[2] = data[index++];
-                    if (data.Length > index) ret.nodeListData[3] = data[index++];
-                    if (data.Length > index) ret.nodeListData[4] = data[index++];
-                    if (data.Length > index) ret.nodeListData[5] = data[index++];
-                    if (data.Length > index) ret.nodeListData[6] = data[index++];
-                    if (data.Length > index) ret.nodeListData[7] = data[index++];
-                    if (data.Length > index) ret.nodeListData[8] = data[index++];
-                    if (data.Length > index) ret.nodeListData[9] = data[index++];
-                    if (data.Length > index) ret.nodeListData[10] = data[index++];
-                    if (data.Length > index) ret.nodeListData[11] = data[index++];
-                    if (data.Length > index) ret.nodeListData[12] = data[index++];
-                    if (data.Length > index) ret.nodeListData[13] = data[index++];
-                    if (data.Length > index) ret.nodeListData[14] = data[index++];
-                    if (data.Length > index) ret.nodeListData[15] = data[index++];
-                    if (data.Length > index) ret.nodeListData[16] = data[index++];
-                    if (data.Length > index) ret.nodeListData[17] = data[index++];
-                    if (data.Length > index) ret.nodeListData[18] = data[index++];
-                    if (data.Length > index) ret.nodeListData[19] = data[index++];
-                    if (data.Length > index) ret.nodeListData[20] = data[index++];
-                    if (data.Length > index) ret.nodeListData[21] = data[index++];
-                    if (data.Length > index) ret.nodeListData[22] = data[index++];
-                    if (data.Length > index) ret.nodeListData[23] = data[index++];
-                    if (data.Length > index) ret.nodeListData[24] = data[index++];
-                    if (data.Length > index) ret.nodeListData[25] = data[index++];
-                    if (data.Length > index) ret.nodeListData[26] = data[index++];
-                    if (data.Length > index) ret.nodeListData[27] = data[index++];
-                    if (data.Length > index) ret.nodeListData[28] = data[index++];
-                    ret.extendedNodeListLength = (data.Length - index) >= extendedNodeListLengthBytesCount ? new byte[extendedNodeListLengthBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.extendedNodeListLength[0] = data[index++];
-                    if (data.Length > index) ret.extendedNodeListLength[1] = data[index++];
-                    ret.extendedNodeList = new List<byte>();
-                    for (int i = 0; i < (ret.extendedNodeListLength[0] << 8) + ret.extendedNodeListLength[1]; i++)
-                    {
-                        if (data.Length > index) ret.extendedNodeList.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NODE_LIST_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY_V4.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.status.HasValue) ret.Add(command.status);
-                if (command.nodeListControllerId.HasValue) ret.Add(command.nodeListControllerId);
-                if (command.nodeListData != null)
-                {
-                    foreach (var tmp in command.nodeListData)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.extendedNodeListLength != null)
-                {
-                    foreach (var tmp in command.extendedNodeListLength)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.extendedNodeList != null)
-                {
-                    foreach (var tmp in command.extendedNodeList)
                     {
                         ret.Add(tmp);
                     }

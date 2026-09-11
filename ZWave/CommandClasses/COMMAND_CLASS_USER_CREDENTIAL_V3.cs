@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace ZWave.CommandClasses
 {
-    public partial class COMMAND_CLASS_USER_CREDENTIAL_V2
+    public partial class COMMAND_CLASS_USER_CREDENTIAL_V3
     {
         public const byte ID = 0x83;
-        public const byte VERSION = 2;
+        public const byte VERSION = 3;
         public partial class USER_CAPABILITIES_GET
         {
             public const byte ID = 0x01;
@@ -19,7 +19,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_CAPABILITIES_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 return ret.ToArray();
             }
@@ -110,7 +110,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_CAPABILITIES_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.numberOfSupportedUserUniqueIdentifiers != null)
                 {
@@ -144,7 +144,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_CAPABILITIES_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 return ret.ToArray();
             }
@@ -346,7 +346,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_CAPABILITIES_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.numberOfSupportedCredentialTypes.HasValue) ret.Add(command.numberOfSupportedCredentialTypes);
@@ -552,7 +552,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_SET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.userUniqueIdentifier != null)
@@ -604,7 +604,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userUniqueIdentifier != null)
                 {
@@ -725,7 +725,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userReportType.HasValue) ret.Add(command.userReportType);
                 if (command.nextUserUniqueIdentifier != null)
@@ -836,7 +836,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_SET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userUniqueIdentifier != null)
                 {
@@ -892,7 +892,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userUniqueIdentifier != null)
                 {
@@ -992,7 +992,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.credentialReportType.HasValue) ret.Add(command.credentialReportType);
                 if (command.userUniqueIdentifier != null)
@@ -1096,7 +1096,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_LEARN_START command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userUniqueIdentifier != null)
                 {
@@ -1129,7 +1129,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_LEARN_CANCEL command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 return ret.ToArray();
             }
@@ -1165,7 +1165,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_LEARN_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.credentialLearnStatus.HasValue) ret.Add(command.credentialLearnStatus);
                 if (command.userUniqueIdentifier != null)
@@ -1214,7 +1214,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_CREDENTIAL_ASSOCIATION_SET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.credentialType.HasValue) ret.Add(command.credentialType);
                 if (command.credentialSlot != null)
@@ -1263,7 +1263,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_CREDENTIAL_ASSOCIATION_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.credentialType.HasValue) ret.Add(command.credentialType);
                 if (command.credentialSlot != null)
@@ -1295,7 +1295,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](ALL_USERS_CHECKSUM_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 return ret.ToArray();
             }
@@ -1320,7 +1320,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](ALL_USERS_CHECKSUM_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.allUsersChecksum != null)
                 {
@@ -1352,7 +1352,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_CHECKSUM_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userUniqueIdentifier != null)
                 {
@@ -1389,7 +1389,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](USER_CHECKSUM_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.userUniqueIdentifier != null)
                 {
@@ -1425,7 +1425,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_CHECKSUM_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.credentialType.HasValue) ret.Add(command.credentialType);
                 return ret.ToArray();
@@ -1453,7 +1453,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](CREDENTIAL_CHECKSUM_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.credentialType.HasValue) ret.Add(command.credentialType);
                 if (command.credentialChecksum != null)
@@ -1516,7 +1516,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](ADMIN_PIN_CODE_SET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.adminCode != null)
@@ -1540,7 +1540,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](ADMIN_PIN_CODE_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 return ret.ToArray();
             }
@@ -1595,7 +1595,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](ADMIN_PIN_CODE_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.adminCode != null)
@@ -1619,7 +1619,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](KEY_LOCKER_CAPABILITIES_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 return ret.ToArray();
             }
@@ -1698,7 +1698,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](KEY_LOCKER_CAPABILITIES_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.numberOfSupportedEntryTypes.HasValue) ret.Add(command.numberOfSupportedEntryTypes);
                 if (command.vg1SupportedEntryType != null)
@@ -1812,7 +1812,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](KEY_LOCKER_ENTRY_SET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.entryType.HasValue) ret.Add(command.entryType);
                 if (command.entrySlot != null)
@@ -1862,7 +1862,7 @@ namespace ZWave.CommandClasses
             public static implicit operator byte[](KEY_LOCKER_ENTRY_GET command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.entryType.HasValue) ret.Add(command.entryType);
                 if (command.entrySlot != null)
@@ -1909,6 +1909,9 @@ namespace ZWave.CommandClasses
             public ByteValue entryType = 0;
             public const byte entrySlotBytesCount = 2;
             public byte[] entrySlot = new byte[entrySlotBytesCount];
+            public const byte entryDataLengthBytesCount = 2;
+            public byte[] entryDataLength = new byte[entryDataLengthBytesCount];
+            public IList<byte> entryData = new List<byte>();
             public static implicit operator KEY_LOCKER_ENTRY_REPORT(byte[] data)
             {
                 KEY_LOCKER_ENTRY_REPORT ret = new KEY_LOCKER_ENTRY_REPORT();
@@ -1920,13 +1923,21 @@ namespace ZWave.CommandClasses
                     ret.entrySlot = (data.Length - index) >= entrySlotBytesCount ? new byte[entrySlotBytesCount] : new byte[data.Length - index];
                     if (data.Length > index) ret.entrySlot[0] = data[index++];
                     if (data.Length > index) ret.entrySlot[1] = data[index++];
+                    ret.entryDataLength = (data.Length - index) >= entryDataLengthBytesCount ? new byte[entryDataLengthBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.entryDataLength[0] = data[index++];
+                    if (data.Length > index) ret.entryDataLength[1] = data[index++];
+                    ret.entryData = new List<byte>();
+                    for (int i = 0; i < (ret.entryDataLength[0] << 8) + ret.entryDataLength[1]; i++)
+                    {
+                        if (data.Length > index) ret.entryData.Add(data[index++]);
+                    }
                 }
                 return ret;
             }
             public static implicit operator byte[](KEY_LOCKER_ENTRY_REPORT command)
             {
                 List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V2.ID);
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.entryType.HasValue) ret.Add(command.entryType);
@@ -1935,6 +1946,217 @@ namespace ZWave.CommandClasses
                     foreach (var tmp in command.entrySlot)
                     {
                         ret.Add(tmp);
+                    }
+                }
+                if (command.entryDataLength != null)
+                {
+                    foreach (var tmp in command.entryDataLength)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.entryData != null)
+                {
+                    foreach (var tmp in command.entryData)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_GET
+        {
+            public const byte ID = 0x22;
+            public static implicit operator USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_GET(byte[] data)
+            {
+                USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_GET ret = new USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_GET();
+                return ret;
+            }
+            public static implicit operator byte[](USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_REPORT
+        {
+            public const byte ID = 0x23;
+            public ByteValue supportedConfigurationCount = 0;
+            public class TVG1SUPPORTEDCONFIGURATIONS
+            {
+                public ByteValue supportedConfiguration = 0;
+            }
+            public List<TVG1SUPPORTEDCONFIGURATIONS> vg1SupportedConfigurations = new List<TVG1SUPPORTEDCONFIGURATIONS>();
+            public static implicit operator USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_REPORT(byte[] data)
+            {
+                USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_REPORT ret = new USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.supportedConfigurationCount = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.vg1SupportedConfigurations = new List<TVG1SUPPORTEDCONFIGURATIONS>();
+                    for (int j = 0; j < ret.supportedConfigurationCount; j++)
+                    {
+                        TVG1SUPPORTEDCONFIGURATIONS tmp = new TVG1SUPPORTEDCONFIGURATIONS();
+                        tmp.supportedConfiguration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        ret.vg1SupportedConfigurations.Add(tmp);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](USER_CREDENTIAL_CONFIGURATION_CAPABILITIES_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
+                ret.Add(ID);
+                if (command.supportedConfigurationCount.HasValue) ret.Add(command.supportedConfigurationCount);
+                if (command.vg1SupportedConfigurations != null)
+                {
+                    foreach (var item in command.vg1SupportedConfigurations)
+                    {
+                        if (item.supportedConfiguration.HasValue) ret.Add(item.supportedConfiguration);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class USER_CREDENTIAL_CONFIGURATION_SET
+        {
+            public const byte ID = 0x24;
+            public ByteValue configurationParameter = 0;
+            public ByteValue configurationParameterLength = 0;
+            public IList<byte> configurationParameterData = new List<byte>();
+            public static implicit operator USER_CREDENTIAL_CONFIGURATION_SET(byte[] data)
+            {
+                USER_CREDENTIAL_CONFIGURATION_SET ret = new USER_CREDENTIAL_CONFIGURATION_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.configurationParameter = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.configurationParameterLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.configurationParameterData = new List<byte>();
+                    for (int i = 0; i < ret.configurationParameterLength; i++)
+                    {
+                        if (data.Length > index) ret.configurationParameterData.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](USER_CREDENTIAL_CONFIGURATION_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
+                ret.Add(ID);
+                if (command.configurationParameter.HasValue) ret.Add(command.configurationParameter);
+                if (command.configurationParameterLength.HasValue) ret.Add(command.configurationParameterLength);
+                if (command.configurationParameterData != null)
+                {
+                    foreach (var tmp in command.configurationParameterData)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class USER_CREDENTIAL_CONFIGURATION_GET
+        {
+            public const byte ID = 0x25;
+            public ByteValue configurationParameterCount = 0;
+            public class TVG1CONFIGURATIONPARAMETERS
+            {
+                public ByteValue configurationParameter = 0;
+            }
+            public List<TVG1CONFIGURATIONPARAMETERS> vg1ConfigurationParameters = new List<TVG1CONFIGURATIONPARAMETERS>();
+            public static implicit operator USER_CREDENTIAL_CONFIGURATION_GET(byte[] data)
+            {
+                USER_CREDENTIAL_CONFIGURATION_GET ret = new USER_CREDENTIAL_CONFIGURATION_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.configurationParameterCount = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.vg1ConfigurationParameters = new List<TVG1CONFIGURATIONPARAMETERS>();
+                    for (int j = 0; j < ret.configurationParameterCount; j++)
+                    {
+                        TVG1CONFIGURATIONPARAMETERS tmp = new TVG1CONFIGURATIONPARAMETERS();
+                        tmp.configurationParameter = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        ret.vg1ConfigurationParameters.Add(tmp);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](USER_CREDENTIAL_CONFIGURATION_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
+                ret.Add(ID);
+                if (command.configurationParameterCount.HasValue) ret.Add(command.configurationParameterCount);
+                if (command.vg1ConfigurationParameters != null)
+                {
+                    foreach (var item in command.vg1ConfigurationParameters)
+                    {
+                        if (item.configurationParameter.HasValue) ret.Add(item.configurationParameter);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class USER_CREDENTIAL_CONFIGURATION_REPORT
+        {
+            public const byte ID = 0x26;
+            public ByteValue configurationParameterCount = 0;
+            public class TVG1CONFIGURATIONPARAMETERS
+            {
+                public ByteValue configurationParameter = 0;
+                public ByteValue configurationParameterLength = 0;
+                public IList<byte> configurationParameterData = new List<byte>();
+            }
+            public List<TVG1CONFIGURATIONPARAMETERS> vg1ConfigurationParameters = new List<TVG1CONFIGURATIONPARAMETERS>();
+            public static implicit operator USER_CREDENTIAL_CONFIGURATION_REPORT(byte[] data)
+            {
+                USER_CREDENTIAL_CONFIGURATION_REPORT ret = new USER_CREDENTIAL_CONFIGURATION_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.configurationParameterCount = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.vg1ConfigurationParameters = new List<TVG1CONFIGURATIONPARAMETERS>();
+                    for (int j = 0; j < ret.configurationParameterCount; j++)
+                    {
+                        TVG1CONFIGURATIONPARAMETERS tmp = new TVG1CONFIGURATIONPARAMETERS();
+                        tmp.configurationParameter = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        tmp.configurationParameterLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                        tmp.configurationParameterData = new List<byte>();
+                        for (int i = 0; i < tmp.configurationParameterLength; i++)
+                        {
+                            if (data.Length > index) tmp.configurationParameterData.Add(data[index++]);
+                        }
+                        ret.vg1ConfigurationParameters.Add(tmp);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](USER_CREDENTIAL_CONFIGURATION_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_USER_CREDENTIAL_V3.ID);
+                ret.Add(ID);
+                if (command.configurationParameterCount.HasValue) ret.Add(command.configurationParameterCount);
+                if (command.vg1ConfigurationParameters != null)
+                {
+                    foreach (var item in command.vg1ConfigurationParameters)
+                    {
+                        if (item.configurationParameter.HasValue) ret.Add(item.configurationParameter);
+                        if (item.configurationParameterLength.HasValue) ret.Add(item.configurationParameterLength);
+                        if (item.configurationParameterData != null)
+                        {
+                            foreach (var tmp in item.configurationParameterData)
+                            {
+                                ret.Add(tmp);
+                            }
+                        }
                     }
                 }
                 return ret.ToArray();

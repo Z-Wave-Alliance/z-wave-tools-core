@@ -8,6 +8,29 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x76;
         public const byte VERSION = 1;
+        public partial class LOCK_SET
+        {
+            public const byte ID = 0x01;
+            public ByteValue lockState = 0;
+            public static implicit operator LOCK_SET(byte[] data)
+            {
+                LOCK_SET ret = new LOCK_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.lockState = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](LOCK_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_LOCK.ID);
+                ret.Add(ID);
+                if (command.lockState.HasValue) ret.Add(command.lockState);
+                return ret.ToArray();
+            }
+        }
         public partial class LOCK_GET
         {
             public const byte ID = 0x02;
@@ -39,29 +62,6 @@ namespace ZWave.CommandClasses
                 return ret;
             }
             public static implicit operator byte[](LOCK_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_LOCK.ID);
-                ret.Add(ID);
-                if (command.lockState.HasValue) ret.Add(command.lockState);
-                return ret.ToArray();
-            }
-        }
-        public partial class LOCK_SET
-        {
-            public const byte ID = 0x01;
-            public ByteValue lockState = 0;
-            public static implicit operator LOCK_SET(byte[] data)
-            {
-                LOCK_SET ret = new LOCK_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.lockState = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](LOCK_SET command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_LOCK.ID);

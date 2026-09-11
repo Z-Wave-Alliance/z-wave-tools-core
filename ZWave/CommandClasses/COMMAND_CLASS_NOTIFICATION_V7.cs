@@ -8,6 +8,95 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x71;
         public const byte VERSION = 7;
+        public partial class EVENT_SUPPORTED_GET
+        {
+            public const byte ID = 0x01;
+            public ByteValue notificationType = 0;
+            public static implicit operator EVENT_SUPPORTED_GET(byte[] data)
+            {
+                EVENT_SUPPORTED_GET ret = new EVENT_SUPPORTED_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.notificationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](EVENT_SUPPORTED_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NOTIFICATION_V7.ID);
+                ret.Add(ID);
+                if (command.notificationType.HasValue) ret.Add(command.notificationType);
+                return ret.ToArray();
+            }
+        }
+        public partial class EVENT_SUPPORTED_REPORT
+        {
+            public const byte ID = 0x02;
+            public ByteValue notificationType = 0;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte numberOfBitMasks
+                {
+                    get { return (byte)(_value >> 0 & 0x1F); }
+                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 5 & 0x07); }
+                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> bitMask = new List<byte>();
+            public static implicit operator EVENT_SUPPORTED_REPORT(byte[] data)
+            {
+                EVENT_SUPPORTED_REPORT ret = new EVENT_SUPPORTED_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.notificationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.bitMask = new List<byte>();
+                    for (int i = 0; i < ret.properties1.numberOfBitMasks; i++)
+                    {
+                        if (data.Length > index) ret.bitMask.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](EVENT_SUPPORTED_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NOTIFICATION_V7.ID);
+                ret.Add(ID);
+                if (command.notificationType.HasValue) ret.Add(command.notificationType);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.bitMask != null)
+                {
+                    foreach (var tmp in command.bitMask)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
         public partial class NOTIFICATION_GET
         {
             public const byte ID = 0x04;
@@ -225,95 +314,6 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_NOTIFICATION_V7.ID);
                 ret.Add(ID);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.bitMask != null)
-                {
-                    foreach (var tmp in command.bitMask)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class EVENT_SUPPORTED_GET
-        {
-            public const byte ID = 0x01;
-            public ByteValue notificationType = 0;
-            public static implicit operator EVENT_SUPPORTED_GET(byte[] data)
-            {
-                EVENT_SUPPORTED_GET ret = new EVENT_SUPPORTED_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.notificationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](EVENT_SUPPORTED_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NOTIFICATION_V7.ID);
-                ret.Add(ID);
-                if (command.notificationType.HasValue) ret.Add(command.notificationType);
-                return ret.ToArray();
-            }
-        }
-        public partial class EVENT_SUPPORTED_REPORT
-        {
-            public const byte ID = 0x02;
-            public ByteValue notificationType = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte numberOfBitMasks
-                {
-                    get { return (byte)(_value >> 0 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 5 & 0x07); }
-                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public IList<byte> bitMask = new List<byte>();
-            public static implicit operator EVENT_SUPPORTED_REPORT(byte[] data)
-            {
-                EVENT_SUPPORTED_REPORT ret = new EVENT_SUPPORTED_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.notificationType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.bitMask = new List<byte>();
-                    for (int i = 0; i < ret.properties1.numberOfBitMasks; i++)
-                    {
-                        if (data.Length > index) ret.bitMask.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](EVENT_SUPPORTED_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NOTIFICATION_V7.ID);
-                ret.Add(ID);
-                if (command.notificationType.HasValue) ret.Add(command.notificationType);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.bitMask != null)
                 {

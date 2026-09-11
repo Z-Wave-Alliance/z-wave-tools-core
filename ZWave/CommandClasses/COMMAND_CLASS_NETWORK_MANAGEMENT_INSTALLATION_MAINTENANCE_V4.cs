@@ -290,6 +290,29 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
+        public partial class ZWAVE_LR_CHANNEL_CONFIGURATION_SET
+        {
+            public const byte ID = 0x0A;
+            public ByteValue zWaveLongRangeChannel = 0;
+            public static implicit operator ZWAVE_LR_CHANNEL_CONFIGURATION_SET(byte[] data)
+            {
+                ZWAVE_LR_CHANNEL_CONFIGURATION_SET ret = new ZWAVE_LR_CHANNEL_CONFIGURATION_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.zWaveLongRangeChannel = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](ZWAVE_LR_CHANNEL_CONFIGURATION_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INSTALLATION_MAINTENANCE_V4.ID);
+                ret.Add(ID);
+                if (command.zWaveLongRangeChannel.HasValue) ret.Add(command.zWaveLongRangeChannel);
+                return ret.ToArray();
+            }
+        }
         public partial class EXTENDED_STATISTICS_GET
         {
             public const byte ID = 0x0B;
@@ -386,29 +409,6 @@ namespace ZWave.CommandClasses
                         }
                     }
                 }
-                return ret.ToArray();
-            }
-        }
-        public partial class ZWAVE_LR_CHANNEL_CONFIGURATION_SET
-        {
-            public const byte ID = 0x0A;
-            public ByteValue zWaveLongRangeChannel = 0;
-            public static implicit operator ZWAVE_LR_CHANNEL_CONFIGURATION_SET(byte[] data)
-            {
-                ZWAVE_LR_CHANNEL_CONFIGURATION_SET ret = new ZWAVE_LR_CHANNEL_CONFIGURATION_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.zWaveLongRangeChannel = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](ZWAVE_LR_CHANNEL_CONFIGURATION_SET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INSTALLATION_MAINTENANCE_V4.ID);
-                ret.Add(ID);
-                if (command.zWaveLongRangeChannel.HasValue) ret.Add(command.zWaveLongRangeChannel);
                 return ret.ToArray();
             }
         }

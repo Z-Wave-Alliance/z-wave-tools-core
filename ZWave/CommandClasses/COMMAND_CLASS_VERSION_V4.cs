@@ -8,55 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x86;
         public const byte VERSION = 4;
-        public partial class VERSION_COMMAND_CLASS_GET
-        {
-            public const byte ID = 0x13;
-            public ByteValue requestedCommandClass = 0;
-            public static implicit operator VERSION_COMMAND_CLASS_GET(byte[] data)
-            {
-                VERSION_COMMAND_CLASS_GET ret = new VERSION_COMMAND_CLASS_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.requestedCommandClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](VERSION_COMMAND_CLASS_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_VERSION_V4.ID);
-                ret.Add(ID);
-                if (command.requestedCommandClass.HasValue) ret.Add(command.requestedCommandClass);
-                return ret.ToArray();
-            }
-        }
-        public partial class VERSION_COMMAND_CLASS_REPORT
-        {
-            public const byte ID = 0x14;
-            public ByteValue requestedCommandClass = 0;
-            public ByteValue commandClassVersion = 0;
-            public static implicit operator VERSION_COMMAND_CLASS_REPORT(byte[] data)
-            {
-                VERSION_COMMAND_CLASS_REPORT ret = new VERSION_COMMAND_CLASS_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.requestedCommandClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.commandClassVersion = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](VERSION_COMMAND_CLASS_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_VERSION_V4.ID);
-                ret.Add(ID);
-                if (command.requestedCommandClass.HasValue) ret.Add(command.requestedCommandClass);
-                if (command.commandClassVersion.HasValue) ret.Add(command.commandClassVersion);
-                return ret.ToArray();
-            }
-        }
         public partial class VERSION_GET
         {
             public const byte ID = 0x11;
@@ -133,6 +84,55 @@ namespace ZWave.CommandClasses
                         if (item.firmwareSubVersion.HasValue) ret.Add(item.firmwareSubVersion);
                     }
                 }
+                return ret.ToArray();
+            }
+        }
+        public partial class VERSION_COMMAND_CLASS_GET
+        {
+            public const byte ID = 0x13;
+            public ByteValue requestedCommandClass = 0;
+            public static implicit operator VERSION_COMMAND_CLASS_GET(byte[] data)
+            {
+                VERSION_COMMAND_CLASS_GET ret = new VERSION_COMMAND_CLASS_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.requestedCommandClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](VERSION_COMMAND_CLASS_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_VERSION_V4.ID);
+                ret.Add(ID);
+                if (command.requestedCommandClass.HasValue) ret.Add(command.requestedCommandClass);
+                return ret.ToArray();
+            }
+        }
+        public partial class VERSION_COMMAND_CLASS_REPORT
+        {
+            public const byte ID = 0x14;
+            public ByteValue requestedCommandClass = 0;
+            public ByteValue commandClassVersion = 0;
+            public static implicit operator VERSION_COMMAND_CLASS_REPORT(byte[] data)
+            {
+                VERSION_COMMAND_CLASS_REPORT ret = new VERSION_COMMAND_CLASS_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.requestedCommandClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.commandClassVersion = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](VERSION_COMMAND_CLASS_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_VERSION_V4.ID);
+                ret.Add(ID);
+                if (command.requestedCommandClass.HasValue) ret.Add(command.requestedCommandClass);
+                if (command.commandClassVersion.HasValue) ret.Add(command.commandClassVersion);
                 return ret.ToArray();
             }
         }

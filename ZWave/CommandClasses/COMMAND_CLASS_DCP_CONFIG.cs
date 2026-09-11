@@ -8,50 +8,45 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x3A;
         public const byte VERSION = 1;
-        public partial class DCP_LIST_REMOVE
+        public partial class DCP_LIST_SUPPORTED_GET
         {
-            public const byte ID = 0x04;
-            public const byte yearBytesCount = 2;
-            public byte[] year = new byte[yearBytesCount];
-            public ByteValue month = 0;
-            public ByteValue day = 0;
-            public ByteValue hourLocalTime = 0;
-            public ByteValue minuteLocalTime = 0;
-            public ByteValue secondLocalTime = 0;
-            public static implicit operator DCP_LIST_REMOVE(byte[] data)
+            public const byte ID = 0x01;
+            public static implicit operator DCP_LIST_SUPPORTED_GET(byte[] data)
             {
-                DCP_LIST_REMOVE ret = new DCP_LIST_REMOVE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.year = (data.Length - index) >= yearBytesCount ? new byte[yearBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.year[0] = data[index++];
-                    if (data.Length > index) ret.year[1] = data[index++];
-                    ret.month = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.day = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.hourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.minuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.secondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
+                DCP_LIST_SUPPORTED_GET ret = new DCP_LIST_SUPPORTED_GET();
                 return ret;
             }
-            public static implicit operator byte[](DCP_LIST_REMOVE command)
+            public static implicit operator byte[](DCP_LIST_SUPPORTED_GET command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_DCP_CONFIG.ID);
                 ret.Add(ID);
-                if (command.year != null)
+                return ret.ToArray();
+            }
+        }
+        public partial class DCP_LIST_SUPPORTED_REPORT
+        {
+            public const byte ID = 0x02;
+            public ByteValue dcpListSize = 0;
+            public ByteValue freeDcpListEntries = 0;
+            public static implicit operator DCP_LIST_SUPPORTED_REPORT(byte[] data)
+            {
+                DCP_LIST_SUPPORTED_REPORT ret = new DCP_LIST_SUPPORTED_REPORT();
+                if (data != null)
                 {
-                    foreach (var tmp in command.year)
-                    {
-                        ret.Add(tmp);
-                    }
+                    int index = 2;
+                    ret.dcpListSize = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.freeDcpListEntries = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                 }
-                if (command.month.HasValue) ret.Add(command.month);
-                if (command.day.HasValue) ret.Add(command.day);
-                if (command.hourLocalTime.HasValue) ret.Add(command.hourLocalTime);
-                if (command.minuteLocalTime.HasValue) ret.Add(command.minuteLocalTime);
-                if (command.secondLocalTime.HasValue) ret.Add(command.secondLocalTime);
+                return ret;
+            }
+            public static implicit operator byte[](DCP_LIST_SUPPORTED_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_DCP_CONFIG.ID);
+                ret.Add(ID);
+                if (command.dcpListSize.HasValue) ret.Add(command.dcpListSize);
+                if (command.freeDcpListEntries.HasValue) ret.Add(command.freeDcpListEntries);
                 return ret.ToArray();
             }
         }
@@ -208,45 +203,50 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class DCP_LIST_SUPPORTED_GET
+        public partial class DCP_LIST_REMOVE
         {
-            public const byte ID = 0x01;
-            public static implicit operator DCP_LIST_SUPPORTED_GET(byte[] data)
+            public const byte ID = 0x04;
+            public const byte yearBytesCount = 2;
+            public byte[] year = new byte[yearBytesCount];
+            public ByteValue month = 0;
+            public ByteValue day = 0;
+            public ByteValue hourLocalTime = 0;
+            public ByteValue minuteLocalTime = 0;
+            public ByteValue secondLocalTime = 0;
+            public static implicit operator DCP_LIST_REMOVE(byte[] data)
             {
-                DCP_LIST_SUPPORTED_GET ret = new DCP_LIST_SUPPORTED_GET();
-                return ret;
-            }
-            public static implicit operator byte[](DCP_LIST_SUPPORTED_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_DCP_CONFIG.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class DCP_LIST_SUPPORTED_REPORT
-        {
-            public const byte ID = 0x02;
-            public ByteValue dcpListSize = 0;
-            public ByteValue freeDcpListEntries = 0;
-            public static implicit operator DCP_LIST_SUPPORTED_REPORT(byte[] data)
-            {
-                DCP_LIST_SUPPORTED_REPORT ret = new DCP_LIST_SUPPORTED_REPORT();
+                DCP_LIST_REMOVE ret = new DCP_LIST_REMOVE();
                 if (data != null)
                 {
                     int index = 2;
-                    ret.dcpListSize = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.freeDcpListEntries = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.year = (data.Length - index) >= yearBytesCount ? new byte[yearBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.year[0] = data[index++];
+                    if (data.Length > index) ret.year[1] = data[index++];
+                    ret.month = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.day = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.hourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.minuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.secondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                 }
                 return ret;
             }
-            public static implicit operator byte[](DCP_LIST_SUPPORTED_REPORT command)
+            public static implicit operator byte[](DCP_LIST_REMOVE command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_DCP_CONFIG.ID);
                 ret.Add(ID);
-                if (command.dcpListSize.HasValue) ret.Add(command.dcpListSize);
-                if (command.freeDcpListEntries.HasValue) ret.Add(command.freeDcpListEntries);
+                if (command.year != null)
+                {
+                    foreach (var tmp in command.year)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.month.HasValue) ret.Add(command.month);
+                if (command.day.HasValue) ret.Add(command.day);
+                if (command.hourLocalTime.HasValue) ret.Add(command.hourLocalTime);
+                if (command.minuteLocalTime.HasValue) ret.Add(command.minuteLocalTime);
+                if (command.secondLocalTime.HasValue) ret.Add(command.secondLocalTime);
                 return ret.ToArray();
             }
         }

@@ -8,6 +8,42 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x85;
         public const byte VERSION = 4;
+        public partial class ASSOCIATION_SET
+        {
+            public const byte ID = 0x01;
+            public ByteValue groupingIdentifier = 0;
+            public IList<byte> nodeId = new List<byte>();
+            public static implicit operator ASSOCIATION_SET(byte[] data)
+            {
+                ASSOCIATION_SET ret = new ASSOCIATION_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.groupingIdentifier = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeId = new List<byte>();
+                    while (data.Length - 0 > index)
+                    {
+                        if (data.Length > index) ret.nodeId.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](ASSOCIATION_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
+                ret.Add(ID);
+                if (command.groupingIdentifier.HasValue) ret.Add(command.groupingIdentifier);
+                if (command.nodeId != null)
+                {
+                    foreach (var tmp in command.nodeId)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
         public partial class ASSOCIATION_GET
         {
             public const byte ID = 0x02;
@@ -28,81 +64,6 @@ namespace ZWave.CommandClasses
                 ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
                 ret.Add(ID);
                 if (command.groupingIdentifier.HasValue) ret.Add(command.groupingIdentifier);
-                return ret.ToArray();
-            }
-        }
-        public partial class ASSOCIATION_GROUPINGS_GET
-        {
-            public const byte ID = 0x05;
-            public static implicit operator ASSOCIATION_GROUPINGS_GET(byte[] data)
-            {
-                ASSOCIATION_GROUPINGS_GET ret = new ASSOCIATION_GROUPINGS_GET();
-                return ret;
-            }
-            public static implicit operator byte[](ASSOCIATION_GROUPINGS_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class ASSOCIATION_GROUPINGS_REPORT
-        {
-            public const byte ID = 0x06;
-            public ByteValue supportedGroupings = 0;
-            public static implicit operator ASSOCIATION_GROUPINGS_REPORT(byte[] data)
-            {
-                ASSOCIATION_GROUPINGS_REPORT ret = new ASSOCIATION_GROUPINGS_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.supportedGroupings = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](ASSOCIATION_GROUPINGS_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
-                ret.Add(ID);
-                if (command.supportedGroupings.HasValue) ret.Add(command.supportedGroupings);
-                return ret.ToArray();
-            }
-        }
-        public partial class ASSOCIATION_REMOVE
-        {
-            public const byte ID = 0x04;
-            public ByteValue groupingIdentifier = 0;
-            public IList<byte> nodeId = new List<byte>();
-            public static implicit operator ASSOCIATION_REMOVE(byte[] data)
-            {
-                ASSOCIATION_REMOVE ret = new ASSOCIATION_REMOVE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.groupingIdentifier = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeId = new List<byte>();
-                    while (data.Length - 0 > index)
-                    {
-                        if (data.Length > index) ret.nodeId.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](ASSOCIATION_REMOVE command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
-                ret.Add(ID);
-                if (command.groupingIdentifier.HasValue) ret.Add(command.groupingIdentifier);
-                if (command.nodeId != null)
-                {
-                    foreach (var tmp in command.nodeId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
                 return ret.ToArray();
             }
         }
@@ -148,14 +109,14 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class ASSOCIATION_SET
+        public partial class ASSOCIATION_REMOVE
         {
-            public const byte ID = 0x01;
+            public const byte ID = 0x04;
             public ByteValue groupingIdentifier = 0;
             public IList<byte> nodeId = new List<byte>();
-            public static implicit operator ASSOCIATION_SET(byte[] data)
+            public static implicit operator ASSOCIATION_REMOVE(byte[] data)
             {
-                ASSOCIATION_SET ret = new ASSOCIATION_SET();
+                ASSOCIATION_REMOVE ret = new ASSOCIATION_REMOVE();
                 if (data != null)
                 {
                     int index = 2;
@@ -168,7 +129,7 @@ namespace ZWave.CommandClasses
                 }
                 return ret;
             }
-            public static implicit operator byte[](ASSOCIATION_SET command)
+            public static implicit operator byte[](ASSOCIATION_REMOVE command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
@@ -181,6 +142,45 @@ namespace ZWave.CommandClasses
                         ret.Add(tmp);
                     }
                 }
+                return ret.ToArray();
+            }
+        }
+        public partial class ASSOCIATION_GROUPINGS_GET
+        {
+            public const byte ID = 0x05;
+            public static implicit operator ASSOCIATION_GROUPINGS_GET(byte[] data)
+            {
+                ASSOCIATION_GROUPINGS_GET ret = new ASSOCIATION_GROUPINGS_GET();
+                return ret;
+            }
+            public static implicit operator byte[](ASSOCIATION_GROUPINGS_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class ASSOCIATION_GROUPINGS_REPORT
+        {
+            public const byte ID = 0x06;
+            public ByteValue supportedGroupings = 0;
+            public static implicit operator ASSOCIATION_GROUPINGS_REPORT(byte[] data)
+            {
+                ASSOCIATION_GROUPINGS_REPORT ret = new ASSOCIATION_GROUPINGS_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.supportedGroupings = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](ASSOCIATION_GROUPINGS_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_ASSOCIATION_V4.ID);
+                ret.Add(ID);
+                if (command.supportedGroupings.HasValue) ret.Add(command.supportedGroupings);
                 return ret.ToArray();
             }
         }

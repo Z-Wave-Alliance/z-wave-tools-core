@@ -8,6 +8,32 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x26;
         public const byte VERSION = 3;
+        public partial class SWITCH_MULTILEVEL_SET
+        {
+            public const byte ID = 0x01;
+            public ByteValue value = 0;
+            public ByteValue duration = 0;
+            public static implicit operator SWITCH_MULTILEVEL_SET(byte[] data)
+            {
+                SWITCH_MULTILEVEL_SET ret = new SWITCH_MULTILEVEL_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.value = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.duration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SWITCH_MULTILEVEL_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SWITCH_MULTILEVEL_V3.ID);
+                ret.Add(ID);
+                if (command.value.HasValue) ret.Add(command.value);
+                if (command.duration.HasValue) ret.Add(command.duration);
+                return ret.ToArray();
+            }
+        }
         public partial class SWITCH_MULTILEVEL_GET
         {
             public const byte ID = 0x02;
@@ -44,32 +70,6 @@ namespace ZWave.CommandClasses
                 ret.Add(COMMAND_CLASS_SWITCH_MULTILEVEL_V3.ID);
                 ret.Add(ID);
                 if (command.value.HasValue) ret.Add(command.value);
-                return ret.ToArray();
-            }
-        }
-        public partial class SWITCH_MULTILEVEL_SET
-        {
-            public const byte ID = 0x01;
-            public ByteValue value = 0;
-            public ByteValue duration = 0;
-            public static implicit operator SWITCH_MULTILEVEL_SET(byte[] data)
-            {
-                SWITCH_MULTILEVEL_SET ret = new SWITCH_MULTILEVEL_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.value = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.duration = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SWITCH_MULTILEVEL_SET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SWITCH_MULTILEVEL_V3.ID);
-                ret.Add(ID);
-                if (command.value.HasValue) ret.Add(command.value);
-                if (command.duration.HasValue) ret.Add(command.duration);
                 return ret.ToArray();
             }
         }

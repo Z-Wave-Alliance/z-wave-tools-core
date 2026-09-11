@@ -8,55 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x98;
         public const byte VERSION = 1;
-        public partial class NETWORK_KEY_SET
-        {
-            public const byte ID = 0x06;
-            public IList<byte> networkKeyByte = new List<byte>();
-            public static implicit operator NETWORK_KEY_SET(byte[] data)
-            {
-                NETWORK_KEY_SET ret = new NETWORK_KEY_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.networkKeyByte = new List<byte>();
-                    while (data.Length - 0 > index)
-                    {
-                        if (data.Length > index) ret.networkKeyByte.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NETWORK_KEY_SET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                if (command.networkKeyByte != null)
-                {
-                    foreach (var tmp in command.networkKeyByte)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class NETWORK_KEY_VERIFY
-        {
-            public const byte ID = 0x07;
-            public static implicit operator NETWORK_KEY_VERIFY(byte[] data)
-            {
-                NETWORK_KEY_VERIFY ret = new NETWORK_KEY_VERIFY();
-                return ret;
-            }
-            public static implicit operator byte[](NETWORK_KEY_VERIFY command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
         public partial class SECURITY_COMMANDS_SUPPORTED_GET
         {
             public const byte ID = 0x02;
@@ -119,6 +70,173 @@ namespace ZWave.CommandClasses
                 if (command.commandClassControl != null)
                 {
                     foreach (var tmp in command.commandClassControl)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_SCHEME_GET
+        {
+            public const byte ID = 0x04;
+            public ByteValue supportedSecuritySchemes = 0;
+            public static implicit operator SECURITY_SCHEME_GET(byte[] data)
+            {
+                SECURITY_SCHEME_GET ret = new SECURITY_SCHEME_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.supportedSecuritySchemes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_SCHEME_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                if (command.supportedSecuritySchemes.HasValue) ret.Add(command.supportedSecuritySchemes);
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_SCHEME_REPORT
+        {
+            public const byte ID = 0x05;
+            public ByteValue supportedSecuritySchemes = 0;
+            public static implicit operator SECURITY_SCHEME_REPORT(byte[] data)
+            {
+                SECURITY_SCHEME_REPORT ret = new SECURITY_SCHEME_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.supportedSecuritySchemes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_SCHEME_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                if (command.supportedSecuritySchemes.HasValue) ret.Add(command.supportedSecuritySchemes);
+                return ret.ToArray();
+            }
+        }
+        public partial class NETWORK_KEY_SET
+        {
+            public const byte ID = 0x06;
+            public IList<byte> networkKeyByte = new List<byte>();
+            public static implicit operator NETWORK_KEY_SET(byte[] data)
+            {
+                NETWORK_KEY_SET ret = new NETWORK_KEY_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.networkKeyByte = new List<byte>();
+                    while (data.Length - 0 > index)
+                    {
+                        if (data.Length > index) ret.networkKeyByte.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NETWORK_KEY_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                if (command.networkKeyByte != null)
+                {
+                    foreach (var tmp in command.networkKeyByte)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class NETWORK_KEY_VERIFY
+        {
+            public const byte ID = 0x07;
+            public static implicit operator NETWORK_KEY_VERIFY(byte[] data)
+            {
+                NETWORK_KEY_VERIFY ret = new NETWORK_KEY_VERIFY();
+                return ret;
+            }
+            public static implicit operator byte[](NETWORK_KEY_VERIFY command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_SCHEME_INHERIT
+        {
+            public const byte ID = 0x08;
+            public ByteValue supportedSecuritySchemes = 0;
+            public static implicit operator SECURITY_SCHEME_INHERIT(byte[] data)
+            {
+                SECURITY_SCHEME_INHERIT ret = new SECURITY_SCHEME_INHERIT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.supportedSecuritySchemes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_SCHEME_INHERIT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                if (command.supportedSecuritySchemes.HasValue) ret.Add(command.supportedSecuritySchemes);
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_NONCE_GET
+        {
+            public const byte ID = 0x40;
+            public static implicit operator SECURITY_NONCE_GET(byte[] data)
+            {
+                SECURITY_NONCE_GET ret = new SECURITY_NONCE_GET();
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_NONCE_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class SECURITY_NONCE_REPORT
+        {
+            public const byte ID = 0x80;
+            public IList<byte> nonceByte = new List<byte>();
+            public static implicit operator SECURITY_NONCE_REPORT(byte[] data)
+            {
+                SECURITY_NONCE_REPORT ret = new SECURITY_NONCE_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.nonceByte = new List<byte>();
+                    while (data.Length - 0 > index)
+                    {
+                        if (data.Length > index) ret.nonceByte.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_NONCE_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY.ID);
+                ret.Add(ID);
+                if (command.nonceByte != null)
+                {
+                    foreach (var tmp in command.nonceByte)
                     {
                         ret.Add(tmp);
                     }
@@ -347,124 +465,6 @@ namespace ZWave.CommandClasses
                         ret.Add(tmp);
                     }
                 }
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_NONCE_GET
-        {
-            public const byte ID = 0x40;
-            public static implicit operator SECURITY_NONCE_GET(byte[] data)
-            {
-                SECURITY_NONCE_GET ret = new SECURITY_NONCE_GET();
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_NONCE_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_NONCE_REPORT
-        {
-            public const byte ID = 0x80;
-            public IList<byte> nonceByte = new List<byte>();
-            public static implicit operator SECURITY_NONCE_REPORT(byte[] data)
-            {
-                SECURITY_NONCE_REPORT ret = new SECURITY_NONCE_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.nonceByte = new List<byte>();
-                    while (data.Length - 0 > index)
-                    {
-                        if (data.Length > index) ret.nonceByte.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_NONCE_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                if (command.nonceByte != null)
-                {
-                    foreach (var tmp in command.nonceByte)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_SCHEME_GET
-        {
-            public const byte ID = 0x04;
-            public ByteValue supportedSecuritySchemes = 0;
-            public static implicit operator SECURITY_SCHEME_GET(byte[] data)
-            {
-                SECURITY_SCHEME_GET ret = new SECURITY_SCHEME_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.supportedSecuritySchemes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_SCHEME_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                if (command.supportedSecuritySchemes.HasValue) ret.Add(command.supportedSecuritySchemes);
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_SCHEME_INHERIT
-        {
-            public const byte ID = 0x08;
-            public ByteValue supportedSecuritySchemes = 0;
-            public static implicit operator SECURITY_SCHEME_INHERIT(byte[] data)
-            {
-                SECURITY_SCHEME_INHERIT ret = new SECURITY_SCHEME_INHERIT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.supportedSecuritySchemes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_SCHEME_INHERIT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                if (command.supportedSecuritySchemes.HasValue) ret.Add(command.supportedSecuritySchemes);
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_SCHEME_REPORT
-        {
-            public const byte ID = 0x05;
-            public ByteValue supportedSecuritySchemes = 0;
-            public static implicit operator SECURITY_SCHEME_REPORT(byte[] data)
-            {
-                SECURITY_SCHEME_REPORT ret = new SECURITY_SCHEME_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.supportedSecuritySchemes = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_SCHEME_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY.ID);
-                ret.Add(ID);
-                if (command.supportedSecuritySchemes.HasValue) ret.Add(command.supportedSecuritySchemes);
                 return ret.ToArray();
             }
         }

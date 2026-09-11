@@ -8,85 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x34;
         public const byte VERSION = 4;
-        public partial class FAILED_NODE_REMOVE
-        {
-            public const byte ID = 0x07;
-            public ByteValue seqNo = 0;
-            public ByteValue nodeId = 0;
-            public const byte extendedNodeidBytesCount = 2;
-            public byte[] extendedNodeid = new byte[extendedNodeidBytesCount];
-            public static implicit operator FAILED_NODE_REMOVE(byte[] data)
-            {
-                FAILED_NODE_REMOVE ret = new FAILED_NODE_REMOVE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.extendedNodeid = (data.Length - index) >= extendedNodeidBytesCount ? new byte[extendedNodeidBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.extendedNodeid[0] = data[index++];
-                    if (data.Length > index) ret.extendedNodeid[1] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](FAILED_NODE_REMOVE command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION_V4.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.nodeId.HasValue) ret.Add(command.nodeId);
-                if (command.extendedNodeid != null)
-                {
-                    foreach (var tmp in command.extendedNodeid)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class FAILED_NODE_REMOVE_STATUS
-        {
-            public const byte ID = 0x08;
-            public ByteValue seqNo = 0;
-            public ByteValue status = 0;
-            public ByteValue nodeId = 0;
-            public const byte extendedNodeidBytesCount = 2;
-            public byte[] extendedNodeid = new byte[extendedNodeidBytesCount];
-            public static implicit operator FAILED_NODE_REMOVE_STATUS(byte[] data)
-            {
-                FAILED_NODE_REMOVE_STATUS ret = new FAILED_NODE_REMOVE_STATUS();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.extendedNodeid = (data.Length - index) >= extendedNodeidBytesCount ? new byte[extendedNodeidBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.extendedNodeid[0] = data[index++];
-                    if (data.Length > index) ret.extendedNodeid[1] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](FAILED_NODE_REMOVE_STATUS command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION_V4.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.status.HasValue) ret.Add(command.status);
-                if (command.nodeId.HasValue) ret.Add(command.nodeId);
-                if (command.extendedNodeid != null)
-                {
-                    foreach (var tmp in command.extendedNodeid)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
         public partial class NODE_ADD
         {
             public const byte ID = 0x01;
@@ -345,6 +266,85 @@ namespace ZWave.CommandClasses
                 if (command.seqNo.HasValue) ret.Add(command.seqNo);
                 if (command.status.HasValue) ret.Add(command.status);
                 if (command.nodeid.HasValue) ret.Add(command.nodeid);
+                if (command.extendedNodeid != null)
+                {
+                    foreach (var tmp in command.extendedNodeid)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class FAILED_NODE_REMOVE
+        {
+            public const byte ID = 0x07;
+            public ByteValue seqNo = 0;
+            public ByteValue nodeId = 0;
+            public const byte extendedNodeidBytesCount = 2;
+            public byte[] extendedNodeid = new byte[extendedNodeidBytesCount];
+            public static implicit operator FAILED_NODE_REMOVE(byte[] data)
+            {
+                FAILED_NODE_REMOVE ret = new FAILED_NODE_REMOVE();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.extendedNodeid = (data.Length - index) >= extendedNodeidBytesCount ? new byte[extendedNodeidBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.extendedNodeid[0] = data[index++];
+                    if (data.Length > index) ret.extendedNodeid[1] = data[index++];
+                }
+                return ret;
+            }
+            public static implicit operator byte[](FAILED_NODE_REMOVE command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION_V4.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.nodeId.HasValue) ret.Add(command.nodeId);
+                if (command.extendedNodeid != null)
+                {
+                    foreach (var tmp in command.extendedNodeid)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class FAILED_NODE_REMOVE_STATUS
+        {
+            public const byte ID = 0x08;
+            public ByteValue seqNo = 0;
+            public ByteValue status = 0;
+            public ByteValue nodeId = 0;
+            public const byte extendedNodeidBytesCount = 2;
+            public byte[] extendedNodeid = new byte[extendedNodeidBytesCount];
+            public static implicit operator FAILED_NODE_REMOVE_STATUS(byte[] data)
+            {
+                FAILED_NODE_REMOVE_STATUS ret = new FAILED_NODE_REMOVE_STATUS();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.extendedNodeid = (data.Length - index) >= extendedNodeidBytesCount ? new byte[extendedNodeidBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.extendedNodeid[0] = data[index++];
+                    if (data.Length > index) ret.extendedNodeid[1] = data[index++];
+                }
+                return ret;
+            }
+            public static implicit operator byte[](FAILED_NODE_REMOVE_STATUS command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION_V4.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.status.HasValue) ret.Add(command.status);
+                if (command.nodeId.HasValue) ret.Add(command.nodeId);
                 if (command.extendedNodeid != null)
                 {
                     foreach (var tmp in command.extendedNodeid)
@@ -914,72 +914,6 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class INCLUDED_NIF_REPORT
-        {
-            public const byte ID = 0x19;
-            public ByteValue seqNo = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte dskLength
-                {
-                    get { return (byte)(_value >> 0 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
-                }
-                public byte reserved1
-                {
-                    get { return (byte)(_value >> 5 & 0x07); }
-                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public IList<byte> dsk = new List<byte>();
-            public static implicit operator INCLUDED_NIF_REPORT(byte[] data)
-            {
-                INCLUDED_NIF_REPORT ret = new INCLUDED_NIF_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.dsk = new List<byte>();
-                    for (int i = 0; i < ret.properties1.dskLength; i++)
-                    {
-                        if (data.Length > index) ret.dsk.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](INCLUDED_NIF_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION_V4.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.dsk != null)
-                {
-                    foreach (var tmp in command.dsk)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
         public partial class EXTENDED_NODE_ADD_STATUS
         {
             public const byte ID = 0x16;
@@ -1106,6 +1040,72 @@ namespace ZWave.CommandClasses
                 }
                 if (command.grantedKeys.HasValue) ret.Add(command.grantedKeys);
                 if (command.kexFailType.HasValue) ret.Add(command.kexFailType);
+                return ret.ToArray();
+            }
+        }
+        public partial class INCLUDED_NIF_REPORT
+        {
+            public const byte ID = 0x19;
+            public ByteValue seqNo = 0;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte dskLength
+                {
+                    get { return (byte)(_value >> 0 & 0x1F); }
+                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
+                }
+                public byte reserved1
+                {
+                    get { return (byte)(_value >> 5 & 0x07); }
+                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> dsk = new List<byte>();
+            public static implicit operator INCLUDED_NIF_REPORT(byte[] data)
+            {
+                INCLUDED_NIF_REPORT ret = new INCLUDED_NIF_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.dsk = new List<byte>();
+                    for (int i = 0; i < ret.properties1.dskLength; i++)
+                    {
+                        if (data.Length > index) ret.dsk.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](INCLUDED_NIF_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION_V4.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.dsk != null)
+                {
+                    foreach (var tmp in command.dsk)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
                 return ret.ToArray();
             }
         }

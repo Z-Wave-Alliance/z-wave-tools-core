@@ -8,6 +8,78 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x31;
         public const byte VERSION = 9;
+        public partial class SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR
+        {
+            public const byte ID = 0x01;
+            public static implicit operator SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR(byte[] data)
+            {
+                SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR ret = new SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR();
+                return ret;
+            }
+            public static implicit operator byte[](SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SENSOR_MULTILEVEL_V9.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT
+        {
+            public const byte ID = 0x02;
+            public IList<byte> bitMask = new List<byte>();
+            public static implicit operator SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT(byte[] data)
+            {
+                SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT ret = new SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.bitMask = new List<byte>();
+                    while (data.Length - 0 > index)
+                    {
+                        if (data.Length > index) ret.bitMask.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SENSOR_MULTILEVEL_V9.ID);
+                ret.Add(ID);
+                if (command.bitMask != null)
+                {
+                    foreach (var tmp in command.bitMask)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE
+        {
+            public const byte ID = 0x03;
+            public ByteValue sensorType = 0;
+            public static implicit operator SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE(byte[] data)
+            {
+                SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE ret = new SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.sensorType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SENSOR_MULTILEVEL_V9.ID);
+                ret.Add(ID);
+                if (command.sensorType.HasValue) ret.Add(command.sensorType);
+                return ret.ToArray();
+            }
+        }
         public partial class SENSOR_MULTILEVEL_GET
         {
             public const byte ID = 0x04;
@@ -134,78 +206,6 @@ namespace ZWave.CommandClasses
                         ret.Add(tmp);
                     }
                 }
-                return ret.ToArray();
-            }
-        }
-        public partial class SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR
-        {
-            public const byte ID = 0x01;
-            public static implicit operator SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR(byte[] data)
-            {
-                SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR ret = new SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR();
-                return ret;
-            }
-            public static implicit operator byte[](SENSOR_MULTILEVEL_SUPPORTED_GET_SENSOR command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SENSOR_MULTILEVEL_V9.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
-        public partial class SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT
-        {
-            public const byte ID = 0x02;
-            public IList<byte> bitMask = new List<byte>();
-            public static implicit operator SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT(byte[] data)
-            {
-                SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT ret = new SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.bitMask = new List<byte>();
-                    while (data.Length - 0 > index)
-                    {
-                        if (data.Length > index) ret.bitMask.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SENSOR_MULTILEVEL_SUPPORTED_SENSOR_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SENSOR_MULTILEVEL_V9.ID);
-                ret.Add(ID);
-                if (command.bitMask != null)
-                {
-                    foreach (var tmp in command.bitMask)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE
-        {
-            public const byte ID = 0x03;
-            public ByteValue sensorType = 0;
-            public static implicit operator SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE(byte[] data)
-            {
-                SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE ret = new SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.sensorType = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SENSOR_MULTILEVEL_SUPPORTED_GET_SCALE command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SENSOR_MULTILEVEL_V9.ID);
-                ret.Add(ID);
-                if (command.sensorType.HasValue) ret.Add(command.sensorType);
                 return ret.ToArray();
             }
         }

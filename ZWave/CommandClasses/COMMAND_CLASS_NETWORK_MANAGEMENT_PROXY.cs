@@ -8,6 +8,71 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x52;
         public const byte VERSION = 1;
+        public partial class NODE_LIST_GET
+        {
+            public const byte ID = 0x01;
+            public ByteValue seqNo = 0;
+            public static implicit operator NODE_LIST_GET(byte[] data)
+            {
+                NODE_LIST_GET ret = new NODE_LIST_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NODE_LIST_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                return ret.ToArray();
+            }
+        }
+        public partial class NODE_LIST_REPORT
+        {
+            public const byte ID = 0x02;
+            public ByteValue seqNo = 0;
+            public ByteValue status = 0;
+            public ByteValue nodeListControllerId = 0;
+            public IList<byte> nodeListData = new List<byte>();
+            public static implicit operator NODE_LIST_REPORT(byte[] data)
+            {
+                NODE_LIST_REPORT ret = new NODE_LIST_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeListControllerId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.nodeListData = new List<byte>();
+                    while (data.Length - 0 > index)
+                    {
+                        if (data.Length > index) ret.nodeListData.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NODE_LIST_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.status.HasValue) ret.Add(command.status);
+                if (command.nodeListControllerId.HasValue) ret.Add(command.nodeListControllerId);
+                if (command.nodeListData != null)
+                {
+                    foreach (var tmp in command.nodeListData)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
         public partial class NODE_INFO_CACHED_GET
         {
             public const byte ID = 0x03;
@@ -195,71 +260,6 @@ namespace ZWave.CommandClasses
                 if (command.commandClass != null)
                 {
                     foreach (var tmp in command.commandClass)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class NODE_LIST_GET
-        {
-            public const byte ID = 0x01;
-            public ByteValue seqNo = 0;
-            public static implicit operator NODE_LIST_GET(byte[] data)
-            {
-                NODE_LIST_GET ret = new NODE_LIST_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NODE_LIST_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                return ret.ToArray();
-            }
-        }
-        public partial class NODE_LIST_REPORT
-        {
-            public const byte ID = 0x02;
-            public ByteValue seqNo = 0;
-            public ByteValue status = 0;
-            public ByteValue nodeListControllerId = 0;
-            public IList<byte> nodeListData = new List<byte>();
-            public static implicit operator NODE_LIST_REPORT(byte[] data)
-            {
-                NODE_LIST_REPORT ret = new NODE_LIST_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeListControllerId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.nodeListData = new List<byte>();
-                    while (data.Length - 0 > index)
-                    {
-                        if (data.Length > index) ret.nodeListData.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NODE_LIST_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.status.HasValue) ret.Add(command.status);
-                if (command.nodeListControllerId.HasValue) ret.Add(command.nodeListControllerId);
-                if (command.nodeListData != null)
-                {
-                    foreach (var tmp in command.nodeListData)
                     {
                         ret.Add(tmp);
                     }

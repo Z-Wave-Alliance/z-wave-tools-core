@@ -69,38 +69,6 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class NODE_INFORMATION_SEND
-        {
-            public const byte ID = 0x05;
-            public ByteValue seqNo = 0;
-            public ByteValue reserved = 0;
-            public ByteValue destinationNodeId = 0;
-            public ByteValue txOptions = 0;
-            public static implicit operator NODE_INFORMATION_SEND(byte[] data)
-            {
-                NODE_INFORMATION_SEND ret = new NODE_INFORMATION_SEND();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.reserved = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.destinationNodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.txOptions = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](NODE_INFORMATION_SEND command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_BASIC.ID);
-                ret.Add(ID);
-                if (command.seqNo.HasValue) ret.Add(command.seqNo);
-                if (command.reserved.HasValue) ret.Add(command.reserved);
-                if (command.destinationNodeId.HasValue) ret.Add(command.destinationNodeId);
-                if (command.txOptions.HasValue) ret.Add(command.txOptions);
-                return ret.ToArray();
-            }
-        }
         public partial class NETWORK_UPDATE_REQUEST
         {
             public const byte ID = 0x03;
@@ -147,6 +115,38 @@ namespace ZWave.CommandClasses
                 ret.Add(ID);
                 if (command.seqNo.HasValue) ret.Add(command.seqNo);
                 if (command.status.HasValue) ret.Add(command.status);
+                return ret.ToArray();
+            }
+        }
+        public partial class NODE_INFORMATION_SEND
+        {
+            public const byte ID = 0x05;
+            public ByteValue seqNo = 0;
+            public ByteValue reserved = 0;
+            public ByteValue destinationNodeId = 0;
+            public ByteValue txOptions = 0;
+            public static implicit operator NODE_INFORMATION_SEND(byte[] data)
+            {
+                NODE_INFORMATION_SEND ret = new NODE_INFORMATION_SEND();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.seqNo = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.reserved = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.destinationNodeId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.txOptions = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](NODE_INFORMATION_SEND command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_NETWORK_MANAGEMENT_BASIC.ID);
+                ret.Add(ID);
+                if (command.seqNo.HasValue) ret.Add(command.seqNo);
+                if (command.reserved.HasValue) ret.Add(command.reserved);
+                if (command.destinationNodeId.HasValue) ret.Add(command.destinationNodeId);
+                if (command.txOptions.HasValue) ret.Add(command.txOptions);
                 return ret.ToArray();
             }
         }

@@ -8,6 +8,22 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x30;
         public const byte VERSION = 2;
+        public partial class SENSOR_BINARY_SUPPORTED_GET_SENSOR
+        {
+            public const byte ID = 0x01;
+            public static implicit operator SENSOR_BINARY_SUPPORTED_GET_SENSOR(byte[] data)
+            {
+                SENSOR_BINARY_SUPPORTED_GET_SENSOR ret = new SENSOR_BINARY_SUPPORTED_GET_SENSOR();
+                return ret;
+            }
+            public static implicit operator byte[](SENSOR_BINARY_SUPPORTED_GET_SENSOR command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SENSOR_BINARY_V2.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
         public partial class SENSOR_BINARY_GET
         {
             public const byte ID = 0x02;
@@ -54,22 +70,6 @@ namespace ZWave.CommandClasses
                 ret.Add(ID);
                 if (command.sensorValue.HasValue) ret.Add(command.sensorValue);
                 if (command.sensorType.HasValue) ret.Add(command.sensorType);
-                return ret.ToArray();
-            }
-        }
-        public partial class SENSOR_BINARY_SUPPORTED_GET_SENSOR
-        {
-            public const byte ID = 0x01;
-            public static implicit operator SENSOR_BINARY_SUPPORTED_GET_SENSOR(byte[] data)
-            {
-                SENSOR_BINARY_SUPPORTED_GET_SENSOR ret = new SENSOR_BINARY_SUPPORTED_GET_SENSOR();
-                return ret;
-            }
-            public static implicit operator byte[](SENSOR_BINARY_SUPPORTED_GET_SENSOR command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SENSOR_BINARY_V2.ID);
-                ret.Add(ID);
                 return ret.ToArray();
             }
         }

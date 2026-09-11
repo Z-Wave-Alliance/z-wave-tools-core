@@ -8,6 +8,29 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x2F;
         public const byte VERSION = 1;
+        public partial class SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET
+        {
+            public const byte ID = 0x01;
+            public ByteValue zoneNumber = 0;
+            public static implicit operator SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET(byte[] data)
+            {
+                SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET ret = new SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.zoneNumber = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_SECURITY_PANEL_ZONE_SENSOR.ID);
+                ret.Add(ID);
+                if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
+                return ret.ToArray();
+            }
+        }
         public partial class COMMAND_CLASS_SECURITY_PANEL_ZONE_SENSOR_INSTALLED_REPORT
         {
             public const byte ID = 0x02;
@@ -86,29 +109,6 @@ namespace ZWave.CommandClasses
                 if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
                 if (command.sensorNumber.HasValue) ret.Add(command.sensorNumber);
                 if (command.zwaveAlarmType.HasValue) ret.Add(command.zwaveAlarmType);
-                return ret.ToArray();
-            }
-        }
-        public partial class SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET
-        {
-            public const byte ID = 0x01;
-            public ByteValue zoneNumber = 0;
-            public static implicit operator SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET(byte[] data)
-            {
-                SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET ret = new SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.zoneNumber = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](SECURITY_PANEL_ZONE_SENSOR_INSTALLED_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_SECURITY_PANEL_ZONE_SENSOR.ID);
-                ret.Add(ID);
-                if (command.zoneNumber.HasValue) ret.Add(command.zoneNumber);
                 return ret.ToArray();
             }
         }

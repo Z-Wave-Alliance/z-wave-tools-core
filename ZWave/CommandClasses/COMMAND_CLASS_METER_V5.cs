@@ -203,22 +203,6 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class METER_RESET
-        {
-            public const byte ID = 0x05;
-            public static implicit operator METER_RESET(byte[] data)
-            {
-                METER_RESET ret = new METER_RESET();
-                return ret;
-            }
-            public static implicit operator byte[](METER_RESET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_METER_V5.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
         public partial class METER_SUPPORTED_GET
         {
             public const byte ID = 0x03;
@@ -333,6 +317,22 @@ namespace ZWave.CommandClasses
                         ret.Add(tmp);
                     }
                 }
+                return ret.ToArray();
+            }
+        }
+        public partial class METER_RESET
+        {
+            public const byte ID = 0x05;
+            public static implicit operator METER_RESET(byte[] data)
+            {
+                METER_RESET ret = new METER_RESET();
+                return ret;
+            }
+            public static implicit operator byte[](METER_RESET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_METER_V5.ID);
+                ret.Add(ID);
                 return ret.ToArray();
             }
         }

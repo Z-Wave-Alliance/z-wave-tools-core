@@ -8,103 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x3B;
         public const byte VERSION = 1;
-        public partial class DCP_EVENT_STATUS_GET
-        {
-            public const byte ID = 0x03;
-            public const byte yearBytesCount = 2;
-            public byte[] year = new byte[yearBytesCount];
-            public ByteValue month = 0;
-            public ByteValue day = 0;
-            public ByteValue hourLocalTime = 0;
-            public ByteValue minuteLocalTime = 0;
-            public ByteValue secondLocalTime = 0;
-            public static implicit operator DCP_EVENT_STATUS_GET(byte[] data)
-            {
-                DCP_EVENT_STATUS_GET ret = new DCP_EVENT_STATUS_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.year = (data.Length - index) >= yearBytesCount ? new byte[yearBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.year[0] = data[index++];
-                    if (data.Length > index) ret.year[1] = data[index++];
-                    ret.month = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.day = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.hourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.minuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.secondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](DCP_EVENT_STATUS_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_DCP_MONITOR.ID);
-                ret.Add(ID);
-                if (command.year != null)
-                {
-                    foreach (var tmp in command.year)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.month.HasValue) ret.Add(command.month);
-                if (command.day.HasValue) ret.Add(command.day);
-                if (command.hourLocalTime.HasValue) ret.Add(command.hourLocalTime);
-                if (command.minuteLocalTime.HasValue) ret.Add(command.minuteLocalTime);
-                if (command.secondLocalTime.HasValue) ret.Add(command.secondLocalTime);
-                return ret.ToArray();
-            }
-        }
-        public partial class DCP_EVENT_STATUS_REPORT
-        {
-            public const byte ID = 0x04;
-            public const byte yearBytesCount = 2;
-            public byte[] year = new byte[yearBytesCount];
-            public ByteValue month = 0;
-            public ByteValue day = 0;
-            public ByteValue hourLocalTime = 0;
-            public ByteValue minuteLocalTime = 0;
-            public ByteValue secondLocalTime = 0;
-            public ByteValue eventStatus = 0;
-            public static implicit operator DCP_EVENT_STATUS_REPORT(byte[] data)
-            {
-                DCP_EVENT_STATUS_REPORT ret = new DCP_EVENT_STATUS_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.year = (data.Length - index) >= yearBytesCount ? new byte[yearBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.year[0] = data[index++];
-                    if (data.Length > index) ret.year[1] = data[index++];
-                    ret.month = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.day = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.hourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.minuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.secondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.eventStatus = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](DCP_EVENT_STATUS_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_DCP_MONITOR.ID);
-                ret.Add(ID);
-                if (command.year != null)
-                {
-                    foreach (var tmp in command.year)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.month.HasValue) ret.Add(command.month);
-                if (command.day.HasValue) ret.Add(command.day);
-                if (command.hourLocalTime.HasValue) ret.Add(command.hourLocalTime);
-                if (command.minuteLocalTime.HasValue) ret.Add(command.minuteLocalTime);
-                if (command.secondLocalTime.HasValue) ret.Add(command.secondLocalTime);
-                if (command.eventStatus.HasValue) ret.Add(command.eventStatus);
-                return ret.ToArray();
-            }
-        }
         public partial class DCP_LIST_GET
         {
             public const byte ID = 0x01;
@@ -274,6 +177,103 @@ namespace ZWave.CommandClasses
                 if (command.startAssociationGroup.HasValue) ret.Add(command.startAssociationGroup);
                 if (command.stopAssociationGroup.HasValue) ret.Add(command.stopAssociationGroup);
                 if (command.randomizationInterval.HasValue) ret.Add(command.randomizationInterval);
+                return ret.ToArray();
+            }
+        }
+        public partial class DCP_EVENT_STATUS_GET
+        {
+            public const byte ID = 0x03;
+            public const byte yearBytesCount = 2;
+            public byte[] year = new byte[yearBytesCount];
+            public ByteValue month = 0;
+            public ByteValue day = 0;
+            public ByteValue hourLocalTime = 0;
+            public ByteValue minuteLocalTime = 0;
+            public ByteValue secondLocalTime = 0;
+            public static implicit operator DCP_EVENT_STATUS_GET(byte[] data)
+            {
+                DCP_EVENT_STATUS_GET ret = new DCP_EVENT_STATUS_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.year = (data.Length - index) >= yearBytesCount ? new byte[yearBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.year[0] = data[index++];
+                    if (data.Length > index) ret.year[1] = data[index++];
+                    ret.month = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.day = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.hourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.minuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.secondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](DCP_EVENT_STATUS_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_DCP_MONITOR.ID);
+                ret.Add(ID);
+                if (command.year != null)
+                {
+                    foreach (var tmp in command.year)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.month.HasValue) ret.Add(command.month);
+                if (command.day.HasValue) ret.Add(command.day);
+                if (command.hourLocalTime.HasValue) ret.Add(command.hourLocalTime);
+                if (command.minuteLocalTime.HasValue) ret.Add(command.minuteLocalTime);
+                if (command.secondLocalTime.HasValue) ret.Add(command.secondLocalTime);
+                return ret.ToArray();
+            }
+        }
+        public partial class DCP_EVENT_STATUS_REPORT
+        {
+            public const byte ID = 0x04;
+            public const byte yearBytesCount = 2;
+            public byte[] year = new byte[yearBytesCount];
+            public ByteValue month = 0;
+            public ByteValue day = 0;
+            public ByteValue hourLocalTime = 0;
+            public ByteValue minuteLocalTime = 0;
+            public ByteValue secondLocalTime = 0;
+            public ByteValue eventStatus = 0;
+            public static implicit operator DCP_EVENT_STATUS_REPORT(byte[] data)
+            {
+                DCP_EVENT_STATUS_REPORT ret = new DCP_EVENT_STATUS_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.year = (data.Length - index) >= yearBytesCount ? new byte[yearBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.year[0] = data[index++];
+                    if (data.Length > index) ret.year[1] = data[index++];
+                    ret.month = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.day = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.hourLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.minuteLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.secondLocalTime = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.eventStatus = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](DCP_EVENT_STATUS_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_DCP_MONITOR.ID);
+                ret.Add(ID);
+                if (command.year != null)
+                {
+                    foreach (var tmp in command.year)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.month.HasValue) ret.Add(command.month);
+                if (command.day.HasValue) ret.Add(command.day);
+                if (command.hourLocalTime.HasValue) ret.Add(command.hourLocalTime);
+                if (command.minuteLocalTime.HasValue) ret.Add(command.minuteLocalTime);
+                if (command.secondLocalTime.HasValue) ret.Add(command.secondLocalTime);
+                if (command.eventStatus.HasValue) ret.Add(command.eventStatus);
                 return ret.ToArray();
             }
         }

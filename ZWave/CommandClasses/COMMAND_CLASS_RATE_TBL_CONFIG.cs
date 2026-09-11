@@ -8,69 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x48;
         public const byte VERSION = 1;
-        public partial class RATE_TBL_REMOVE
-        {
-            public const byte ID = 0x02;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte rateParameterSetIds
-                {
-                    get { return (byte)(_value >> 0 & 0x3F); }
-                    set { HasValue = true; _value &= 0xFF - 0x3F; _value += (byte)(value << 0 & 0x3F); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 6 & 0x03); }
-                    set { HasValue = true; _value &= 0xFF - 0xC0; _value += (byte)(value << 6 & 0xC0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public IList<byte> rateParameterSetId = new List<byte>();
-            public static implicit operator RATE_TBL_REMOVE(byte[] data)
-            {
-                RATE_TBL_REMOVE ret = new RATE_TBL_REMOVE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.rateParameterSetId = new List<byte>();
-                    for (int i = 0; i < ret.properties1.rateParameterSetIds; i++)
-                    {
-                        if (data.Length > index) ret.rateParameterSetId.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](RATE_TBL_REMOVE command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_RATE_TBL_CONFIG.ID);
-                ret.Add(ID);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.rateParameterSetId != null)
-                {
-                    foreach (var tmp in command.rateParameterSetId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
         public partial class RATE_TBL_SET
         {
             public const byte ID = 0x01;
@@ -262,6 +199,69 @@ namespace ZWave.CommandClasses
                     }
                 }
                 if (command.dcpRateId.HasValue) ret.Add(command.dcpRateId);
+                return ret.ToArray();
+            }
+        }
+        public partial class RATE_TBL_REMOVE
+        {
+            public const byte ID = 0x02;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte rateParameterSetIds
+                {
+                    get { return (byte)(_value >> 0 & 0x3F); }
+                    set { HasValue = true; _value &= 0xFF - 0x3F; _value += (byte)(value << 0 & 0x3F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 6 & 0x03); }
+                    set { HasValue = true; _value &= 0xFF - 0xC0; _value += (byte)(value << 6 & 0xC0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> rateParameterSetId = new List<byte>();
+            public static implicit operator RATE_TBL_REMOVE(byte[] data)
+            {
+                RATE_TBL_REMOVE ret = new RATE_TBL_REMOVE();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.rateParameterSetId = new List<byte>();
+                    for (int i = 0; i < ret.properties1.rateParameterSetIds; i++)
+                    {
+                        if (data.Length > index) ret.rateParameterSetId.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](RATE_TBL_REMOVE command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_RATE_TBL_CONFIG.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.rateParameterSetId != null)
+                {
+                    foreach (var tmp in command.rateParameterSetId)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
                 return ret.ToArray();
             }
         }

@@ -8,136 +8,6 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x4A;
         public const byte VERSION = 1;
-        public partial class TARIFF_TBL_REMOVE
-        {
-            public const byte ID = 0x03;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte rateParameterSetIds
-                {
-                    get { return (byte)(_value >> 0 & 0x3F); }
-                    set { HasValue = true; _value &= 0xFF - 0x3F; _value += (byte)(value << 0 & 0x3F); }
-                }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 6 & 0x03); }
-                    set { HasValue = true; _value &= 0xFF - 0xC0; _value += (byte)(value << 6 & 0xC0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public IList<byte> rateParameterSetId = new List<byte>();
-            public static implicit operator TARIFF_TBL_REMOVE(byte[] data)
-            {
-                TARIFF_TBL_REMOVE ret = new TARIFF_TBL_REMOVE();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.rateParameterSetId = new List<byte>();
-                    for (int i = 0; i < ret.properties1.rateParameterSetIds; i++)
-                    {
-                        if (data.Length > index) ret.rateParameterSetId.Add(data[index++]);
-                    }
-                }
-                return ret;
-            }
-            public static implicit operator byte[](TARIFF_TBL_REMOVE command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_TARIFF_CONFIG.ID);
-                ret.Add(ID);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.rateParameterSetId != null)
-                {
-                    foreach (var tmp in command.rateParameterSetId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class TARIFF_TBL_SET
-        {
-            public const byte ID = 0x02;
-            public ByteValue rateParameterSetId = 0;
-            public struct Tproperties1
-            {
-                private byte _value;
-                public bool HasValue { get; private set; }
-                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
-                public byte reserved
-                {
-                    get { return (byte)(_value >> 0 & 0x1F); }
-                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
-                }
-                public byte tariffPrecision
-                {
-                    get { return (byte)(_value >> 5 & 0x07); }
-                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
-                }
-                public static implicit operator Tproperties1(byte data)
-                {
-                    Tproperties1 ret = new Tproperties1();
-                    ret._value = data;
-                    ret.HasValue = true;
-                    return ret;
-                }
-                public static implicit operator byte(Tproperties1 prm)
-                {
-                    return prm._value;
-                }
-            }
-            public Tproperties1 properties1 = 0;
-            public const byte tariffValueBytesCount = 4;
-            public byte[] tariffValue = new byte[tariffValueBytesCount];
-            public static implicit operator TARIFF_TBL_SET(byte[] data)
-            {
-                TARIFF_TBL_SET ret = new TARIFF_TBL_SET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.rateParameterSetId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
-                    ret.tariffValue = (data.Length - index) >= tariffValueBytesCount ? new byte[tariffValueBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.tariffValue[0] = data[index++];
-                    if (data.Length > index) ret.tariffValue[1] = data[index++];
-                    if (data.Length > index) ret.tariffValue[2] = data[index++];
-                    if (data.Length > index) ret.tariffValue[3] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](TARIFF_TBL_SET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_TARIFF_CONFIG.ID);
-                ret.Add(ID);
-                if (command.rateParameterSetId.HasValue) ret.Add(command.rateParameterSetId);
-                if (command.properties1.HasValue) ret.Add(command.properties1);
-                if (command.tariffValue != null)
-                {
-                    foreach (var tmp in command.tariffValue)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
         public partial class TARIFF_TBL_SUPPLIER_SET
         {
             public const byte ID = 0x01;
@@ -278,6 +148,136 @@ namespace ZWave.CommandClasses
                 if (command.supplierCharacter != null)
                 {
                     foreach (var tmp in command.supplierCharacter)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class TARIFF_TBL_SET
+        {
+            public const byte ID = 0x02;
+            public ByteValue rateParameterSetId = 0;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 0 & 0x1F); }
+                    set { HasValue = true; _value &= 0xFF - 0x1F; _value += (byte)(value << 0 & 0x1F); }
+                }
+                public byte tariffPrecision
+                {
+                    get { return (byte)(_value >> 5 & 0x07); }
+                    set { HasValue = true; _value &= 0xFF - 0xE0; _value += (byte)(value << 5 & 0xE0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public const byte tariffValueBytesCount = 4;
+            public byte[] tariffValue = new byte[tariffValueBytesCount];
+            public static implicit operator TARIFF_TBL_SET(byte[] data)
+            {
+                TARIFF_TBL_SET ret = new TARIFF_TBL_SET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.rateParameterSetId = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.tariffValue = (data.Length - index) >= tariffValueBytesCount ? new byte[tariffValueBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.tariffValue[0] = data[index++];
+                    if (data.Length > index) ret.tariffValue[1] = data[index++];
+                    if (data.Length > index) ret.tariffValue[2] = data[index++];
+                    if (data.Length > index) ret.tariffValue[3] = data[index++];
+                }
+                return ret;
+            }
+            public static implicit operator byte[](TARIFF_TBL_SET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_TARIFF_CONFIG.ID);
+                ret.Add(ID);
+                if (command.rateParameterSetId.HasValue) ret.Add(command.rateParameterSetId);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.tariffValue != null)
+                {
+                    foreach (var tmp in command.tariffValue)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class TARIFF_TBL_REMOVE
+        {
+            public const byte ID = 0x03;
+            public struct Tproperties1
+            {
+                private byte _value;
+                public bool HasValue { get; private set; }
+                public static Tproperties1 Empty { get { return new Tproperties1() { _value = 0, HasValue = false }; } }
+                public byte rateParameterSetIds
+                {
+                    get { return (byte)(_value >> 0 & 0x3F); }
+                    set { HasValue = true; _value &= 0xFF - 0x3F; _value += (byte)(value << 0 & 0x3F); }
+                }
+                public byte reserved
+                {
+                    get { return (byte)(_value >> 6 & 0x03); }
+                    set { HasValue = true; _value &= 0xFF - 0xC0; _value += (byte)(value << 6 & 0xC0); }
+                }
+                public static implicit operator Tproperties1(byte data)
+                {
+                    Tproperties1 ret = new Tproperties1();
+                    ret._value = data;
+                    ret.HasValue = true;
+                    return ret;
+                }
+                public static implicit operator byte(Tproperties1 prm)
+                {
+                    return prm._value;
+                }
+            }
+            public Tproperties1 properties1 = 0;
+            public IList<byte> rateParameterSetId = new List<byte>();
+            public static implicit operator TARIFF_TBL_REMOVE(byte[] data)
+            {
+                TARIFF_TBL_REMOVE ret = new TARIFF_TBL_REMOVE();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
+                    ret.rateParameterSetId = new List<byte>();
+                    for (int i = 0; i < ret.properties1.rateParameterSetIds; i++)
+                    {
+                        if (data.Length > index) ret.rateParameterSetId.Add(data[index++]);
+                    }
+                }
+                return ret;
+            }
+            public static implicit operator byte[](TARIFF_TBL_REMOVE command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_TARIFF_CONFIG.ID);
+                ret.Add(ID);
+                if (command.properties1.HasValue) ret.Add(command.properties1);
+                if (command.rateParameterSetId != null)
+                {
+                    foreach (var tmp in command.rateParameterSetId)
                     {
                         ret.Add(tmp);
                     }

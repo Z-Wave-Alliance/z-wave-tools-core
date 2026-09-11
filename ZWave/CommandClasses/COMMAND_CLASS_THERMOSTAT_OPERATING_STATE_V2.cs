@@ -8,6 +8,22 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x42;
         public const byte VERSION = 2;
+        public partial class THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET
+        {
+            public const byte ID = 0x01;
+            public static implicit operator THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET(byte[] data)
+            {
+                THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET ret = new THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET();
+                return ret;
+            }
+            public static implicit operator byte[](THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_THERMOSTAT_OPERATING_STATE_V2.ID);
+                ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
         public partial class THERMOSTAT_OPERATING_STATE_GET
         {
             public const byte ID = 0x02;
@@ -71,22 +87,6 @@ namespace ZWave.CommandClasses
                 ret.Add(COMMAND_CLASS_THERMOSTAT_OPERATING_STATE_V2.ID);
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
-                return ret.ToArray();
-            }
-        }
-        public partial class THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET
-        {
-            public const byte ID = 0x01;
-            public static implicit operator THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET(byte[] data)
-            {
-                THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET ret = new THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET();
-                return ret;
-            }
-            public static implicit operator byte[](THERMOSTAT_OPERATING_STATE_LOGGING_SUPPORTED_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_THERMOSTAT_OPERATING_STATE_V2.ID);
-                ret.Add(ID);
                 return ret.ToArray();
             }
         }

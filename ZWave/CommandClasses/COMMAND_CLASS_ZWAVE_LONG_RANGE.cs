@@ -8,49 +8,19 @@ namespace ZWave.CommandClasses
     {
         public const byte ID = 0x04;
         public const byte VERSION = 1;
-        public partial class ZWAVE_LR_CMD_ASSIGN_IDS
+        public partial class ZWAVE_LR_CMD_NO_OPERATION
         {
-            public const byte ID = 0x03;
-            public const byte newNodeIdBytesCount = 2;
-            public byte[] newNodeId = new byte[newNodeIdBytesCount];
-            public const byte newHomeIdBytesCount = 4;
-            public byte[] newHomeId = new byte[newHomeIdBytesCount];
-            public static implicit operator ZWAVE_LR_CMD_ASSIGN_IDS(byte[] data)
+            public const byte ID = 0x00;
+            public static implicit operator ZWAVE_LR_CMD_NO_OPERATION(byte[] data)
             {
-                ZWAVE_LR_CMD_ASSIGN_IDS ret = new ZWAVE_LR_CMD_ASSIGN_IDS();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.newNodeId = (data.Length - index) >= newNodeIdBytesCount ? new byte[newNodeIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.newNodeId[0] = data[index++];
-                    if (data.Length > index) ret.newNodeId[1] = data[index++];
-                    ret.newHomeId = (data.Length - index) >= newHomeIdBytesCount ? new byte[newHomeIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.newHomeId[0] = data[index++];
-                    if (data.Length > index) ret.newHomeId[1] = data[index++];
-                    if (data.Length > index) ret.newHomeId[2] = data[index++];
-                    if (data.Length > index) ret.newHomeId[3] = data[index++];
-                }
+                ZWAVE_LR_CMD_NO_OPERATION ret = new ZWAVE_LR_CMD_NO_OPERATION();
                 return ret;
             }
-            public static implicit operator byte[](ZWAVE_LR_CMD_ASSIGN_IDS command)
+            public static implicit operator byte[](ZWAVE_LR_CMD_NO_OPERATION command)
             {
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_ZWAVE_LONG_RANGE.ID);
                 ret.Add(ID);
-                if (command.newNodeId != null)
-                {
-                    foreach (var tmp in command.newNodeId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.newHomeId != null)
-                {
-                    foreach (var tmp in command.newHomeId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
                 return ret.ToArray();
             }
         }
@@ -211,22 +181,6 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
-        public partial class ZWAVE_LR_CMD_NO_OPERATION
-        {
-            public const byte ID = 0x00;
-            public static implicit operator ZWAVE_LR_CMD_NO_OPERATION(byte[] data)
-            {
-                ZWAVE_LR_CMD_NO_OPERATION ret = new ZWAVE_LR_CMD_NO_OPERATION();
-                return ret;
-            }
-            public static implicit operator byte[](ZWAVE_LR_CMD_NO_OPERATION command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_ZWAVE_LONG_RANGE.ID);
-                ret.Add(ID);
-                return ret.ToArray();
-            }
-        }
         public partial class ZWAVE_LR_CMD_REQUEST_NODE_INFO
         {
             public const byte ID = 0x02;
@@ -240,6 +194,52 @@ namespace ZWave.CommandClasses
                 List<byte> ret = new List<byte>();
                 ret.Add(COMMAND_CLASS_ZWAVE_LONG_RANGE.ID);
                 ret.Add(ID);
+                return ret.ToArray();
+            }
+        }
+        public partial class ZWAVE_LR_CMD_ASSIGN_IDS
+        {
+            public const byte ID = 0x03;
+            public const byte newNodeIdBytesCount = 2;
+            public byte[] newNodeId = new byte[newNodeIdBytesCount];
+            public const byte newHomeIdBytesCount = 4;
+            public byte[] newHomeId = new byte[newHomeIdBytesCount];
+            public static implicit operator ZWAVE_LR_CMD_ASSIGN_IDS(byte[] data)
+            {
+                ZWAVE_LR_CMD_ASSIGN_IDS ret = new ZWAVE_LR_CMD_ASSIGN_IDS();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.newNodeId = (data.Length - index) >= newNodeIdBytesCount ? new byte[newNodeIdBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.newNodeId[0] = data[index++];
+                    if (data.Length > index) ret.newNodeId[1] = data[index++];
+                    ret.newHomeId = (data.Length - index) >= newHomeIdBytesCount ? new byte[newHomeIdBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.newHomeId[0] = data[index++];
+                    if (data.Length > index) ret.newHomeId[1] = data[index++];
+                    if (data.Length > index) ret.newHomeId[2] = data[index++];
+                    if (data.Length > index) ret.newHomeId[3] = data[index++];
+                }
+                return ret;
+            }
+            public static implicit operator byte[](ZWAVE_LR_CMD_ASSIGN_IDS command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_ZWAVE_LONG_RANGE.ID);
+                ret.Add(ID);
+                if (command.newNodeId != null)
+                {
+                    foreach (var tmp in command.newNodeId)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.newHomeId != null)
+                {
+                    foreach (var tmp in command.newHomeId)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
                 return ret.ToArray();
             }
         }
@@ -377,7 +377,7 @@ namespace ZWave.CommandClasses
                 }
             }
             public Tproperties2 properties2 = 0;
-            public ByteValue reserved = 0;
+            public ByteValue reserved2 = 0;
             public ByteValue genericDeviceClass = 0;
             public ByteValue specificDeviceClass = 0;
             public ByteValue commandClassListLength = 0;
@@ -390,7 +390,7 @@ namespace ZWave.CommandClasses
                     int index = 2;
                     ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
                     ret.properties2 = data.Length > index ? (Tproperties2)data[index++] : Tproperties2.Empty;
-                    ret.reserved = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.reserved2 = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.genericDeviceClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.specificDeviceClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.commandClassListLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
@@ -409,7 +409,7 @@ namespace ZWave.CommandClasses
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.properties2.HasValue) ret.Add(command.properties2);
-                if (command.reserved.HasValue) ret.Add(command.reserved);
+                if (command.reserved2.HasValue) ret.Add(command.reserved2);
                 if (command.genericDeviceClass.HasValue) ret.Add(command.genericDeviceClass);
                 if (command.specificDeviceClass.HasValue) ret.Add(command.specificDeviceClass);
                 if (command.commandClassListLength.HasValue) ret.Add(command.commandClassListLength);
@@ -507,7 +507,7 @@ namespace ZWave.CommandClasses
                 }
             }
             public Tproperties2 properties2 = 0;
-            public ByteValue reserved = 0;
+            public ByteValue reserved2 = 0;
             public ByteValue genericDeviceClass = 0;
             public ByteValue specificDeviceClass = 0;
             public ByteValue commandClassListLength = 0;
@@ -520,7 +520,7 @@ namespace ZWave.CommandClasses
                     int index = 2;
                     ret.properties1 = data.Length > index ? (Tproperties1)data[index++] : Tproperties1.Empty;
                     ret.properties2 = data.Length > index ? (Tproperties2)data[index++] : Tproperties2.Empty;
-                    ret.reserved = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.reserved2 = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.genericDeviceClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.specificDeviceClass = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
                     ret.commandClassListLength = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
@@ -539,7 +539,7 @@ namespace ZWave.CommandClasses
                 ret.Add(ID);
                 if (command.properties1.HasValue) ret.Add(command.properties1);
                 if (command.properties2.HasValue) ret.Add(command.properties2);
-                if (command.reserved.HasValue) ret.Add(command.reserved);
+                if (command.reserved2.HasValue) ret.Add(command.reserved2);
                 if (command.genericDeviceClass.HasValue) ret.Add(command.genericDeviceClass);
                 if (command.specificDeviceClass.HasValue) ret.Add(command.specificDeviceClass);
                 if (command.commandClassListLength.HasValue) ret.Add(command.commandClassListLength);

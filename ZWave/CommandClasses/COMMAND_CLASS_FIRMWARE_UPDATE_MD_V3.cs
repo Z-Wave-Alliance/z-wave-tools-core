@@ -126,6 +126,100 @@ namespace ZWave.CommandClasses
                 return ret.ToArray();
             }
         }
+        public partial class FIRMWARE_UPDATE_MD_REQUEST_GET
+        {
+            public const byte ID = 0x03;
+            public const byte manufacturerIdBytesCount = 2;
+            public byte[] manufacturerId = new byte[manufacturerIdBytesCount];
+            public const byte firmwareIdBytesCount = 2;
+            public byte[] firmwareId = new byte[firmwareIdBytesCount];
+            public const byte checksumBytesCount = 2;
+            public byte[] checksum = new byte[checksumBytesCount];
+            public ByteValue firmwareTarget = 0;
+            public const byte fragmentSizeBytesCount = 2;
+            public byte[] fragmentSize = new byte[fragmentSizeBytesCount];
+            public static implicit operator FIRMWARE_UPDATE_MD_REQUEST_GET(byte[] data)
+            {
+                FIRMWARE_UPDATE_MD_REQUEST_GET ret = new FIRMWARE_UPDATE_MD_REQUEST_GET();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.manufacturerId = (data.Length - index) >= manufacturerIdBytesCount ? new byte[manufacturerIdBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.manufacturerId[0] = data[index++];
+                    if (data.Length > index) ret.manufacturerId[1] = data[index++];
+                    ret.firmwareId = (data.Length - index) >= firmwareIdBytesCount ? new byte[firmwareIdBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.firmwareId[0] = data[index++];
+                    if (data.Length > index) ret.firmwareId[1] = data[index++];
+                    ret.checksum = (data.Length - index) >= checksumBytesCount ? new byte[checksumBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.checksum[0] = data[index++];
+                    if (data.Length > index) ret.checksum[1] = data[index++];
+                    ret.firmwareTarget = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                    ret.fragmentSize = (data.Length - index) >= fragmentSizeBytesCount ? new byte[fragmentSizeBytesCount] : new byte[data.Length - index];
+                    if (data.Length > index) ret.fragmentSize[0] = data[index++];
+                    if (data.Length > index) ret.fragmentSize[1] = data[index++];
+                }
+                return ret;
+            }
+            public static implicit operator byte[](FIRMWARE_UPDATE_MD_REQUEST_GET command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_FIRMWARE_UPDATE_MD_V3.ID);
+                ret.Add(ID);
+                if (command.manufacturerId != null)
+                {
+                    foreach (var tmp in command.manufacturerId)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.firmwareId != null)
+                {
+                    foreach (var tmp in command.firmwareId)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.checksum != null)
+                {
+                    foreach (var tmp in command.checksum)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                if (command.firmwareTarget.HasValue) ret.Add(command.firmwareTarget);
+                if (command.fragmentSize != null)
+                {
+                    foreach (var tmp in command.fragmentSize)
+                    {
+                        ret.Add(tmp);
+                    }
+                }
+                return ret.ToArray();
+            }
+        }
+        public partial class FIRMWARE_UPDATE_MD_REQUEST_REPORT
+        {
+            public const byte ID = 0x04;
+            public ByteValue status = 0;
+            public static implicit operator FIRMWARE_UPDATE_MD_REQUEST_REPORT(byte[] data)
+            {
+                FIRMWARE_UPDATE_MD_REQUEST_REPORT ret = new FIRMWARE_UPDATE_MD_REQUEST_REPORT();
+                if (data != null)
+                {
+                    int index = 2;
+                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
+                }
+                return ret;
+            }
+            public static implicit operator byte[](FIRMWARE_UPDATE_MD_REQUEST_REPORT command)
+            {
+                List<byte> ret = new List<byte>();
+                ret.Add(COMMAND_CLASS_FIRMWARE_UPDATE_MD_V3.ID);
+                ret.Add(ID);
+                if (command.status.HasValue) ret.Add(command.status);
+                return ret.ToArray();
+            }
+        }
         public partial class FIRMWARE_UPDATE_MD_GET
         {
             public const byte ID = 0x05;
@@ -257,100 +351,6 @@ namespace ZWave.CommandClasses
                         ret.Add(tmp);
                     }
                 }
-                return ret.ToArray();
-            }
-        }
-        public partial class FIRMWARE_UPDATE_MD_REQUEST_GET
-        {
-            public const byte ID = 0x03;
-            public const byte manufacturerIdBytesCount = 2;
-            public byte[] manufacturerId = new byte[manufacturerIdBytesCount];
-            public const byte firmwareIdBytesCount = 2;
-            public byte[] firmwareId = new byte[firmwareIdBytesCount];
-            public const byte checksumBytesCount = 2;
-            public byte[] checksum = new byte[checksumBytesCount];
-            public ByteValue firmwareTarget = 0;
-            public const byte fragmentSizeBytesCount = 2;
-            public byte[] fragmentSize = new byte[fragmentSizeBytesCount];
-            public static implicit operator FIRMWARE_UPDATE_MD_REQUEST_GET(byte[] data)
-            {
-                FIRMWARE_UPDATE_MD_REQUEST_GET ret = new FIRMWARE_UPDATE_MD_REQUEST_GET();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.manufacturerId = (data.Length - index) >= manufacturerIdBytesCount ? new byte[manufacturerIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.manufacturerId[0] = data[index++];
-                    if (data.Length > index) ret.manufacturerId[1] = data[index++];
-                    ret.firmwareId = (data.Length - index) >= firmwareIdBytesCount ? new byte[firmwareIdBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.firmwareId[0] = data[index++];
-                    if (data.Length > index) ret.firmwareId[1] = data[index++];
-                    ret.checksum = (data.Length - index) >= checksumBytesCount ? new byte[checksumBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.checksum[0] = data[index++];
-                    if (data.Length > index) ret.checksum[1] = data[index++];
-                    ret.firmwareTarget = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                    ret.fragmentSize = (data.Length - index) >= fragmentSizeBytesCount ? new byte[fragmentSizeBytesCount] : new byte[data.Length - index];
-                    if (data.Length > index) ret.fragmentSize[0] = data[index++];
-                    if (data.Length > index) ret.fragmentSize[1] = data[index++];
-                }
-                return ret;
-            }
-            public static implicit operator byte[](FIRMWARE_UPDATE_MD_REQUEST_GET command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_FIRMWARE_UPDATE_MD_V3.ID);
-                ret.Add(ID);
-                if (command.manufacturerId != null)
-                {
-                    foreach (var tmp in command.manufacturerId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.firmwareId != null)
-                {
-                    foreach (var tmp in command.firmwareId)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.checksum != null)
-                {
-                    foreach (var tmp in command.checksum)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                if (command.firmwareTarget.HasValue) ret.Add(command.firmwareTarget);
-                if (command.fragmentSize != null)
-                {
-                    foreach (var tmp in command.fragmentSize)
-                    {
-                        ret.Add(tmp);
-                    }
-                }
-                return ret.ToArray();
-            }
-        }
-        public partial class FIRMWARE_UPDATE_MD_REQUEST_REPORT
-        {
-            public const byte ID = 0x04;
-            public ByteValue status = 0;
-            public static implicit operator FIRMWARE_UPDATE_MD_REQUEST_REPORT(byte[] data)
-            {
-                FIRMWARE_UPDATE_MD_REQUEST_REPORT ret = new FIRMWARE_UPDATE_MD_REQUEST_REPORT();
-                if (data != null)
-                {
-                    int index = 2;
-                    ret.status = data.Length > index ? (ByteValue)data[index++] : ByteValue.Empty;
-                }
-                return ret;
-            }
-            public static implicit operator byte[](FIRMWARE_UPDATE_MD_REQUEST_REPORT command)
-            {
-                List<byte> ret = new List<byte>();
-                ret.Add(COMMAND_CLASS_FIRMWARE_UPDATE_MD_V3.ID);
-                ret.Add(ID);
-                if (command.status.HasValue) ret.Add(command.status);
                 return ret.ToArray();
             }
         }
