@@ -1,5 +1,5 @@
-/// SPDX-License-Identifier: BSD-3-Clause
-/// SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace ZWave.Xml
         public const string NEW_LINE = "\n"; // Unix line ending, no matter the platform
 
         private const string SPDX_LICENSE_ID_BSD_3 = "SPDX-" + "License-Identifier: BSD-3-Clause";
-        private const string SPDX_FILE_COPYRIGHT_ZWA = "SPDX-" +"FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org";
+        private const string SPDX_FILE_COPYRIGHT_ZWA = "SPDX-" + "FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>";
 
         /// <summary>
         /// Adds license info as C#-style documentation comments
@@ -27,8 +27,8 @@ namespace ZWave.Xml
             {
                 throw new ArgumentNullException();
             }
-            writer.WriteLine($"/// {SPDX_LICENSE_ID_BSD_3}");
-            writer.WriteLine($"/// {SPDX_FILE_COPYRIGHT_ZWA}");
+            writer.WriteLine($"// {SPDX_LICENSE_ID_BSD_3}");
+            writer.WriteLine($"// {SPDX_FILE_COPYRIGHT_ZWA}");
         }
 
         /// <summary>
