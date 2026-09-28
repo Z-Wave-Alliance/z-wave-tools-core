@@ -36,11 +36,13 @@ namespace ZWave.Layers.Transport
 
         [DllImport("basictrans64", EntryPoint = "EnumNativeSerialPorts", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.U4)]
-        private extern static uint EnumNativeSerialPorts64([In, Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPTStr, SizeConst = MAX_ENUM_BUFF)] IntPtr[] ppSerialPorts, int size);
+        private extern static uint EnumNativeSerialPorts64(
+            [In, Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPTStr, SizeConst = MAX_ENUM_BUFF)] IntPtr[] ppSerialPorts, int size);
 
         [DllImport("basictrans32", EntryPoint = "EnumNativeSerialPorts", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.U4)]
-        private extern static uint EnumNativeSerialPorts32([In, Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPTStr, SizeConst = MAX_ENUM_BUFF)] IntPtr[] ppSerialPorts, int size);
+        private extern static uint EnumNativeSerialPorts32(
+            [In, Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPTStr, SizeConst = MAX_ENUM_BUFF)] IntPtr[] ppSerialPorts, int size);
 
         private static uint EnumNativeSerialPorts(IntPtr[] ppSerialPorts, int size)
         {
@@ -186,7 +188,7 @@ namespace ZWave.Layers.Transport
                     Marshal.WriteByte(serialPorts[i], j, 0x00);
             }
             int serialPortsCount = (int)EnumNativeSerialPorts(serialPorts, MAX_ENUM_BUFF);
-            string[] ports = null;
+            string[] ports = Array.Empty<string>();
             if (serialPortsCount > 0)
             {
                 ports = serialPorts.Take(serialPortsCount).Select(x => Marshal.PtrToStringAnsi(x)).ToArray();

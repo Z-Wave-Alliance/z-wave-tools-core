@@ -97,7 +97,7 @@ namespace ZWave.Layers.Transport
                     listUsbSerial = listUsbSerial.Replace("\"", "\\\"");
 
                     var shell = Environment.GetEnvironmentVariable("SHELL");
-                    if (string.IsNullOrWhiteSpace(shell))
+                    if (!string.IsNullOrWhiteSpace(shell))
                     {
                         try
                         {
