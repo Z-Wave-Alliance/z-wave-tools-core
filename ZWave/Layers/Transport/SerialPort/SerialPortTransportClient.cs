@@ -112,11 +112,9 @@ namespace ZWave.Layers.Transport
             InnerDisconnect();
         }
 
-#if NETCOREAPP
         public static string[] GetPortNames(string vid = null, string pid = null)
         {
             return Transport.SerialPortProvider.GetPortNames(vid, pid);
         }
-#endif
     }
 }

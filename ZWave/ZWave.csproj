@@ -212,14 +212,9 @@
     <Compile Include="Layers\Transport\TextTransportClient.cs" />
     <Compile Include="Layers\Transport\TextTransportLayer.cs" />
     <Compile Include="Layers\Transport\SerialPort\ISerialPortProvider.cs" />
-    <Compile Include="Layers\Transport\SerialPort\NativeSerialProviderUnix.cs" />
-    <Compile Include="Layers\Transport\SerialPort\SafeSerialSourceAccess.cs" />
     <Compile Include="Layers\Transport\SerialPort\SerialPortProvider.cs" />
-    <Compile Include="Layers\Transport\SerialPort\SerialPortProviderUnix.cs" />
-    <Compile Include="Layers\Transport\SerialPort\SerialPortProviderWindows.cs" />
     <Compile Include="Layers\Transport\SerialPort\SerialPortTransportClient.cs" />
     <Compile Include="Layers\Transport\SerialPort\SerialPortTransportLayer.cs" />
-    <Compile Include="Layers\Transport\SerialPort\UzbProviderUnix.cs" />
     <Compile Include="Layers\Transport\Tcp\TcpClientTransportClient.cs" />
     <Compile Include="Layers\Transport\Tcp\TcpClientTransportLayer.cs" />
     <Compile Include="Layers\Transport\Tcp\TcpConnection.cs" />
