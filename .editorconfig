@@ -1,8 +1,7 @@
 # .editorconfig <https://editorconfig.org/>
 #
 # SPDX-License-Identifier: BSD-3-Clause
-#
-# SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org/>
+# SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 
 # Default settings for all files
 root = true

@@ -19,5 +19,4 @@
 ## Legal info
 
 SPDX-License-Identifier: BSD-3-Clause
-
-SPDX-FileCopyrightText: 2024 SiliconLabs
+SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>

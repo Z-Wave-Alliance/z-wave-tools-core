@@ -5,6 +5,5 @@ Please refer to the Open Source Working Group
 
 ## Legal Info
 
-SPDX-FileCopyrightText: Z-Wave-Alliance <https://z-wavealliance.org>
-
 SPDX-License-Identifier: BSD-3-Clause
+SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>

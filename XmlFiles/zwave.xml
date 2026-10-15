@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <!--
 SPDX-License-Identifier: BSD-3-Clause
-SPDX-FileCopyrightText: Z-Wave-Alliance https://z-wavealliance.org
+SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 -->
 <zw_classes version="2.20.1">
   <bas_dev key="0x01" name="BASIC_TYPE_CONTROLLER" help="Controller" comment="Node is a portable controller" />
