@@ -327,7 +327,11 @@ namespace ZWaveTests
             Assert.AreEqual(ActionStates.Cancelled, res.State);
         }
 
+        // Waits for the consumer thread to register the actions instead of assuming a fixed delay: as the first test of the
+        // fixture it pays the JIT of the session client plus a file-info stack trace capture, which exceeded 50 ms on loaded
+        // CI runners. Retry(3) is a safety net only, for stalls beyond the 2 s wait.
         [Test]
+        [Retry(3)]
         public void Cancel_ByActionsTypes_SpecifiedActionsTokensAreCancelled()
         {
             // Arrange.
@@ -343,7 +347,7 @@ namespace ZWaveTests
             var token3 = _sessionClient.ExecuteAsync(fakeAction3);
             _sessionClient.ExecuteAsync(sendOp1);
             _sessionClient.ExecuteAsync(sendOp2);
-            Thread.Sleep(50);
+            SpinWait.SpinUntil(() => _sessionClient.RunningActions.Count == 5, 2000);
             Assert.AreEqual(5, _sessionClient.RunningActions.Count);
             _sessionClient.Cancel(typeof(FakeAction));
             var res1 = token1.WaitCompletedSignal();

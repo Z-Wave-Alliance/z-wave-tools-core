@@ -272,19 +272,20 @@ namespace BasicApplicationTests.TransportService
             Assert.AreEqual(NODE_ID_1.Id, GetTransportServiceManager(_ctrlSecond).NodeIdWaitResponded); // Wait(0) was sent to sender.
         }
 
+        // Turns the receiver off before the send starts: the emulated link delivers the whole datagram within a few
+        // milliseconds, so turning it off afterwards raced against the transmission and the send completed instead of
+        // failing. Retry(3) is a safety net only, for the thread-pool stalls described in SetupFixture.
         [Test]
+        [Retry(3)]
         public void SendLongDataFrame_ReceiverTurnedOff_SenderRetransmitsLastFragmentAndFailed()
         {
             // Arrange.
             var expectToken = _ctrlSecond.ExpectData(DataProvider.Datagram.ToArray(),
                 _segmentsCout * TIMEOUT_PER_FRAME + 2 * DefaultTimeouts.TRANSPORT_SERVICE_SEGMENT_COMPLETE_TIMEOUT + 2 * TIMEOUT_PER_FRAME, null);
+            _ctrlSecond.SetRFReceiveMode(0);
 
             // Act.
             var sendDataRes = _ctrlFirst.SendData(NODE_ID_2, DataProvider.Datagram.ToArray(), TXO, new SubstituteSettings(), null);
-
-            //Thread.Sleep(100);
-
-            _ctrlSecond.SetRFReceiveMode(0);
 
             sendDataRes.WaitCompletedSignal();
             var expectRes = (ExpectDataResult)expectToken.WaitCompletedSignal();
