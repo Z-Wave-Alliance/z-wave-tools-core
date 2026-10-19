@@ -51,7 +51,7 @@ jobs:
         uses: microsoft/setup-msbuild@v3
 
       - name: Add VSTest.Console.exe to Path
-        uses: darenm/Setup-VSTest@v1.2
+        uses: darenm/Setup-VSTest@v1.3
 
       - name: Restore NuGet Packages for Z-Wave Tools Core Solution
         run: |
