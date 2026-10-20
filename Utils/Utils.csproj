@@ -107,6 +107,7 @@
     <Compile Include="IntRef.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Tools.cs" />
+    <Compile Include="ToolsCoreVersionInfo.cs" />
     <Compile Include="StringStorage.cs" />
     <Compile Include="ExpressionVisitor.cs" />
     <Compile Include="UI\Logging\LogPacket.cs" />
