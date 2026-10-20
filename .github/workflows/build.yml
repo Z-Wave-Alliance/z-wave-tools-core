@@ -33,6 +33,7 @@ jobs:
   build-and-test-with-dotnet-framework:
     name: Build and test based on .NET Framework
     runs-on: windows-latest
+    timeout-minutes: 30
     env:
       Configuration: Release
       TargetPlatform: "Any CPU"
@@ -96,8 +97,10 @@ jobs:
   build-and-test-with-dotnet-netcore:
     name: Build and test based on .NET ("netcore")
     runs-on: windows-latest
+    timeout-minutes: 30
     env:
       Solution_Path: ${{ github.workspace}}\z-wave-tools-core\ZWaveDll_netcore.sln
+      Results_Path: ${{ github.workspace}}\TestResults
     defaults:
       run:
         shell: powershell
@@ -122,5 +125,18 @@ jobs:
       - name: Build Z-Wave Tools Core .NET Solution in Debug
         run: dotnet build ${{env.Solution_Path}} --configuration Debug --no-restore --verbosity minimal
 
+      # --blame-hang aborts a test host whose current test exceeds the timeout, prints the tests
+      # still in progress and writes a dump; without it a hung host sits silent until the job timeout.
       - name: Run NUnit Tests with dotnet test
-        run: dotnet test ${{env.Solution_Path}} --configuration Debug --no-build --verbosity minimal
+        run: >
+          dotnet test ${{env.Solution_Path}} --configuration Debug --no-build --verbosity minimal
+          --results-directory ${{env.Results_Path}} --blame-hang --blame-hang-timeout 5m
+
+      - name: Upload test results and hang dumps
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: netcore-test-results
+          path: ${{env.Results_Path}}
+          if-no-files-found: ignore
+          retention-days: 7
