@@ -13,8 +13,6 @@ using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using System.Text;
 using ZWave.UicApplication.Layers;
-using System.Security.Cryptography.X509Certificates;
-using System.IO;
 
 namespace UicApplication
 {
@@ -88,41 +86,10 @@ namespace UicApplication
             _mqttClient = mqttFactory.CreateMqttClient();
             MqttClientCredentials mqttClientCredentials = new MqttClientCredentials();
 
-            bool useTls = false;
-            var mqttPort = useTls ? 8883 : 1883;
-
             var optionsBuilder = new MqttClientOptionsBuilder()
-                .WithTcpServer(dataSource.SourceName.Trim(), mqttPort)
+                .WithTcpServer(dataSource.SourceName.Trim(), 1883)
                 .WithCleanSession()
                 .WithKeepAlivePeriod(TimeSpan.FromMinutes(5));
-
-
-            if (useTls)
-            {
-                var caFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"tls-cert/ca.crt");
-                var caPfxFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"tls-cert/client.pfx");
-                var exportPassphrase = "1234";
-
-                var caCert = X509Certificate.CreateFromCertFile(caFilePath);
-                var clientCert = new X509Certificate2(caPfxFilePath, exportPassphrase);
-
-                optionsBuilder = optionsBuilder.WithTls(new MqttClientOptionsBuilderTlsParameters
-                {
-                    UseTls = true,
-                    SslProtocol = System.Security.Authentication.SslProtocols.Tls12,
-                    CertificateValidationHandler = (mqttCallback) =>
-                    {
-
-                    /// Windows trusted certificates do not approve Self-signed. 
-                    /// That's why we add this always true callback.
-                    return true;
-                    },
-                    Certificates = new List<X509Certificate>()
-                    {
-                        caCert, clientCert
-                    }
-                });
-            }
 
             IMqttClientOptions options = optionsBuilder.Build();
 
