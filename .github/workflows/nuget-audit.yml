@@ -1,0 +1,63 @@
+# YAML -*- mode: yaml; tab-width: 2; indent-tabs-mode: nil; coding: utf-8 -*-
+# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
+
+# Reports the known vulnerabilities of the NuGet packages, direct and transitive, that the two solutions resolve.
+# NuGet audits every restore against the GitHub Advisory Database and emits one warning per finding: NU1901 low,
+# NU1902 moderate, NU1903 high, NU1904 critical. The restores here audit all packages, transitive ones included
+# (NuGet 6.x defaults to the direct references), and turn NU1903 and NU1904 into errors, so the job fails on high
+# and critical findings and lists all of them in the log, with the project that resolves the package. Both
+# properties are passed on the command line only, so local builds keep NuGet's defaults. It is deliberately a
+# separate workflow and not a required check, so that a new advisory shows up as a failed check without breaking
+# the build.
+
+name: NuGet Audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC, advisories are published independently of our changes
+
+permissions:
+  contents: read
+
+jobs:
+  nuget-audit:
+    name: Audit NuGet packages for known vulnerabilities
+    runs-on: windows-latest
+    env:
+      Solution_Framework: ${{ github.workspace }}\z-wave-tools-core\ZWaveDll.sln
+      Solution_Netcore: ${{ github.workspace }}\z-wave-tools-core\ZWaveDll_netcore.sln
+      Audit_Mode: -p:NuGetAuditMode=all
+      # %3B is the escaped semicolon of an MSBuild property value
+      Audit_Errors: -p:WarningsAsErrors=NU1903%3BNU1904
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout z-wave-tools-core
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: 'z-wave-tools-core'
+          submodules: 'recursive'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Add MSBuild.exe to Path
+        uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
+
+      # RestorePackagesConfig includes the packages.config projects, which -t:Restore skips otherwise.
+      - name: Restore the .NET Framework solution, failing on high and critical vulnerabilities
+        run: MSBuild.exe "$Solution_Framework" -t:Restore -p:RestorePackagesConfig=true -verbosity:minimal "$Audit_Mode" "$Audit_Errors"
+
+      - name: Restore the .NET solution, failing on high and critical vulnerabilities
+        if: ${{ !cancelled() }}
+        run: dotnet restore "$Solution_Netcore" --verbosity minimal "$Audit_Mode" "$Audit_Errors"
