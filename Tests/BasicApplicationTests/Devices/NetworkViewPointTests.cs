@@ -279,5 +279,135 @@ namespace BasicApplicationTests.Devices
                 }
             }
         }
+
+        // Two Command Classes the NetworkViewPoint treats as supported non-securely (Z-Wave Plus Info, Security 2) and two it
+        // treats as supported securely (Version, Association), so the NIF derivation has something to keep and something to drop.
+        private static readonly byte[] CONFIGURED_COMMAND_CLASSES =
+        {
+            ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO_V2.ID,
+            ZWave.CommandClasses.COMMAND_CLASS_SECURITY_2.ID,
+            ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID,
+            ZWave.CommandClasses.COMMAND_CLASS_ASSOCIATION.ID
+        };
+
+        private static readonly byte[] NON_SECURE_COMMAND_CLASSES =
+        {
+            ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO_V2.ID,
+            ZWave.CommandClasses.COMMAND_CLASS_SECURITY_2.ID
+        };
+
+        private static readonly byte[] SECURE_COMMAND_CLASSES =
+        {
+            ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID,
+            ZWave.CommandClasses.COMMAND_CLASS_ASSOCIATION.ID
+        };
+
+        private static NetworkViewPoint CreateIncludedNetwork()
+        {
+            var network = new NetworkViewPoint(null);
+            network.NodeTag = new NodeTag(1);
+            network.SetCommandClasses(CONFIGURED_COMMAND_CLASSES);
+            return network;
+        }
+
+        [Test]
+        public void NifCommandClasses_NotIncluded_AdvertisesAllUnlessAccessEndDevice()
+        {
+            var network = CreateIncludedNetwork();
+
+            network.SetNifInclusionState(InclusionStates.NotIncluded, isAccessEndDevice: false);
+            Assert.AreEqual(CONFIGURED_COMMAND_CLASSES, network.GetNifCommandClasses());
+
+            // An Access Control end device leaves its securely supported Command Classes out before its inclusion as well,
+            // like the End Device Serial API, which uses one list when excluded and when included without keys.
+            network.SetNifInclusionState(InclusionStates.NotIncluded, isAccessEndDevice: true);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
+
+        [Test]
+        public void NifCommandClasses_IncludedSecurely_AdvertisesNonSecureOnly()
+        {
+            var network = CreateIncludedNetwork();
+
+            network.SetNifInclusionState(InclusionStates.IncludedSecurely, isAccessEndDevice: false);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+
+            network.SetNifInclusionState(InclusionStates.IncludedSecurely, isAccessEndDevice: true);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
+
+        [Test]
+        public void NifCommandClasses_IncludedNonSecurely_AdvertisesAllUnlessAccessEndDevice()
+        {
+            var network = CreateIncludedNetwork();
+
+            network.SetNifInclusionState(InclusionStates.IncludedNonSecurely, isAccessEndDevice: false);
+            Assert.AreEqual(CONFIGURED_COMMAND_CLASSES, network.GetNifCommandClasses());
+
+            network.SetNifInclusionState(InclusionStates.IncludedNonSecurely, isAccessEndDevice: true);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
+
+        [Test]
+        public void NifCommandClasses_ForAGivenState_IgnoreTheCurrentState()
+        {
+            // The End Device Serial API keeps the list for the time without keys next to the lists for the time with keys, so
+            // the list of a state is available while the own state is another one.
+            var network = CreateIncludedNetwork();
+
+            network.SetNifInclusionState(InclusionStates.IncludedSecurely, isAccessEndDevice: false);
+            Assert.AreEqual(CONFIGURED_COMMAND_CLASSES, network.GetNifCommandClasses(InclusionStates.IncludedNonSecurely));
+            Assert.AreEqual(CONFIGURED_COMMAND_CLASSES, network.GetNifCommandClasses(InclusionStates.NotIncluded));
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+
+            network.SetNifInclusionState(InclusionStates.IncludedNonSecurely, isAccessEndDevice: true);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses(InclusionStates.NotIncluded));
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses(InclusionStates.IncludedSecurely));
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
+
+        [Test]
+        public void NifCommandClasses_DefaultState_IsNotIncluded()
+        {
+            var network = CreateIncludedNetwork();
+
+            Assert.AreEqual(InclusionStates.NotIncluded, network.NifInclusionState);
+            Assert.AreEqual(CONFIGURED_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
+
+        [Test]
+        public void SetNifInclusionStateByKeys_FollowsNodeIdAndKeys()
+        {
+            var network = new NetworkViewPoint(null);
+
+            // No NodeId: not included.
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: false);
+            Assert.AreEqual(InclusionStates.NotIncluded, network.NifInclusionState);
+
+            // The NodeId setter grants the own node the enabled schemes, like a Primary Controller holding its network keys.
+            network.NodeTag = new NodeTag(1);
+            network.SetCommandClasses(CONFIGURED_COMMAND_CLASSES);
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: false);
+            Assert.AreEqual(InclusionStates.IncludedSecurely, network.NifInclusionState);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+
+            // A failed bootstrapping drops the keys.
+            network.ResetSecuritySchemes();
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: false);
+            Assert.AreEqual(InclusionStates.IncludedNonSecurely, network.NifInclusionState);
+            Assert.AreEqual(CONFIGURED_COMMAND_CLASSES, network.GetNifCommandClasses());
+
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
+
+        [Test]
+        public void NonSecureCommandClasses_AreConfiguredWithoutSecure()
+        {
+            var network = CreateIncludedNetwork();
+
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNonSecureCommandClasses());
+            Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSecureCommandClasses());
+        }
     }
 }
