@@ -122,6 +122,7 @@
     <Compile Include="Enums\FrameTypes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\InclusionStates.cs" />
     <Compile Include="Enums\LearnModes.cs" />
     <Compile Include="Enums\Modes.cs" />
     <Compile Include="Enums\SubstituteStatuses.cs" />

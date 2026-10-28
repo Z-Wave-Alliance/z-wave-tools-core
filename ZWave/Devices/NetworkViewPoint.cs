@@ -638,9 +638,12 @@ namespace ZWave.Devices
             }
         }
 
-        public bool HasNetworkAwareCommandClass(byte cmdClass)
+        /// <summary>
+        /// Whether <see cref="GetNifCommandClasses"/> contains the Command Class.
+        /// </summary>
+        public bool HasNifCommandClass(byte cmdClass)
         {
-            return GetNetworkAwareCommandClasses().Contains(cmdClass);
+            return GetNifCommandClasses().Contains(cmdClass);
         }
 
         public virtual bool HasCommandClass(byte cmdClass)
@@ -661,17 +664,77 @@ namespace ZWave.Devices
             }
         }
 
-        public byte[] GetNetworkAwareCommandClasses()
+        private InclusionStates _nifInclusionState = InclusionStates.NotIncluded;
+        private bool _isAccessEndDevice;
+
+        /// <summary>
+        /// The inclusion state set with <see cref="SetNifInclusionState"/>; <see cref="InclusionStates.NotIncluded"/> until set.
+        /// </summary>
+        public InclusionStates NifInclusionState
         {
-            var commandClasses = GetCommandClasses(NodeTag);
-            if (NodeTag.Id > 1 && commandClasses != null && (commandClasses.Contains(COMMAND_CLASS_SECURITY.ID) || commandClasses.Contains(COMMAND_CLASS_SECURITY_2.ID)))
-            {
-                return commandClasses.Where(x => !_secureCommandClasses.Contains(x)).ToArray();
-            }
-            else
-            {
-                return commandClasses;
-            }
+            get { return _nifInclusionState; }
+        }
+
+        /// <summary>
+        /// Sets <see cref="NifInclusionState"/> and whether the own node is an Access Control end device, the inputs of
+        /// <see cref="GetNifCommandClasses"/>.
+        /// </summary>
+        /// <param name="isAccessEndDevice">
+        /// Whether the own node is an end device (supporting Device Type) requesting the S2 Access Control Security Class.
+        /// </param>
+        public void SetNifInclusionState(InclusionStates state, bool isAccessEndDevice)
+        {
+            _nifInclusionState = state;
+            _isAccessEndDevice = isAccessEndDevice;
+        }
+
+        /// <summary>
+        /// Sets <see cref="NifInclusionState"/> from the own NodeId and S0/S2 keys: No NodeId means
+        /// <see cref="InclusionStates.NotIncluded"/>, no key <see cref="InclusionStates.IncludedNonSecurely"/>, a key
+        /// <see cref="InclusionStates.IncludedSecurely"/>. Not for a node in Learn Mode, which keeps its old NodeId and keys
+        /// until the inclusion completes.
+        /// </summary>
+        /// <param name="isAccessEndDevice">See <see cref="SetNifInclusionState"/>.</param>
+        public void SetNifInclusionStateByKeys(bool isAccessEndDevice)
+        {
+            InclusionStates state = NodeTag.Id == 0 ? InclusionStates.NotIncluded
+                : HasSecurityScheme(SecuritySchemeSet.ALL) ? InclusionStates.IncludedSecurely
+                : InclusionStates.IncludedNonSecurely;
+            SetNifInclusionState(state, isAccessEndDevice);
+        }
+
+        /// <summary>
+        /// The Command Classes the own node advertises in its NIF in <see cref="NifInclusionState"/>, see
+        /// <see cref="GetNifCommandClasses(InclusionStates)"/>.
+        /// </summary>
+        public byte[] GetNifCommandClasses()
+        {
+            return GetNifCommandClasses(_nifInclusionState);
+        }
+
+        /// <summary>
+        /// The Command Classes to advertise in the NIF in the given inclusion state, derived from the configured ones:
+        /// A node that is not included or holds no key advertises every Command Class [DT:00.21.0004.1]; a node holding an
+        /// S0/S2 key, which includes a Primary Controller, advertises only the non-securely supported ones and the securely
+        /// supported ones in its S0/S2 Commands Supported Report instead [CC:009F.01.00.21.00B]; an end device requesting S2
+        /// Access Control advertises only the non-securely supported ones in every state, since it must not support the others
+        /// without a key [DT:00.21.000D.1] and may leave them out before its inclusion [CC:0000.00.00.11.00C]. The securely
+        /// supported Command Classes are the ones <see cref="GetSecureCommandClasses()"/> reports. An End Device Serial API
+        /// selects the list by its own keys, so its list for the time without keys is the one of
+        /// <see cref="InclusionStates.IncludedNonSecurely"/> whatever <see cref="NifInclusionState"/> is.
+        /// </summary>
+        public byte[] GetNifCommandClasses(InclusionStates state)
+        {
+            bool nonSecureOnly = state == InclusionStates.IncludedSecurely || _isAccessEndDevice;
+            return nonSecureOnly ? GetNonSecureCommandClasses() : GetCommandClasses(NodeTag);
+        }
+
+        /// <summary>
+        /// The configured Command Classes of the own node that are not in <see cref="OwnSecureCommandClasses"/>.
+        /// </summary>
+        public byte[] GetNonSecureCommandClasses()
+        {
+            return GetSecureFilteredCommandClasses(GetCommandClasses(NodeTag), false);
         }
 
         public virtual byte[] GetCommandClasses()

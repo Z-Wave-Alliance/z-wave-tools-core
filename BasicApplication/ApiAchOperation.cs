@@ -380,7 +380,7 @@ namespace ZWave.BasicApplication.Operations
                 }
                 else
                 {
-                    if (scheme == SecuritySchemes.NONE && !network.HasNetworkAwareCommandClass(command[0]) && network.HasSecurityScheme(SecuritySchemeSet.ALL))
+                    if (scheme == SecuritySchemes.NONE && !network.HasNifCommandClass(command[0]) && network.HasSecurityScheme(SecuritySchemeSet.ALL))
                     {
                         ret = !network.HasSecureCommandClass(command[0]);
                     }
