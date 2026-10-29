@@ -58,6 +58,17 @@ namespace ZWave.Devices
             COMMAND_CLASS_NOTIFICATION_V8.ID,
         };
 
+        private byte[] _ownSecureCommandClasses;
+
+        /// <summary>
+        /// The Command Classes the own node supports securely: The ones the application set with
+        /// <see cref="SetSecureCommandClasses(byte[])"/>, or the default list of a controller application when it set none.
+        /// </summary>
+        private byte[] OwnSecureCommandClasses
+        {
+            get { return _ownSecureCommandClasses ?? _secureCommandClasses; }
+        }
+
         public static byte[] HighSecureCommandClasses = new byte[] // According to SDS13548
         {
             COMMAND_CLASS_ZWAVEPLUS_INFO_V2.ID,
@@ -478,17 +489,21 @@ namespace ZWave.Devices
             return GetSecureCommandClasses(NodeTag);
         }
 
+        /// <summary>
+        /// Splits the given Command Classes of the own node by <see cref="OwnSecureCommandClasses"/> into the securely
+        /// supported part or the non-securely supported part.
+        /// </summary>
         public byte[] GetSecureFilteredCommandClasses(byte[] commandClasses, bool securePart)
         {
             if (commandClasses != null)
             {
                 if (securePart)
                 {
-                    return _secureCommandClasses.Where(x => commandClasses.Contains(x)).ToArray();
+                    return OwnSecureCommandClasses.Where(x => commandClasses.Contains(x)).ToArray();
                 }
                 else
                 {
-                    return commandClasses.Where(x => !_secureCommandClasses.Contains(x)).ToArray();
+                    return commandClasses.Where(x => !OwnSecureCommandClasses.Contains(x)).ToArray();
                 }
             }
             else
@@ -497,21 +512,15 @@ namespace ZWave.Devices
             }
         }
 
+        /// <summary>
+        /// The securely supported Command Classes of a node. For the own node they are its configured Command Classes that are
+        /// in <see cref="OwnSecureCommandClasses"/>.
+        /// </summary>
         public virtual byte[] GetSecureCommandClasses(NodeTag node)
         {
             if (!IsZipGateway && node == NodeTag)
             {
-                var commandClasses = GetCommandClasses(node);
-                if (commandClasses != null)
-                {
-                    //Shouldn't we return the Command Classes that are secured for a specific device? Not only the ones defined on _secureCommandClasses ....
-                    return _secureCommandClasses.Where(x => commandClasses.Contains(x)).ToArray();
-                    //return commandClasses;
-                }
-                else
-                {
-                    return null;
-                }
+                return GetSecureFilteredCommandClasses(GetCommandClasses(node), true);
             }
             else
             {
@@ -629,7 +638,7 @@ namespace ZWave.Devices
             {
                 if (node == NodeTag)
                 {
-                    return _secureCommandClasses.Contains(cmdClass);
+                    return OwnSecureCommandClasses.Contains(cmdClass);
                 }
                 else
                 {
@@ -881,9 +890,23 @@ namespace ZWave.Devices
             }
         }
 
+        /// <summary>
+        /// Stores the securely supported Command Classes a node reported. For the own node use
+        /// <see cref="SetSecureCommandClasses(byte[])"/>.
+        /// </summary>
         public void SetSecureCommandClasses(NodeTag node, byte[] cmdClasses)
         {
             Nodes[node].SetSecureCommandClasses(cmdClasses);
+        }
+
+        /// <summary>
+        /// Sets the Command Classes the own node supports securely, which an application emulating a device decides. Null
+        /// returns to the default list of a controller application. The S0/S2 Commands Supported Report, the NIF (see
+        /// <see cref="GetNifCommandClasses"/>) and the handling of non-secure commands follow the list.
+        /// </summary>
+        public void SetSecureCommandClasses(byte[] cmdClasses)
+        {
+            _ownSecureCommandClasses = cmdClasses;
         }
 
         public int GetTimeoutValue(NodeTag[] nodeIds, bool IsInclusion)
