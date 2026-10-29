@@ -50,7 +50,6 @@ namespace ZWave.Devices
             COMMAND_CLASS_MULTI_CHANNEL_V4.ID,
             COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V3.ID,
             COMMAND_CLASS_WAKE_UP_V2.ID,
-            COMMAND_CLASS_TIME_V2.ID,
 
             // Multi Channel Support only. Not presented in supported CCs.
             COMMAND_CLASS_SWITCH_BINARY_V2.ID,
@@ -61,13 +60,35 @@ namespace ZWave.Devices
         private byte[] _ownSecureCommandClasses;
 
         /// <summary>
-        /// The Command Classes the own node supports securely: The ones the application set with
-        /// <see cref="SetSecureCommandClasses(byte[])"/>, or the default list of a controller application when it set none.
+        /// The Command Classes the own node supports securely: The list set with <see cref="SetSecureCommandClasses(byte[])"/>,
+        /// or the default list when none is set, in both cases without the <see cref="AlwaysNifCommandClasses"/>.
         /// </summary>
         private byte[] OwnSecureCommandClasses
         {
-            get { return _ownSecureCommandClasses ?? _secureCommandClasses; }
+            get { return (_ownSecureCommandClasses ?? _secureCommandClasses).Where(x => !AlwaysNifCommandClasses.Contains(x)).ToArray(); }
         }
+
+        /// <summary>
+        /// The Command Classes the specification defines as always supported non-securely, so a supporting node advertises them
+        /// in its NIF regardless of the inclusion status and the security bootstrapping outcome: Z-Wave Plus Info
+        /// [CC:005E.02.00.21.001], Security 2 [CC:009F.01.00.21.008], Supervision [CC:006C.01.00.21.001], Transport Service
+        /// [CC:0055.02.00.21.003], CRC-16 Encapsulation [CC:0056.01.00.21.001], Multi Command [CC:008F.01.00.21.005],
+        /// Application Status, Time [CC:008A.01.00.21.001], Inclusion Controller [CC:0074.01.00.21.002] and Wake On Critical
+        /// Message [CC:008D.01.00.21.001].
+        /// </summary>
+        public static readonly byte[] AlwaysNifCommandClasses = new byte[]
+        {
+            COMMAND_CLASS_ZWAVEPLUS_INFO.ID,
+            COMMAND_CLASS_SECURITY_2.ID,
+            COMMAND_CLASS_SUPERVISION.ID,
+            COMMAND_CLASS_TRANSPORT_SERVICE.ID,
+            COMMAND_CLASS_CRC_16_ENCAP.ID,
+            COMMAND_CLASS_MULTI_CMD.ID,
+            COMMAND_CLASS_APPLICATION_STATUS.ID,
+            COMMAND_CLASS_TIME.ID,
+            COMMAND_CLASS_INCLUSION_CONTROLLER.ID,
+            COMMAND_CLASS_WAKE_ON_CRITICAL_MESSAGE.ID
+        };
 
         public static byte[] HighSecureCommandClasses = new byte[] // According to SDS13548
         {
@@ -490,8 +511,8 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// Splits the given Command Classes of the own node by <see cref="OwnSecureCommandClasses"/> into the securely
-        /// supported part or the non-securely supported part.
+        /// The given Command Classes that are in <see cref="OwnSecureCommandClasses"/> if <paramref name="securePart"/> is true,
+        /// otherwise the ones that are not; null if <paramref name="commandClasses"/> is null.
         /// </summary>
         public byte[] GetSecureFilteredCommandClasses(byte[] commandClasses, bool securePart)
         {
@@ -722,14 +743,11 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// The Command Classes to advertise in the NIF in the given inclusion state, derived from the configured ones:
-        /// A node that is not included or holds no key advertises every Command Class [DT:00.21.0004.1]; a node holding an
-        /// S0/S2 key, which includes a Primary Controller, advertises only the non-securely supported ones and the securely
-        /// supported ones in its S0/S2 Commands Supported Report instead [CC:009F.01.00.21.00B]; an end device requesting S2
-        /// Access Control advertises only the non-securely supported ones in every state, since it must not support the others
-        /// without a key [DT:00.21.000D.1] and may leave them out before its inclusion [CC:0000.00.00.11.00C]. The securely
-        /// supported Command Classes are the ones <see cref="GetSecureCommandClasses()"/> reports. An End Device Serial API
-        /// selects the list by its own keys, so its list for the time without keys is the one of
+        /// The Command Classes the own node advertises in its NIF in the given inclusion state: Only the non-securely
+        /// supported ones (<see cref="GetNonSecureCommandClasses"/>) when included securely [CC:009F.01.00.21.00B], or in
+        /// every state as an Access Control end device, which must not support the others without a key [DT:00.21.000D.1] and
+        /// may leave them out before its inclusion [CC:0000.00.00.11.00C]; otherwise all configured ones [DT:00.21.0004.1].
+        /// An End Device Serial API selects the list by its own keys, so its list for the time without keys is the one of
         /// <see cref="InclusionStates.IncludedNonSecurely"/> whatever <see cref="NifInclusionState"/> is.
         /// </summary>
         public byte[] GetNifCommandClasses(InclusionStates state)
@@ -900,9 +918,8 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// Sets the Command Classes the own node supports securely, which an application emulating a device decides. Null
-        /// returns to the default list of a controller application. The S0/S2 Commands Supported Report, the NIF (see
-        /// <see cref="GetNifCommandClasses"/>) and the handling of non-secure commands follow the list.
+        /// Sets the Command Classes the own node supports securely; null restores the default list. The
+        /// <see cref="AlwaysNifCommandClasses"/> in the list are ignored.
         /// </summary>
         public void SetSecureCommandClasses(byte[] cmdClasses)
         {

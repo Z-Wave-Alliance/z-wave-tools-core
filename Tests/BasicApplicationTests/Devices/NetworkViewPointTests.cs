@@ -411,6 +411,39 @@ namespace BasicApplicationTests.Devices
         }
 
         [Test]
+        public void AlwaysNifCommandClasses_AreNeverSecureAndStayInTheNif()
+        {
+            // Time is in the NIF in every state and never in the S0/S2 Commands Supported Report, also when the application
+            // declares it securely supported together with Version.
+            var network = new NetworkViewPoint(null);
+            network.NodeTag = new NodeTag(1);
+            network.SetCommandClasses(new byte[]
+            {
+                ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_TIME.ID
+            });
+            network.SetSecureCommandClasses(new byte[]
+            {
+                ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_TIME.ID
+            });
+            network.SetNifInclusionState(InclusionStates.IncludedSecurely, isAccessEndDevice: true);
+
+            byte[] nifCommandClasses = new byte[]
+            {
+                ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_TIME.ID
+            };
+            Assert.AreEqual(nifCommandClasses, network.GetNifCommandClasses());
+            Assert.AreEqual(nifCommandClasses, network.GetNonSecureCommandClasses());
+            Assert.AreEqual(new byte[] { ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID }, network.GetSecureCommandClasses());
+            Assert.IsTrue(network.HasNifCommandClass(ZWave.CommandClasses.COMMAND_CLASS_TIME.ID));
+            Assert.IsFalse(network.HasSecureCommandClass(ZWave.CommandClasses.COMMAND_CLASS_TIME.ID));
+            Assert.IsFalse(network.HasNifCommandClass(ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID));
+        }
+
+        [Test]
         public void SecureCommandClassesOfOwnNode_FollowTheListTheApplicationSets()
         {
             var network = CreateIncludedNetwork();
