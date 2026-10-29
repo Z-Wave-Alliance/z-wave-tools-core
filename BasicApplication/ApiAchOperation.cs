@@ -361,37 +361,21 @@ namespace ZWave.BasicApplication.Operations
 
         }
 
-        protected bool IsSupportedScheme(NetworkViewPoint network, NodeTag node, byte[] command, SecuritySchemes scheme)
+        /// <summary>
+        /// Whether the own node handles the received command at the Security Class it arrived at, see
+        /// <see cref="IsHandlingAllowed(NetworkViewPoint, byte[], SecuritySchemes, bool)"/>. A Command Class the own node does not
+        /// advertise in its NIF counts as securely supported.
+        /// </summary>
+        protected bool IsHandlingAllowed(NetworkViewPoint network, byte[] command, SecuritySchemes scheme)
         {
-            bool ret = false;
-            if (command != null && command.Length > 0)
-            {
-                if (network.IsSecuritySchemesSpecified(node))
-                {
-                    if (scheme == SecuritySchemes.NONE)
-                    {
-                        ret = network.GetSecuritySchemes(node) == null
-                            || network.GetSecuritySchemes(node).Intersect(SecuritySchemeSet.ALL).Any();
-                    }
-                    else
-                    {
-                        ret = true;
-                    }
-                }
-                else
-                {
-                    if (scheme == SecuritySchemes.NONE && !network.HasNifCommandClass(command[0]) && network.HasSecurityScheme(SecuritySchemeSet.ALL))
-                    {
-                        ret = !network.HasSecureCommandClass(command[0]);
-                    }
-                    else
-                    {
-                        ret = true;
-                    }
-                }
-            }
-            return ret;
+            return command != null && command.Length > 0 && IsHandlingAllowed(network, command, scheme, !network.HasNifCommandClass(command[0]));
         }
+
+        /// <summary>
+        /// Whether the own node handles the received command at the Security Class it arrived at: At its highest granted Security
+        /// Class always, below it only a non-securely supported Command Class [CC:009F.01.00.21.00B], and no Multi Channel
+        /// encapsulated command at all.
+        /// </summary>
         protected virtual bool IsHandlingAllowed(NetworkViewPoint network, byte[] command, SecuritySchemes scheme, bool secureCommandClass)
         {
             bool ret = false;

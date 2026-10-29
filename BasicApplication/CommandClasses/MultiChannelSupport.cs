@@ -79,7 +79,7 @@ namespace ZWave.BasicApplication.CommandClasses
             var node = ReceivedAchData.SrcNode;
             byte[] command = ReceivedAchData.Command;
             var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
-            bool isSuportedScheme = IsSupportedScheme(_network, node, command, scheme);
+            bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
             var substituteFlags = ReceivedAchData.SubstituteIncomingFlags;
             var sendData = new SendDataExOperation(_network, node, null, TxOptions, scheme);
             if (substituteFlags.HasFlag(SubstituteIncomingFlags.Crc16Encap))
@@ -87,7 +87,7 @@ namespace ZWave.BasicApplication.CommandClasses
                 sendData.SubstituteSettings.SetFlag(SubstituteFlags.UseCrc16Encap);
             }
 
-            if (command != null && command.Length > 1 && isSuportedScheme)
+            if (command != null && command.Length > 1 && isHandlingAllowed)
             {
                 if (command[1] == COMMAND_CLASS_MULTI_CHANNEL_V4.MULTI_CHANNEL_END_POINT_GET.ID)
                 {

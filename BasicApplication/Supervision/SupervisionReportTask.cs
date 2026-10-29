@@ -47,8 +47,8 @@ namespace ZWave.BasicApplication
                 var node = ReceivedAchData.SrcNode;
                 byte[] command = ReceivedAchData.Command;
                 var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
-                bool isSuportedScheme = IsSupportedScheme(_network, node, command, scheme);
-                if (command != null && command.Length > 1 && isSuportedScheme)
+                bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
+                if (command != null && command.Length > 1 && isHandlingAllowed)
                 {
                     if (command[1] == COMMAND_CLASS_SUPERVISION.SUPERVISION_GET.ID)
                     {
