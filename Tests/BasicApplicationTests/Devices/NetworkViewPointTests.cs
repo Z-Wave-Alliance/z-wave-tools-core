@@ -409,5 +409,32 @@ namespace BasicApplicationTests.Devices
             Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNonSecureCommandClasses());
             Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSecureCommandClasses());
         }
+
+        [Test]
+        public void SecureCommandClassesOfOwnNode_FollowTheListTheApplicationSets()
+        {
+            var network = CreateIncludedNetwork();
+            network.SetNifInclusionState(InclusionStates.IncludedSecurely, isAccessEndDevice: false);
+
+            // The application declares only Association secure, so Version moves into the NIF.
+            network.SetSecureCommandClasses(new byte[] { ZWave.CommandClasses.COMMAND_CLASS_ASSOCIATION.ID });
+            Assert.AreEqual(new byte[] { ZWave.CommandClasses.COMMAND_CLASS_ASSOCIATION.ID }, network.GetSecureCommandClasses());
+            Assert.IsTrue(network.HasSecureCommandClass(ZWave.CommandClasses.COMMAND_CLASS_ASSOCIATION.ID));
+            Assert.IsFalse(network.HasSecureCommandClass(ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID));
+            Assert.AreEqual(
+                new byte[]
+                {
+                    ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO_V2.ID,
+                    ZWave.CommandClasses.COMMAND_CLASS_SECURITY_2.ID,
+                    ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID
+                },
+                network.GetNifCommandClasses());
+
+            // The list set for the own node by NodeTag is the report of an other node and does not apply to the own node.
+            network.SetSecureCommandClasses(null);
+            network.SetSecureCommandClasses(network.NodeTag, new byte[] { ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO_V2.ID });
+            Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSecureCommandClasses());
+            Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNifCommandClasses());
+        }
     }
 }
