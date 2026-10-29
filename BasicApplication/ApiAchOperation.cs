@@ -373,33 +373,35 @@ namespace ZWave.BasicApplication.Operations
 
         /// <summary>
         /// Whether the own node handles the received command at the Security Class it arrived at: At its highest granted Security
-        /// Class always, below it only a non-securely supported Command Class [CC:009F.01.00.21.00B], and no Multi Channel
-        /// encapsulated command at all.
+        /// Class always, below it only a non-securely supported Command Class [CC:009F.01.00.21.00B]. A Multi Channel encapsulated
+        /// command for an End Point is handled only if the own node supports the Multi Channel Command Class at that Security
+        /// Class as well; one for the Root Device is handled by every node, since any node may receive it from a Multi Channel
+        /// Association.
         /// </summary>
         protected virtual bool IsHandlingAllowed(NetworkViewPoint network, byte[] command, SecuritySchemes scheme, bool secureCommandClass)
         {
-            bool ret = false;
-            if (network.GetHighestSecurityScheme() == scheme)
+            if (command == null || command.Length == 0)
             {
-                ret = true;
+                return false;
             }
-            else
+            if (ReceivedAchData.SubstituteIncomingFlags.HasFlag(SubstituteIncomingFlags.MultiChannel) &&
+                (ReceivedAchData.DstNode.EndPointId > 0 || ReceivedAchData.DstNode.IsBitAddress) &&
+                !IsMultiChannelSupportedAt(network, scheme))
             {
-                // It is assumed that the Multi Channel CC is always a secure CC. 
-                // This means if a command with MC encap is received it will not be answered on lower security classes even if
-                // the Multi Channel CC is listed in the normal NIF. This is a known issue for the time being.
-                if (!ReceivedAchData.SubstituteIncomingFlags.HasFlag(SubstituteIncomingFlags.MultiChannel))
-                {
-                    if (command != null && command.Length > 0)
-                    {
-                        if (!secureCommandClass)
-                        {
-                            ret = true;
-                        }
-                    }
-                }
+                return false;
             }
-            return ret;
+            return scheme == network.GetHighestSecurityScheme() || !secureCommandClass;
+        }
+
+        /// <summary>
+        /// Whether the own node supports the Multi Channel Command Class at the given Security Class: In its NIF at any class,
+        /// as a securely supported Command Class at its highest granted Security Class only.
+        /// </summary>
+        private static bool IsMultiChannelSupportedAt(NetworkViewPoint network, SecuritySchemes scheme)
+        {
+            return network.HasNifCommandClass(COMMAND_CLASS_MULTI_CHANNEL_V4.ID) ||
+                (scheme != SecuritySchemes.NONE && scheme == network.GetHighestSecurityScheme() &&
+                    network.HasSecureCommandClass(COMMAND_CLASS_MULTI_CHANNEL_V4.ID));
         }
     }
 
