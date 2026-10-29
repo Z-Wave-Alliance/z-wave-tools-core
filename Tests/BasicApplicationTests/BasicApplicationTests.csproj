@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiAchOperationTests.cs" />
     <Compile Include="Crc16Encap\SendDataCrc16EncapTests.cs" />
     <Compile Include="Devices\NetworkViewPointTests.cs" />
     <Compile Include="FakeAction.cs" />

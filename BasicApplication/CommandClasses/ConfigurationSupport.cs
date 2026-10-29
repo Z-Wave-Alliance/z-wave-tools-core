@@ -43,12 +43,12 @@ namespace ZWave.BasicApplication.CommandClasses
                 var node = ReceivedAchData.SrcNode;
                 byte[] command = ReceivedAchData.Command;
                 var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
-                bool isSupportedScheme = IsSupportedScheme(_network, node, command, scheme);
+                bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
 
                 byte[] response = null;
                 ApiOperation sendData = null;
 
-                if (command != null && command.Length > 1 && isSupportedScheme)
+                if (command != null && command.Length > 1 && isHandlingAllowed)
                 {
                     switch (command[1])
                     {

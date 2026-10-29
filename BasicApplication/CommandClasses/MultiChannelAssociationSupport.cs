@@ -55,8 +55,8 @@ namespace ZWave.BasicApplication.CommandClasses
             var node = ReceivedAchData.SrcNode;
             byte[] command = ReceivedAchData.Command;
             var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
-            bool isSuportedScheme = IsSupportedScheme(_network, node, command, scheme);
-            if (command != null && command.Length > 1 && isSuportedScheme)
+            bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
+            if (command != null && command.Length > 1 && isHandlingAllowed)
             {
                 if (command[1] == COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V3.MULTI_CHANNEL_ASSOCIATION_GET.ID)
                 {
