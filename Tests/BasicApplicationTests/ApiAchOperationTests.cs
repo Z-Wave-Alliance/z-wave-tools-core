@@ -142,6 +142,20 @@ namespace BasicApplicationTests
         }
 
         [Test]
+        public void IsHandlingAllowed_WithoutOwnCommandClasses_CountsEveryCommandClassAsSecure()
+        {
+            // Right after start-up the own Command Classes are not set yet, so the NIF is empty and only the highest Security
+            // Class comparison applies.
+            var network = new NetworkViewPoint(null);
+            network.NodeTag = new NodeTag(1);
+            var gate = new HandlingGate(network);
+
+            Assert.IsFalse(network.HasNifCommandClass(COMMAND_CLASS_ZWAVEPLUS_INFO.ID));
+            Assert.IsTrue(gate.Allows(ZWAVEPLUS_INFO_GET, SecuritySchemes.S2_ACCESS));
+            Assert.IsFalse(gate.Allows(ZWAVEPLUS_INFO_GET, SecuritySchemes.NONE));
+        }
+
+        [Test]
         public void IsHandlingAllowed_EmptyCommand_IsRefused()
         {
             var gate = new HandlingGate(CreateNetwork());

@@ -669,11 +669,12 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// Whether <see cref="GetNifCommandClasses"/> contains the Command Class.
+        /// Whether <see cref="GetNifCommandClasses"/> contains the Command Class; false while the own Command Classes are not set.
         /// </summary>
         public bool HasNifCommandClass(byte cmdClass)
         {
-            return GetNifCommandClasses().Contains(cmdClass);
+            byte[] nifCommandClasses = GetNifCommandClasses();
+            return nifCommandClasses != null && nifCommandClasses.Contains(cmdClass);
         }
 
         public virtual bool HasCommandClass(byte cmdClass)
