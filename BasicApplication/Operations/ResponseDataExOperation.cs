@@ -149,8 +149,8 @@ namespace ZWave.BasicApplication.Operations
                         var scheme = IsSecuritySchemeSpecified ? SecurityScheme : (SecuritySchemes)ReceivedAchData.SecurityScheme;
                         foreach (var command in Data)
                         {
-                            bool isSuportedScheme = IsSupportedScheme(_network, node, command, scheme);
-                            if (command != null && command.Length > 1 && isSuportedScheme)
+                            bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
+                            if (command != null && command.Length > 1 && isHandlingAllowed)
                             {
                                 CallbackApiOperation operation = null;
                                 operation = new SendDataExOperation(_network, ReceivedAchData.DstNode, ReceivedAchData.SrcNode, command, TxOptions, TxSecOptions, scheme, TxOptions2);

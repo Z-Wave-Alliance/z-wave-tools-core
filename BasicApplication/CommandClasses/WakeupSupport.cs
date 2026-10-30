@@ -37,8 +37,8 @@ namespace ZWave.BasicApplication.CommandClasses
                 var node = ReceivedAchData.SrcNode;
                 byte[] command = ReceivedAchData.Command;
                 var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
-                bool isSuportedScheme = IsSupportedScheme(_network, node, command, scheme);
-                if (isSuportedScheme && command != null && command.Length > 1)
+                bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
+                if (isHandlingAllowed && command != null && command.Length > 1)
                 {
                     if (command[1] == COMMAND_CLASS_WAKE_UP_V2.WAKE_UP_INTERVAL_CAPABILITIES_GET.ID)
                     {

@@ -40,11 +40,11 @@ namespace ZWave.BasicApplication.CommandClasses
             var scheme = (SecuritySchemes)ReceivedAchData.SecurityScheme;
 
             // SDS13782: CC:0072.01.00.41.004:
-            bool isSuportedScheme = IsSupportedScheme(_network, node, command, scheme);
+            bool isHandlingAllowed = IsHandlingAllowed(_network, command, scheme);
             //SDS13782: CC:0072.01.04.11.003 | CC:0072.02.06.11.003
             var isMustIgnore = receiveStatus.HasFlag(ReceiveStatuses.TypeBroad) || receiveStatus.HasFlag(ReceiveStatuses.TypeMulti) || ReceivedAchData.DstNode.EndPointId > 0;
 
-            if (command != null && command.Length > 1 && isSuportedScheme && !isMustIgnore)
+            if (command != null && command.Length > 1 && isHandlingAllowed && !isMustIgnore)
             {
                 if (command[1] == COMMAND_CLASS_MANUFACTURER_SPECIFIC_V2.MANUFACTURER_SPECIFIC_GET.ID)
                 {
