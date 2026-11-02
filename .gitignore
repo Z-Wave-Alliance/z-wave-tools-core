@@ -44,6 +44,10 @@ _ReSharper*/
 launchSettings.json
 UpgradeLog.htm
 
+# VS Code
+.vscode/
+*.code-workspace
+
 # User-specific files
 *.suo
 *.user
