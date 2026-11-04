@@ -46,6 +46,7 @@
     <Compile Include="FakeAction.cs" />
     <Compile Include="FrameLogRecord.cs" />
     <Compile Include="FramesLoggerProvider.cs" />
+    <Compile Include="MultiChannel\MultiChannelManagerTests.cs" />
     <Compile Include="RequestNodeInfo\NodeInfoTests.cs" />
     <Compile Include="Security\EmulatedTests.cs" />
     <Compile Include="Security\ExtensionsTests.cs" />
