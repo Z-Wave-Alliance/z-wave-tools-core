@@ -45,6 +45,7 @@
     <Compile Include="ConsumerQueueTests.cs" />
     <Compile Include="ConversionTests.cs" />
     <Compile Include="EnumExtensionsTests.cs" />
+    <Compile Include="ExternalToolRunnerTests.cs" />
     <Compile Include="JLinkBoardLocatorTests.cs" />
     <Compile Include="SimplicityCommanderCliTests.cs" />
     <Compile Include="UsbSerialPortLocatorTests.cs" />

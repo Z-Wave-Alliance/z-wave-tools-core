@@ -2,20 +2,19 @@
 // SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
 namespace Utils
 {
     /// <summary>
-    /// Thin wrapper around the Simplicity Commander command line tool (commander.exe) of Silicon Labs.
+    /// Argument builders and output parser for the Simplicity Commander command line tool (commander.exe) of
+    /// Silicon Labs.
     ///
-    /// Holds the pieces every caller needs and used to duplicate: running Commander with a timeout, addressing
-    /// a J-Link adapter by IP address or serial number, the names of the Z-Wave manufacturing tokens, building
-    /// the "commander tokendump" / "commander flash" token arguments, and parsing the tokendump output.
-    /// The callers keep their own retry and logging policy, this class never logs and never throws for a
-    /// failed Commander run.
+    /// Holds the pieces every caller needs and used to duplicate: Addressing a J-Link adapter by IP address or
+    /// serial number, the names of the Z-Wave manufacturing tokens, building the "commander tokendump" /
+    /// "commander flash" token arguments, and parsing the tokendump output. Commander itself is run through an
+    /// <see cref="IExternalToolRunner"/>.
     /// </summary>
     public static class SimplicityCommanderCli
     {
@@ -38,69 +37,6 @@ namespace Utils
         /// Manufacturing token holding the RF region as one byte (the Z-Wave region enumeration value).
         /// </summary>
         public const string MFG_ZWAVE_COUNTRY_FREQ_TOKEN = "MFG_ZWAVE_COUNTRY_FREQ";
-
-        /// <summary>
-        /// Runs Commander with the given arguments and waits for it to exit.
-        /// </summary>
-        /// <param name="commanderPath">Full path of commander.exe.</param>
-        /// <param name="arguments">Command line arguments, e.g. "device reset --serialno 440244321".</param>
-        /// <param name="timeoutMs">Commander is killed when it has not exited after this many milliseconds.</param>
-        /// <param name="output">Standard output of Commander, empty when it could not be read.</param>
-        /// <returns>The Commander exit code, 0 on success, or -1 when Commander could not be started, was killed or
-        /// has not exited.</returns>
-        public static int Run(string commanderPath, string arguments, int timeoutMs, out string output)
-        {
-            output = string.Empty;
-            if (string.IsNullOrEmpty(commanderPath))
-            {
-                return -1;
-            }
-
-            var process = new Process();
-            process.StartInfo.FileName = commanderPath;
-            process.StartInfo.Arguments = arguments;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.CreateNoWindow = true;
-            try
-            {
-                process.Start();
-            }
-            catch (Exception)
-            {
-                // Path does not exist, access denied, ...
-                process.Close();
-                return -1;
-            }
-
-            var readOutput = process.StandardOutput.ReadToEndAsync();
-            if (!process.WaitForExit(timeoutMs))
-            {
-                try
-                {
-                    process.Kill();
-                    // Give the killed process a moment to release its handles, but never block indefinitely.
-                    process.WaitForExit(5000);
-                }
-                catch (InvalidOperationException)
-                {
-                    // The process exited between the timeout and the kill.
-                }
-            }
-
-            try
-            {
-                output = readOutput.Result ?? string.Empty;
-            }
-            catch (AggregateException)
-            {
-                output = string.Empty;
-            }
-
-            int exitCode = process.HasExited ? process.ExitCode : -1;
-            process.Close();
-            return exitCode;
-        }
 
         /// <summary>
         /// Builds the Commander argument that selects the J-Link adapter: "--ip" followed by the address when the port
