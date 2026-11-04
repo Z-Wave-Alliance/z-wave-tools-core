@@ -83,6 +83,8 @@
     <Compile Include="JLink\JLinkBoardLocatorWindows.cs" />
     <Compile Include="JLink\JLinkUsbMatcher.cs" />
     <Compile Include="JLink\SimplicityCommanderCli.cs" />
+    <Compile Include="ExternalToolRunner.cs" />
+    <Compile Include="IExternalToolRunner.cs" />
     <Compile Include="UsbSerialPortLocator.cs" />
     <Compile Include="UsbSerialPortLocatorUnix.cs" />
     <Compile Include="UsbSerialPortLocatorWindows.cs" />
