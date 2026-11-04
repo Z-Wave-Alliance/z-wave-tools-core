@@ -87,7 +87,8 @@ namespace ZWave.BasicApplication
                     isBitAdress = action.SubstituteSettings.IsBitAdress;
                 }
 
-                if (data.Length > 1 && (dstEndPointId > 0 || srcEndPointId > 0))
+                // Data is null for S2 messages that only carry extensions (e.g. the MPAN answer to MOS).
+                if (data != null && data.Length > 1 && (dstEndPointId > 0 || srcEndPointId > 0))
                 {
                     if (data[0] != COMMAND_CLASS_MULTI_CHANNEL_V2.ID)
                     {

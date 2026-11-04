@@ -63,7 +63,8 @@ namespace ZWave.BasicApplication
                 {
                     data = ((SendDataExOperation)action).Data;
                 }
-                if (data.Length > 1)
+                // Data is null for S2 messages that only carry extensions (e.g. the MPAN answer to MOS).
+                if (data != null && data.Length > 1)
                 {
                     if (data[0] != COMMAND_CLASS_CRC_16_ENCAP.ID)
                     {

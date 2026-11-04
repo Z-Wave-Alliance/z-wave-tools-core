@@ -8,6 +8,7 @@ using ZWave.BasicApplication;
 using System;
 using Utils;
 using ZWave.Devices;
+using ZWave.Enums;
 
 namespace BasicApplicationTests.Crc16Encap
 {
@@ -55,6 +56,22 @@ namespace BasicApplicationTests.Crc16Encap
 
             // Assert.
             Assert.IsTrue(expectRes.Command.SequenceEqual(primaryCmd));
+        }
+
+        [Test]
+        public void SubstituteActionInternal_NoCommandData_LeavesActionUnchanged()
+        {
+            // Arrange: the SecurityManager answers an S2 MOS extension with an MPAN-only action.
+            var network = new NetworkViewPoint();
+            var action = new SendDataOperation(network, NODE_ID_2, null, TXO);
+            action.SubstituteSettings.SetFlag(SubstituteFlags.UseCrc16Encap);
+
+            // Act.
+            var result = new Crc16EncapManager(network).SubstituteActionInternal(action);
+
+            // Assert.
+            Assert.IsNull(result);
+            Assert.IsNull(action.Data);
         }
 
         protected byte[] Crc16Encap(byte[] data)
