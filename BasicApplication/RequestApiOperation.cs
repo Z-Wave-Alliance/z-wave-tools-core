@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using ZWave.Enums;
 using ZWave.BasicApplication.Enums;
 using ZWave.Devices;
@@ -46,7 +47,7 @@ namespace ZWave.BasicApplication
         }
 
         protected ApiMessage message;
-        private ApiHandler handler;
+        protected ApiHandler handler;
 
         /// <summary>
         /// Fills OperationUnits list. Frame retransmittion timeout=2sec, so we waiting 7 seconds in operation
