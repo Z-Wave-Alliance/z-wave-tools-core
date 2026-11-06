@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace ZWave.BasicApplication.EmulatedLink
         public byte Specific { get; set; }
         public List<byte> NodesList { get; set; } = new List<byte>();
         public bool IsNifResponseEnabled { get; set; } = true;
+        public bool IsEndDeviceApi { get; set; }
+        public byte SecurityKeysMask { get; set; }
 
         //private byte _nextNodeId;
         private readonly byte _defaultNodeId;
@@ -58,6 +61,7 @@ namespace ZWave.BasicApplication.EmulatedLink
             IsRemovingNode = false;
             IsReplacingNode = false;
             FuncId = 0;
+            SecurityKeysMask = 0;
             NodesList = new List<byte> { NodeId };
             ControllerCapability = ControllerCapabilities.IS_REAL_PRIMARY;
         }
