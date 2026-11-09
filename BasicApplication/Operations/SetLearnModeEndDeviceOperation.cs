@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
-// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using ZWave.Enums;
 using ZWave.BasicApplication.Enums;
-using ZWave.BasicApplication.Security;
 using Utils;
 using ZWave.Devices;
 
@@ -49,9 +47,6 @@ namespace ZWave.BasicApplication.Operations
         private ApiMessage _sendNodeInfo;
         private ApiHandler _sendNodeInfoRetFail;
         private ApiHandler _sendNodeInfoCallback;
-
-        private ApiMessage _getSecurityKeys;
-        private ApiHandler _securityKeys;
 
         private bool _isAssignCompleteReceived;
 
@@ -99,18 +94,7 @@ namespace ZWave.BasicApplication.Operations
 
             ActionUnits.Add(new DataReceivedUnit(_learnReady, OnLearnReady));
             ActionUnits.Add(new DataReceivedUnit(_assignNodeIdDone, OnNodeIdDone));
-            // A Serial API End Device does the security bootstrapping itself and holds the keys, while the NodeTag setter
-            // grants the own node every enabled scheme with the new NodeId. The keys are therefore read from the chip once
-            // the inclusion is complete, before the Learn Mode is stopped, so their response precedes the completion.
-            if (_network.Library.IsSerialApiEndDevice())
-            {
-                ActionUnits.Add(new DataReceivedUnit(_assignComplete, OnAssignComplete, _getSecurityKeys, _setLearnModeStop, _stopCompletedDelay));
-                ActionUnits.Add(new DataReceivedUnit(_securityKeys, OnSecurityKeys));
-            }
-            else
-            {
-                ActionUnits.Add(new DataReceivedUnit(_assignComplete, OnAssignComplete, _setLearnModeStop, _stopCompletedDelay));
-            }
+            ActionUnits.Add(new DataReceivedUnit(_assignComplete, OnAssignComplete, _setLearnModeStop, _stopCompletedDelay));
             ActionUnits.Add(new TimeElapsedUnit(_stopCompletedDelay, SetStateCompleted, 0, null));
             ActionUnits.Add(new TimeElapsedUnit(_stopFailedDelay, SetStateFailed, 0, null));
             ActionUnits.Add(new DataReceivedUnit(_assignRangeInfoUpdate, OnRangeInfoUpdate));
@@ -176,12 +160,6 @@ namespace ZWave.BasicApplication.Operations
             _sendNodeInfoCallback = new ApiHandler(FrameTypes.Request, CommandTypes.CmdZWaveSendNodeInformation);
             _sendNodeInfoCallback.AddConditions(ByteIndex.AnyValue, ByteIndex.AnyValue);
 
-            // HOST->ZW: REQ | 0x9C | 0 (Security Setup, Get Security Keys)
-            _getSecurityKeys = new ApiMessage(CommandTypes.CmdZWaveSecuritySetup, 0x00);
-
-            _securityKeys = new ApiHandler(FrameTypes.Response, CommandTypes.CmdZWaveSecuritySetup);
-            _securityKeys.AddConditions(new ByteIndex(0x00));
-
             _timeoutItem = new RandomTimeInterval(GetNextCounter(), Id, 2000, 4000);
         }
 
@@ -235,20 +213,6 @@ namespace ZWave.BasicApplication.Operations
             AssignStatus = (AssignStatuses)ou.DataFrame.Payload[1];
             AssignStatusCallback(AssignStatus);
             _isAssignCompleteReceived = true;
-        }
-
-        /// <summary>
-        /// Stores the keys the chip reported as the own security schemes of the network view and in the result.
-        /// </summary>
-        private void OnSecurityKeys(DataReceivedUnit ou)
-        {
-            // ZW->HOST: RES | 0x9C | 0 | securityKeys_bitmaskLen(1) | securityKeys_bitmask
-            byte[] res = ou.DataFrame.Payload;
-            if (res != null && res.Length > 2)
-            {
-                SpecificResult.SecuritySchemes = SecurityManagerInfo.ConvertToSecuritySchemes((NetworkKeyS2Flags)res[2]);
-                _network.SetSecuritySchemes(SpecificResult.SecuritySchemes);
-            }
         }
 
         public override string AboutMe()

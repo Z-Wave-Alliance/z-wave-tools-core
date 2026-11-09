@@ -987,6 +987,14 @@ namespace ZWave.BasicApplication.EmulatedLink
             _modules[sessionId].SecurityKeysMask = keysMask;
         }
 
+        /// <summary>
+        /// Lets the module answer Security Setup Get Security Keys or leave it unanswered, like a chip that is restarting.
+        /// </summary>
+        public void SetSecurityKeysAnswered(ushort sessionId, bool value)
+        {
+            _modules[sessionId].IsSecurityKeysAnswered = value;
+        }
+
         private void CmdZWaveSecuritySetup(ushort sessionId, byte[] data)
         {
             if (_pool.TryGetValue(sessionId, out BlockingCollection<byte[]> value))
@@ -995,8 +1003,11 @@ namespace ZWave.BasicApplication.EmulatedLink
                 // ZW->HOST for Get Security Keys (sub command 0): RES | 0x9C | 0 | securityKeys_bitmaskLen(1) | securityKeys_bitmask
                 if (data[4] == 0x00)
                 {
-                    value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Response, (byte)CommandTypes.CmdZWaveSecuritySetup, 0x00, 0x01,
-                        _modules[sessionId].SecurityKeysMask }));
+                    if (_modules[sessionId].IsSecurityKeysAnswered)
+                    {
+                        value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Response, (byte)CommandTypes.CmdZWaveSecuritySetup, 0x00, 0x01,
+                            _modules[sessionId].SecurityKeysMask }));
+                    }
                 }
                 else
                 {

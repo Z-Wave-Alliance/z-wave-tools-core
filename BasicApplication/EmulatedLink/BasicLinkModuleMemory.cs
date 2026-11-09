@@ -32,6 +32,7 @@ namespace ZWave.BasicApplication.EmulatedLink
         public bool IsNifResponseEnabled { get; set; } = true;
         public bool IsEndDeviceApi { get; set; }
         public byte SecurityKeysMask { get; set; }
+        public bool IsSecurityKeysAnswered { get; set; }
 
         //private byte _nextNodeId;
         private readonly byte _defaultNodeId;
@@ -62,6 +63,7 @@ namespace ZWave.BasicApplication.EmulatedLink
             IsReplacingNode = false;
             FuncId = 0;
             SecurityKeysMask = 0;
+            IsSecurityKeysAnswered = true;
             NodesList = new List<byte> { NodeId };
             ControllerCapability = ControllerCapabilities.IS_REAL_PRIMARY;
         }

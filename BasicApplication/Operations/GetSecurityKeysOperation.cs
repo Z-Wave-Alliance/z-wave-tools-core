@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System.Linq;
 using ZWave.BasicApplication.Enums;
 using ZWave.BasicApplication.Security;
@@ -17,6 +18,12 @@ namespace ZWave.BasicApplication.Operations
     {
         public GetSecurityKeysOperation(NetworkViewPoint network)
             : base(CommandTypes.CmdZWaveSecuritySetup, false)
+        {
+            _network = network;
+        }
+
+        public GetSecurityKeysOperation(NetworkViewPoint network, int timeoutMs)
+            : base(FrameTypes.Response, CommandTypes.CmdZWaveSecuritySetup, false, timeoutMs)
         {
             _network = network;
         }

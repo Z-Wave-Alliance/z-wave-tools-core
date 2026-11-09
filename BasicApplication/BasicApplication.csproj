@@ -317,6 +317,7 @@
     <Compile Include="Operations\SetDefaultOperation.cs" />
     <Compile Include="Operations\SetExtIntLevelOperation.cs" />
     <Compile Include="Operations\SetLearnModeEndDeviceOperation.cs" />
+    <Compile Include="Operations\SetLearnModeWithSecurityKeysOperation.cs" />
     <Compile Include="CallbackApiOperation.cs" />
     <Compile Include="ControlApiOperation.cs" />
     <Compile Include="DataFrame.cs" />
