@@ -1,7 +1,7 @@
 # Contributing Guidelines
 
 Please refer to the Open Source Working Group
-[contribution guidelines](https://github.com/Z-Wave-Alliance/OSWG/blob/main/CONTRIBUTING.md).
+[contribution guidelines](https://github.com/Z-Wave-Alliance/open-source-working-group/blob/main/CONTRIBUTING.md).
 
 ## Legal Info
 
