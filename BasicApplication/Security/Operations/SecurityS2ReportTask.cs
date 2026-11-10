@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -175,7 +176,8 @@ namespace ZWave.BasicApplication.Operations
                                     }
                                     else
                                     {
-                                        var secureCommandClasses = _securityManagerInfo.Network.GetSecureCommandClasses();
+                                        // None for an Access Control end device granted a class below S2 Access Control.
+                                        var secureCommandClasses = _securityManagerInfo.Network.GetSupportedSecureCommandClasses();
                                         if (secureCommandClasses != null)
                                         {
                                             switch (scheme)
@@ -184,13 +186,13 @@ namespace ZWave.BasicApplication.Operations
                                                     if (!_securityManagerInfo.Network.HasSecurityScheme(SecuritySchemes.S2_ACCESS) &&
                                                         !_securityManagerInfo.Network.HasSecurityScheme(SecuritySchemes.S2_AUTHENTICATED))
                                                     {
-                                                        ccReport.commandClass = new List<byte>(_securityManagerInfo.Network.GetSecureCommandClasses());
+                                                        ccReport.commandClass = new List<byte>(secureCommandClasses);
                                                     }
                                                     break;
                                                 case SecuritySchemes.S2_AUTHENTICATED:
                                                     if (!_securityManagerInfo.Network.HasSecurityScheme(SecuritySchemes.S2_ACCESS))
                                                     {
-                                                        ccReport.commandClass = new List<byte>(_securityManagerInfo.Network.GetSecureCommandClasses());
+                                                        ccReport.commandClass = new List<byte>(secureCommandClasses);
                                                     }
                                                     break;
                                                 case SecuritySchemes.S2_ACCESS:

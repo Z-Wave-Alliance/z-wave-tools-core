@@ -89,6 +89,40 @@ namespace BasicApplicationTests
         }
 
         [Test]
+        public void IsHandlingAllowed_AccessEndDeviceBelowAccess_RefusesSecureCommandClasses()
+        {
+            // An Access Control end device granted S2 Authenticated as its highest class supports its securely supported
+            // Command Classes not at all [DT:00.21.000C.1], while the ones in its NIF keep working.
+            var network = CreateNetwork();
+            network.SetSecuritySchemes(new[] { SecuritySchemes.S2_AUTHENTICATED, SecuritySchemes.S2_UNAUTHENTICATED, SecuritySchemes.S0 });
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            var gate = new HandlingGate(network);
+
+            Assert.IsFalse(gate.Allows(VERSION_GET, SecuritySchemes.S2_AUTHENTICATED));
+            Assert.IsFalse(gate.Allows(BASIC_GET, SecuritySchemes.S2_AUTHENTICATED));
+            Assert.IsTrue(gate.Allows(ZWAVEPLUS_INFO_GET, SecuritySchemes.S2_AUTHENTICATED));
+
+            // Any other node supports them at its highest class.
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: false);
+            Assert.IsTrue(gate.Allows(VERSION_GET, SecuritySchemes.S2_AUTHENTICATED));
+
+            // With S0 or S2 Access Control as the highest class the Access Control end device supports them as well.
+            network.SetSecuritySchemes(new[] { SecuritySchemes.S0 });
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsTrue(gate.Allows(VERSION_GET, SecuritySchemes.S0));
+            network.SetSecuritySchemes(new[] { SecuritySchemes.S2_ACCESS, SecuritySchemes.S2_AUTHENTICATED });
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsTrue(gate.Allows(VERSION_GET, SecuritySchemes.S2_ACCESS));
+            Assert.IsFalse(gate.Allows(VERSION_GET, SecuritySchemes.S2_AUTHENTICATED));
+
+            // Without a key it supports them not at all either [DT:00.21.000D.1], unlike any other node.
+            network.ResetSecuritySchemes();
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsFalse(gate.Allows(VERSION_GET, SecuritySchemes.NONE));
+            Assert.IsTrue(gate.Allows(ZWAVEPLUS_INFO_GET, SecuritySchemes.NONE));
+        }
+
+        [Test]
         public void IsHandlingAllowed_MultiChannelEncapsulated_RequiresMultiChannelAtThatClass()
         {
             // Multi Channel is securely supported, so an Access end device without a key supports it not at all and ignores the
