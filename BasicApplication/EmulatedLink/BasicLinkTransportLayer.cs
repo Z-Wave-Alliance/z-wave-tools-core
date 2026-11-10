@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -192,7 +193,8 @@ namespace ZWave.BasicApplication.EmulatedLink
             CommandTypes.CmdSerialApiSetup,
             CommandTypes.CmdZWaveSetSucNodeId,
             CommandTypes.CmdZWaveIsFailedNode,
-            CommandTypes.CmdZWaveRequestNodeNeighborUpdate
+            CommandTypes.CmdZWaveRequestNodeNeighborUpdate,
+            CommandTypes.CmdZWaveSecuritySetup
         };
 
         private int WriteData(ushort sessionId, byte[] data)
@@ -224,6 +226,9 @@ namespace ZWave.BasicApplication.EmulatedLink
                                 break;
                             case CommandTypes.CmdMemoryGetId:
                                 CmdMemoryGetId(sessionId);
+                                break;
+                            case CommandTypes.CmdZWaveSecuritySetup:
+                                CmdZWaveSecuritySetup(sessionId, data);
                                 break;
                             case CommandTypes.CmdSerialApiGetInitData:
                                 CmdSerialApiGetInitData(sessionId, data);
@@ -848,11 +853,16 @@ namespace ZWave.BasicApplication.EmulatedLink
                 // HOST->ZW: REQ | 0x50 | mode | funcID
                 // ZW->HOST: REQ | 0x50 | funcID | bStatus | bSource | bLen | pCmd[]
                 var learnModeFuncId = data[5];
+                var isEndDevice = _modules[sessionId].IsEndDeviceApi;
                 if (data[4] == (byte)LearnModes.LearnModeClassic ||
                     data[4] == (byte)LearnModes.LearnModeNWE ||
                     data[4] == (byte)LearnModes.LearnModeNWI)
                 {
-                    value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Request, (byte)CommandTypes.CmdZWaveSetLearnMode, learnModeFuncId, (byte)NodeStatuses.LearnReady, 0, 0, 0 }));
+                    if (!isEndDevice)
+                    {
+                        value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Request, (byte)CommandTypes.CmdZWaveSetLearnMode, learnModeFuncId,
+                            (byte)NodeStatuses.LearnReady, 0, 0, 0 }));
+                    }
 
                     var inclusionModules = _modules.Where(x => x.Value.IsAddingNode);
                     var exclusionModules = _modules.Where(x => x.Value.IsRemovingNode);
@@ -873,7 +883,9 @@ namespace ZWave.BasicApplication.EmulatedLink
                                 _modules[sessionId].ControllerCapability = ControllerCapabilities.IS_SECONDARY | ControllerCapabilities.ON_OTHER_NETWORK;
                             }
                             inclusionValue.Add(ComposeAddNodeClientResponse((byte)NodeStatuses.NodeFound, _modules[inclusionModule.Key].FuncId, _modules[sessionId].NodeId, _modules[sessionId].CmdClasses, CommandTypes.CmdZWaveAddNodeToNetwork));
-                            inclusionValue.Add(ComposeAddNodeClientResponse((byte)NodeStatuses.AddingRemovingController, _modules[inclusionModule.Key].FuncId, _modules[sessionId].NodeId, _modules[sessionId].CmdClasses, CommandTypes.CmdZWaveAddNodeToNetwork));
+                            var addingStatus = isEndDevice ? NodeStatuses.AddingRemovingEndDevice : NodeStatuses.AddingRemovingController;
+                            inclusionValue.Add(ComposeAddNodeClientResponse((byte)addingStatus, _modules[inclusionModule.Key].FuncId,
+                                _modules[sessionId].NodeId, _modules[sessionId].CmdClasses, CommandTypes.CmdZWaveAddNodeToNetwork));
                             inclusionValue.Add(ComposeAddNodeClientResponse((byte)NodeStatuses.ProtocolDone, _modules[inclusionModule.Key].FuncId, _modules[sessionId].NodeId, _modules[sessionId].CmdClasses, CommandTypes.CmdZWaveAddNodeToNetwork));
 
                             _modules[inclusionModule.Key].IsAddingNode = false;
@@ -929,7 +941,19 @@ namespace ZWave.BasicApplication.EmulatedLink
                             _modules[exclusionModule.Key].IsRemovingNode = false;
                         }
                     }
-                    value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Request, (byte)CommandTypes.CmdZWaveSetLearnMode, learnModeFuncId, (byte)NodeStatuses.Done, _modules[sessionId].NodeId, 0, 0 }));
+                    if (isEndDevice)
+                    {
+                        // ZW->HOST: REQ | 0x50 | funcID | bStatus | nodeID, the End Device reports the assigned NodeId and the completion.
+                        value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Request, (byte)CommandTypes.CmdZWaveSetLearnMode, learnModeFuncId,
+                            (byte)AssignStatuses.AssignNodeIdDone, _modules[sessionId].NodeId }));
+                        value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Request, (byte)CommandTypes.CmdZWaveSetLearnMode, learnModeFuncId,
+                            (byte)AssignStatuses.AssignComplete, _modules[sessionId].NodeId }));
+                    }
+                    else
+                    {
+                        value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Request, (byte)CommandTypes.CmdZWaveSetLearnMode, learnModeFuncId,
+                            (byte)NodeStatuses.Done, _modules[sessionId].NodeId, 0, 0 }));
+                    }
                 }
                 else if (data[4] == (byte)LearnModes.LearnModeDisable)
                 {
@@ -945,6 +969,51 @@ namespace ZWave.BasicApplication.EmulatedLink
         public void SetSucNodeId(ushort sessionId, NodeTag node)
         {
             _modules[sessionId].SucNodeId = node.Id;
+        }
+
+        /// <summary>
+        /// Lets the module answer the Learn Mode like an End Device Serial API, with the assigned NodeId and the completion.
+        /// </summary>
+        public void SetEndDeviceApi(ushort sessionId, bool value)
+        {
+            _modules[sessionId].IsEndDeviceApi = value;
+        }
+
+        /// <summary>
+        /// Sets the S0/S2 keys the module reports with Security Setup Get Security Keys, as a <see cref="NetworkKeyS2Flags"/> mask.
+        /// </summary>
+        public void SetSecurityKeys(ushort sessionId, byte keysMask)
+        {
+            _modules[sessionId].SecurityKeysMask = keysMask;
+        }
+
+        /// <summary>
+        /// Lets the module answer Security Setup Get Security Keys or leave it unanswered, like a chip that is restarting.
+        /// </summary>
+        public void SetSecurityKeysAnswered(ushort sessionId, bool value)
+        {
+            _modules[sessionId].IsSecurityKeysAnswered = value;
+        }
+
+        private void CmdZWaveSecuritySetup(ushort sessionId, byte[] data)
+        {
+            if (_pool.TryGetValue(sessionId, out BlockingCollection<byte[]> value))
+            {
+                // HOST->ZW: REQ | 0x9C | subCommand
+                // ZW->HOST for Get Security Keys (sub command 0): RES | 0x9C | 0 | securityKeys_bitmaskLen(1) | securityKeys_bitmask
+                if (data[4] == 0x00)
+                {
+                    if (_modules[sessionId].IsSecurityKeysAnswered)
+                    {
+                        value.Add(CreateFrame(new byte[] { (byte)FrameTypes.Response, (byte)CommandTypes.CmdZWaveSecuritySetup, 0x00, 0x01,
+                            _modules[sessionId].SecurityKeysMask }));
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         private void CmdZWaveSendData(ushort sessionId, byte[] data)
