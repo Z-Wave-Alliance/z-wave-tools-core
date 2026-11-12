@@ -52,8 +52,8 @@
     <Compile Include="Operations\ExpectPtiDataOperation.cs" />
     <Compile Include="Operations\ExpectDataOperation.cs" />
     <Compile Include="Operations\GetFrequencyStr4xOperation.cs" />
-    <Compile Include="Operations\GetLRChConfigsOperation.cs" />
-    <Compile Include="Operations\GetLRChConfigStrOperation.cs" />
+    <Compile Include="Operations\GetLrChConfigsOperation.cs" />
+    <Compile Include="Operations\GetLrChConfigStrOperation.cs" />
     <Compile Include="Operations\GetLRRegionsOperation.cs" />
     <Compile Include="Operations\ListenDataOperation.cs" />
     <Compile Include="Operations\SetLRChConfigOperation.cs" />
