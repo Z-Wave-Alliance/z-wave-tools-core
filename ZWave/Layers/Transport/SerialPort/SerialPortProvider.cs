@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -247,13 +248,13 @@ namespace ZWave.Layers.Transport
                 {
                     _port.DiscardInBuffer();
                     _port.DiscardOutBuffer();
-                    _port.Close();
-                    Thread.Sleep(200);
                 }
                 catch (IOException)
                 {
 
                 }
+                DisposePort();
+                Thread.Sleep(200);
                 _portName = null;
             }
             ReleasePortName();
@@ -262,9 +263,43 @@ namespace ZWave.Layers.Transport
         public void Dispose()
         {
             ReleasePortName();
-            if (_port as IDisposable != null)
+            if (_port != null)
             {
-                ((IDisposable)_port).Dispose();
+                DisposePort();
+            }
+        }
+
+        // The dispose of a System.IO.Ports.SerialPort waits for its event loop thread, which some USB serial drivers never
+        // let end, so the thread doing it is given up after this time.
+        private const int DISPOSE_TIMEOUT_MS = 3000;
+
+        /// <summary>
+        /// Disposes the port on a background thread and waits <see cref="DISPOSE_TIMEOUT_MS"/> for it at most. A port whose
+        /// dispose did not return in time is given up and stays open in this process, the provider is free for a new port.
+        /// </summary>
+        private void DisposePort()
+        {
+            SerialPort port = _port;
+            string portName = _portName;
+            _port = null;
+            var disposeThread = new Thread(() =>
+            {
+                try
+                {
+                    port.Dispose();
+                }
+                catch (IOException)
+                {
+                }
+            })
+            {
+                IsBackground = true,
+                Name = "SerialPortDispose " + portName
+            };
+            disposeThread.Start();
+            if (!disposeThread.Join(DISPOSE_TIMEOUT_MS))
+            {
+                "The dispose of the serial port {0} did not return within {1} ms, the port is given up"._DLOG(portName, DISPOSE_TIMEOUT_MS);
             }
         }
 
