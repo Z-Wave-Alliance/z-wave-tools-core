@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System.Collections.Generic;
 using System.Threading;
 using Utils;
@@ -99,7 +100,8 @@ namespace ZWave.BasicApplication.Operations
                                         }
                                         else
                                         {
-                                            var secureCommandClasses = _securityManagerInfo.Network.GetSecureCommandClasses();
+                                            // Equal to the configured list here, since S0 is the highest granted class without an S2 key.
+                                            var secureCommandClasses = _securityManagerInfo.Network.GetSupportedSecureCommandClasses();
                                             if (secureCommandClasses != null)
                                             {
                                                 ccReport.commandClassSupport = new List<byte>(secureCommandClasses);

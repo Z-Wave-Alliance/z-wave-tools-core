@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System.Collections.Generic;
 using System.Linq;
 using ZWave.Enums;
@@ -345,6 +346,12 @@ namespace ZWave.BasicApplication.Operations
             }
         }
 
+        /// <summary>
+        /// The Security Classes the node answered the Commands Supported Get at, highest first, and the securely supported
+        /// Command Classes of its report at the first of them: An empty report counts, since a node granted a class below
+        /// S2 Access Control may support none [DT:00.21.000C.1]; null when the node sent no report at that class, as the
+        /// reports at the lower classes carry no Command Classes [CC:009F.01.0D.11.004].
+        /// </summary>
         private SecuritySchemes[] GetProbingResults(out byte[] secureCommandClasses)
         {
             secureCommandClasses = null;
@@ -357,7 +364,7 @@ namespace ZWave.BasicApplication.Operations
                     {
                         var commandClasses = ((COMMAND_CLASS_SECURITY_2.SECURITY_2_COMMANDS_SUPPORTED_REPORT)_supportedS2_ACCESS.SpecificResult.Command).
                             commandClass.TakeWhile(x => x != 0xEF).ToArray();
-                        if (commandClasses.Length > 0)
+                        if (schemes.Count == 0)
                         {
                             secureCommandClasses = commandClasses;
                         }
@@ -379,7 +386,7 @@ namespace ZWave.BasicApplication.Operations
                     {
                         var commandClasses = ((COMMAND_CLASS_SECURITY_2.SECURITY_2_COMMANDS_SUPPORTED_REPORT)_supportedS2_AUTHENTICATED.SpecificResult.Command).
                             commandClass.TakeWhile(x => x != 0xEF).ToArray();
-                        if (commandClasses.Length > 0)
+                        if (schemes.Count == 0)
                         {
                             secureCommandClasses = commandClasses;
                         }
@@ -405,7 +412,7 @@ namespace ZWave.BasicApplication.Operations
                     {
                         var commandClasses = ((COMMAND_CLASS_SECURITY_2.SECURITY_2_COMMANDS_SUPPORTED_REPORT)_supportedS2_UNAUTHENTICATED.SpecificResult.Command).
                             commandClass.TakeWhile(x => x != 0xEF).ToArray();
-                        if (commandClasses.Length > 0)
+                        if (schemes.Count == 0)
                         {
                             secureCommandClasses = commandClasses;
                         }
@@ -427,7 +434,7 @@ namespace ZWave.BasicApplication.Operations
                     {
                         var commandClasses = ((COMMAND_CLASS_SECURITY.SECURITY_COMMANDS_SUPPORTED_REPORT)_supportedS0.SpecificResult.Command).
                             commandClassSupport.TakeWhile(x => x != 0xEF).ToArray();
-                        if (commandClasses.Length > 0)
+                        if (schemes.Count == 0)
                         {
                             secureCommandClasses = commandClasses;
                         }

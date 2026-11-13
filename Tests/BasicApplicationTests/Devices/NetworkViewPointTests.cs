@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using NUnit.Framework;
 using ZWave.Enums;
 using ZWave.Devices;
@@ -408,6 +409,39 @@ namespace BasicApplicationTests.Devices
 
             Assert.AreEqual(NON_SECURE_COMMAND_CLASSES, network.GetNonSecureCommandClasses());
             Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSecureCommandClasses());
+        }
+
+        [Test]
+        public void SupportedSecureCommandClasses_AccessEndDevice_NoneBelowAccessOrS0()
+        {
+            // The NodeId setter grants the own node the enabled schemes, so its highest Security Class is S2 Access Control.
+            var network = CreateIncludedNetwork();
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsTrue(network.SupportsSecureCommandClasses());
+            Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSupportedSecureCommandClasses());
+
+            // Granted S2 Authenticated as the highest class, an Access Control end device supports them not at all
+            // [DT:00.21.000C.1]; any other node supports them.
+            network.SetSecuritySchemes(new[] { SecuritySchemes.S2_AUTHENTICATED, SecuritySchemes.S2_UNAUTHENTICATED, SecuritySchemes.S0 });
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsFalse(network.SupportsSecureCommandClasses());
+            Assert.AreEqual(new byte[0], network.GetSupportedSecureCommandClasses());
+            Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSecureCommandClasses());
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: false);
+            Assert.IsTrue(network.SupportsSecureCommandClasses());
+            Assert.AreEqual(SECURE_COMMAND_CLASSES, network.GetSupportedSecureCommandClasses());
+
+            // S0 as the highest class keeps them.
+            network.SetSecuritySchemes(new[] { SecuritySchemes.S0 });
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsTrue(network.SupportsSecureCommandClasses());
+
+            // Without a key an Access Control end device supports them not at all either [DT:00.21.000D.1].
+            network.ResetSecuritySchemes();
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: true);
+            Assert.IsFalse(network.SupportsSecureCommandClasses());
+            network.SetNifInclusionStateByKeys(isAccessEndDevice: false);
+            Assert.IsTrue(network.SupportsSecureCommandClasses());
         }
 
         [Test]

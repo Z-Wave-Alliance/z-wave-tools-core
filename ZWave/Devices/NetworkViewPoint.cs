@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -666,6 +667,30 @@ namespace ZWave.Devices
                     return Nodes[node].HasSecureCommandClass(cmdClass);
                 }
             }
+        }
+
+        /// <summary>
+        /// Whether the own node supports its securely supported Command Classes in its current state: Not as an Access Control
+        /// end device whose highest granted Security Class is neither S2 Access Control nor S0 [DT:00.21.000C.1], which includes
+        /// the time without a key [DT:00.21.000D.1]. Any other node supports them, without a key non-securely.
+        /// </summary>
+        public bool SupportsSecureCommandClasses()
+        {
+            if (!_isAccessEndDevice)
+            {
+                return true;
+            }
+            SecuritySchemes highestScheme = GetHighestSecurityScheme();
+            return highestScheme == SecuritySchemes.S2_ACCESS || highestScheme == SecuritySchemes.S0;
+        }
+
+        /// <summary>
+        /// The securely supported Command Classes the own node supports in its current state, see
+        /// <see cref="SupportsSecureCommandClasses"/>: <see cref="GetSecureCommandClasses()"/> or none.
+        /// </summary>
+        public byte[] GetSupportedSecureCommandClasses()
+        {
+            return SupportsSecureCommandClasses() ? GetSecureCommandClasses() : new byte[0];
         }
 
         /// <summary>

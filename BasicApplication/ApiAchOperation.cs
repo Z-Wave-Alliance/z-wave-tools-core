@@ -373,10 +373,11 @@ namespace ZWave.BasicApplication.Operations
 
         /// <summary>
         /// Whether the own node handles the received command at the Security Class it arrived at: At its highest granted Security
-        /// Class always, below it only a non-securely supported Command Class [CC:009F.01.00.21.00B]. A Multi Channel encapsulated
-        /// command for an End Point is handled only if the own node supports the Multi Channel Command Class at that Security
-        /// Class as well; one for the Root Device is handled by every node, since any node may receive it from a Multi Channel
-        /// Association.
+        /// Class always, below it only a non-securely supported Command Class [CC:009F.01.00.21.00B]. A securely supported Command
+        /// Class is not handled at all while the own node supports none, see
+        /// <see cref="NetworkViewPoint.SupportsSecureCommandClasses"/>. A Multi Channel encapsulated command for an End Point is
+        /// handled only if the own node supports the Multi Channel Command Class at that Security Class as well; one for the Root
+        /// Device is handled by every node, since any node may receive it from a Multi Channel Association.
         /// </summary>
         protected virtual bool IsHandlingAllowed(NetworkViewPoint network, byte[] command, SecuritySchemes scheme, bool secureCommandClass)
         {
@@ -390,18 +391,23 @@ namespace ZWave.BasicApplication.Operations
             {
                 return false;
             }
+            if (secureCommandClass && !network.SupportsSecureCommandClasses())
+            {
+                return false;
+            }
             return scheme == network.GetHighestSecurityScheme() || !secureCommandClass;
         }
 
         /// <summary>
         /// Whether the own node supports the Multi Channel Command Class at the given Security Class: In its NIF at any class,
-        /// as a securely supported Command Class at its highest granted Security Class only.
+        /// as a securely supported Command Class at its highest granted Security Class only, and only while the own node supports
+        /// its securely supported Command Classes.
         /// </summary>
         private static bool IsMultiChannelSupportedAt(NetworkViewPoint network, SecuritySchemes scheme)
         {
             return network.HasNifCommandClass(COMMAND_CLASS_MULTI_CHANNEL_V4.ID) ||
                 (scheme != SecuritySchemes.NONE && scheme == network.GetHighestSecurityScheme() &&
-                    network.HasSecureCommandClass(COMMAND_CLASS_MULTI_CHANNEL_V4.ID));
+                    network.SupportsSecureCommandClasses() && network.HasSecureCommandClass(COMMAND_CLASS_MULTI_CHANNEL_V4.ID));
         }
     }
 
