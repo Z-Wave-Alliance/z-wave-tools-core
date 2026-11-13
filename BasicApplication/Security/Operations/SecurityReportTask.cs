@@ -100,7 +100,7 @@ namespace ZWave.BasicApplication.Operations
                                         }
                                         else
                                         {
-                                            // None for an Access Control end device whose highest class is an S2 class below Access.
+                                            // Equal to the configured list here, since S0 is the highest granted class without an S2 key.
                                             var secureCommandClasses = _securityManagerInfo.Network.GetSupportedSecureCommandClasses();
                                             if (secureCommandClasses != null)
                                             {
