@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 SPDX-License-Identifier: BSD-3-Clause
 SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 -->
-
 <FrameDefinition>
   <RadioFrequency Name="EU" Code="0" BaseHeader="0" Text="868.4 MHz (EU)"/>
   <RadioFrequency Name="US" Code="1" BaseHeader="0" Text="908.4 MHz (US)"/>
@@ -31,74 +30,74 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
   <RadioFrequency Name="IL" Code="27" BaseHeader="0" Text="916 MHz (IL)"/>
   <RadioFrequency Name="KR" Code="28" BaseHeader="1" Text="919.7 MHz (KR)"/>
   <BaseHeader Key="0" Name="BASIC" Text="Basic Frame Layout">
-    <Param Order="0" Name="HomeID" Text="Home ID" Type="HEX" Bits="32" />
-    <Param Order="1" Name="SourceNodeID" Text="Source Node ID" Type="NODE_NUMBER" Bits="8" />
+    <Param Order="0" Name="HomeID" Text="Home ID" Type="HEX" Bits="32"/>
+    <Param Order="1" Name="SourceNodeID" Text="Source Node ID" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="2" Name="Properties1" Text="Properties1" Type="HEX" Bits="8">
-      <Param Order="0" Name="HeaderType" Text="Header Type" Type="HEX" Bits="4" Defines="HeaderType" />
-      <Param Order="1" Name="SpeedModified" Text="Speed Modified" Type="BOOLEAN" Bits="1" />
-      <Param Order="2" Name="LowPower" Text="Low Power" Type="BOOLEAN" Bits="1" />
-      <Param Order="3" Name="Ack" Text="Ack" Type="BOOLEAN" Bits="1" />
-      <Param Order="4" Name="Routed" Text="Routed" Type="BOOLEAN" Bits="1" />
+      <Param Order="0" Name="HeaderType" Text="Header Type" Type="HEX" Bits="4" Defines="HeaderType"/>
+      <Param Order="1" Name="SpeedModified" Text="Speed Modified" Type="BOOLEAN" Bits="1"/>
+      <Param Order="2" Name="LowPower" Text="Low Power" Type="BOOLEAN" Bits="1"/>
+      <Param Order="3" Name="Ack" Text="Ack" Type="BOOLEAN" Bits="1"/>
+      <Param Order="4" Name="Routed" Text="Routed" Type="BOOLEAN" Bits="1"/>
     </Param>
     <Param Order="3" Name="Properties2" Text="Properties2" Type="HEX" Bits="8">
-      <Param Order="0" Name="SequenceNumber" Text="Sequence Number" Type="NUMBER" Bits="4" />
-      <Param Order="1" Name="Reserved2" Text="Reserved" Type="BOOLEAN" Bits="1" />
-      <Param Order="2" Name="SourceWakeupBeam250ms" Text="Source Wakeup Beam 250ms" Type="BOOLEAN" Bits="1" />
-      <Param Order="3" Name="WakeupSourceBeam1000ms" Text="Wakeup Source Beam 1000ms" Type="BOOLEAN" Bits="1" />
-      <Param Order="4" Name="SUCPresent" Text="SUC Present" Type="BOOLEAN" Bits="1" />
+      <Param Order="0" Name="SequenceNumber" Text="Sequence Number" Type="NUMBER" Bits="4"/>
+      <Param Order="1" Name="Reserved2" Text="Reserved" Type="BOOLEAN" Bits="1"/>
+      <Param Order="2" Name="SourceWakeupBeam250ms" Text="Source Wakeup Beam 250ms" Type="BOOLEAN" Bits="1"/>
+      <Param Order="3" Name="WakeupSourceBeam1000ms" Text="Wakeup Source Beam 1000ms" Type="BOOLEAN" Bits="1"/>
+      <Param Order="4" Name="SUCPresent" Text="SUC Present" Type="BOOLEAN" Bits="1"/>
     </Param>
-    <Param Order="4" Name="Length" Text="Length" Type="NUMBER" Bits="8" />
+    <Param Order="4" Name="Length" Text="Length" Type="NUMBER" Bits="8"/>
     <HomeId Ref="HomeID"/>
     <Source Ref="SourceNodeID"/>
     <HeaderType Ref="Properties1.HeaderType"/>
     <IsLTX Ref="Properties1.LowPower"/>
-    <SequenceNumber Ref="Properties2.SequenceNumber"/>
+	<SequenceNumber Ref="Properties2.SequenceNumber"/>
   </BaseHeader>
   <BaseHeader Key="1" Name="BASIC24" Text="Basic Frame Layout (24)">
-    <Param Order="0" Name="HomeID" Text="Home ID" Type="HEX" Bits="32" />
-    <Param Order="1" Name="SourceNodeID" Text="Source Node ID" Type="NODE_NUMBER" Bits="8" />
+    <Param Order="0" Name="HomeID" Text="Home ID" Type="HEX" Bits="32"/>
+    <Param Order="1" Name="SourceNodeID" Text="Source Node ID" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="2" Name="Properties1" Text="Properties1" Type="HEX" Bits="8">
-      <Param Order="0" Name="HeaderType" Text="Header Type" Type="HEX" Bits="4" Defines="HeaderType" />
-      <Param Order="1" Name="SpeedModified" Text="Speed Modified" Type="BOOLEAN" Bits="1" />
-      <Param Order="2" Name="SUCPresent" Text="SUC Present" Type="BOOLEAN" Bits="1" />
-      <Param Order="3" Name="LowPower" Text="Low Power" Type="BOOLEAN" Bits="1" />
-      <Param Order="4" Name="Ack" Text="Ack" Type="BOOLEAN" Bits="1" />
+      <Param Order="0" Name="HeaderType" Text="Header Type" Type="HEX" Bits="4" Defines="HeaderType"/>
+      <Param Order="1" Name="SpeedModified" Text="Speed Modified" Type="BOOLEAN" Bits="1"/>
+      <Param Order="2" Name="SUCPresent" Text="SUC Present" Type="BOOLEAN" Bits="1"/>
+      <Param Order="3" Name="LowPower" Text="Low Power" Type="BOOLEAN" Bits="1"/>
+      <Param Order="4" Name="Ack" Text="Ack" Type="BOOLEAN" Bits="1"/>
     </Param>
     <Param Order="3" Name="Properties2" Text="Properties2" Type="HEX" Bits="8">
-      <Param Order="0" Name="Reserved2" Text="Reserved" Type="HEX" Bits="4" />
-      <Param Order="1" Name="SourceWakeup" Text="Source Wakeup" Type="HEX" Bits="3" />
-      <Param Order="2" Name="Extended" Text="Extended" Type="BOOLEAN" Bits="1" />
+      <Param Order="0" Name="Reserved2" Text="Reserved" Type="HEX" Bits="4"/>
+      <Param Order="1" Name="SourceWakeup" Text="Source Wakeup" Type="HEX" Bits="3"/>
+      <Param Order="2" Name="Extended" Text="Extended" Type="BOOLEAN" Bits="1"/>
     </Param>
-    <Param Order="4" Name="Length" Text="Length" Type="NUMBER" Bits="8" />
-    <Param Order="5" Name="SequenceNumber" Text="Sequence Number" Type="HEX" Bits="8" />
+    <Param Order="4" Name="Length" Text="Length" Type="NUMBER" Bits="8"/>
+    <Param Order="5" Name="SequenceNumber" Text="Sequence Number" Type="HEX" Bits="8"/>
     <HomeId Ref="HomeID"/>
     <Source Ref="SourceNodeID"/>
     <HeaderType Ref="Properties1.HeaderType"/>
     <IsLTX Ref="Properties1.LowPower"/>
-    <SequenceNumber Ref="SequenceNumber"/>
+	<SequenceNumber Ref="SequenceNumber"/>
   </BaseHeader>
   <BaseHeader Key="2" Name="BASICLR" Text="Basic Long Range Frame Layout">
-    <Param Order="0" Name="HomeID" Text="Home ID" Type="HEX" Bits="32" />
+    <Param Order="0" Name="HomeID" Text="Home ID" Type="HEX" Bits="32"/>
     <Param Order="1" Name="Properties1" Text="Properties1" Type="HEX" Bits="24">
-      <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NUMBER" Bits="12" />
-      <Param Order="1" Name="SourceNodeID" Text="Source Node ID" Type="NUMBER" Bits="12" />
+      <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NUMBER" Bits="12"/>
+      <Param Order="1" Name="SourceNodeID" Text="Source Node ID" Type="NUMBER" Bits="12"/>
     </Param>
-    <Param Order="2" Name="Length" Text="Length" Type="NUMBER" Bits="8" />
+    <Param Order="2" Name="Length" Text="Length" Type="NUMBER" Bits="8"/>
     <Param Order="3" Name="Properties2" Text="Properties2" Type="HEX" Bits="8">
-      <Param Order="0" Name="HeaderType" Text="Header Type" Type="HEX" Bits="3" Defines="HeaderType" />
-      <Param Order="1" Name="Reserved1" Text="Reserved" Type="HEX" Bits="3" />
-      <Param Order="2" Name="Extended" Text="Extended" Type="BOOLEAN" Bits="1" />
-      <Param Order="3" Name="Ack" Text="Ack" Type="BOOLEAN" Bits="1" />
-    </Param>
-    <Param Order="4" Name="SequenceNumber" Text="Sequence Number" Type="HEX" Bits="8" />
-    <Param Order="5" Name="NoiseFloor" Text="Noise Floor" Type="HEX" Bits="8" />
-    <Param Order="6" Name="TxPower" Text="Tx Power" Type="NUMBER_SIGNED" Bits="8" />
+	  <Param Order="0" Name="HeaderType" Text="Header Type" Type="HEX" Bits="3" Defines="HeaderType"/>
+      <Param Order="1" Name="Reserved1" Text="Reserved" Type="HEX" Bits="3"/>
+      <Param Order="2" Name="Extended" Text="Extended" Type="BOOLEAN" Bits="1"/>
+      <Param Order="3" Name="Ack" Text="Ack" Type="BOOLEAN" Bits="1"/>    
+	</Param>
+    <Param Order="4" Name="SequenceNumber" Text="Sequence Number" Type="HEX" Bits="8"/>
+    <Param Order="5" Name="NoiseFloor" Text="Noise Floor" Type="HEX" Bits="8"/>
+    <Param Order="6" Name="TxPower" Text="Tx Power" Type="NUMBER_SIGNED" Bits="8"/>
     <HomeId Ref="HomeID"/>
     <Source Ref="Properties1.SourceNodeID"/>
     <Destination Ref="Properties1.DestinationNodeID"/>
     <HeaderType Ref="Properties2.HeaderType"/>
     <IsLTX Ref="Properties2.Reserved1"/>
-    <SequenceNumber Ref="SequenceNumber"/>
+	<SequenceNumber Ref="SequenceNumber"/>
   </BaseHeader>
   <Header Key="10" Name="BROADCAST" Text="Broadcast" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
     <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NODE_NUMBER" Bits="8"/>
@@ -124,15 +123,15 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     </Destination>
   </Header>
   <Header Key="72" Name="BROADCASTLR" Text="Broadcast" BaseHeaderKey="2" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
-    <Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
+   	<Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
       <Param Order="0" Name="ExtensionLength" Text="Extension Length" Type="HEX" Bits="3"/>
       <Param Order="1" Name="Discard" Text="Discard" Type="HEX" Bits="1"/>
       <Param Order="2" Name="Extension Type" Text="Extension Type" Type="HEX" Bits="3"/>
       <Param Order="3" Name="Reserved" Text="Reserved" Type="HEX" Bits="1"/>
     </Param>
     <Param Order="1" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties3.ExtensionLength" OptRef="Properties2.Extended"/>
-    <Validation ParamName="Properties2.HeaderType" ParamHexValue="0x01"/>
-    <Validation ParamName="Properties1.DestinationNodeID" ParamHexValue="0xFFF"/>
+	<Validation ParamName="Properties2.HeaderType" ParamHexValue="0x01"/>
+	<Validation ParamName="Properties1.DestinationNodeID" ParamHexValue="0xFFF"/>
   </Header>
   <Header Key="13" Name="SINGLECAST" Text="Singlecast" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
     <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NODE_NUMBER" Bits="8"/>
@@ -156,14 +155,14 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     </Destination>
   </Header>
   <Header Key="70" Name="SINGLECASTLR" Text="Singlecast" BaseHeaderKey="2" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
-    <Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
+   	<Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8" OptRef="Properties2.Extended">
       <Param Order="0" Name="ExtensionLength" Text="Extension Length" Type="HEX" Bits="3"/>
       <Param Order="1" Name="Discard" Text="Discard" Type="HEX" Bits="1"/>
       <Param Order="2" Name="Extension Type" Text="Extension Type" Type="HEX" Bits="3"/>
       <Param Order="3" Name="Reserved" Text="Reserved" Type="HEX" Bits="1"/>
     </Param>
     <Param Order="1" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties3.ExtensionLength" OptRef="Properties2.Extended"/>
-    <Validation ParamName="Properties2.HeaderType" ParamHexValue="0x01"/>
+	<Validation ParamName="Properties2.HeaderType" ParamHexValue="0x01"/>
   </Header>
   <Header Key="16" Name="MULTICAST" Text="Multicast" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="true" IsRouted="false">
     <Param Order="0" Name="Properties3" Text="Properties3" Type="HEX" Bits="8">
@@ -202,7 +201,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.Ack" ParamHexValue="0x00"/>
     <Validation ParamName="Properties1.Routed" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="20" Name="TRANSFER_ACKNOWLEDGE24" Text="Ack" BaseHeaderKey="1" IsAck="true" IsError="false" IsMulticast="false" IsRouted="false">
@@ -215,15 +214,15 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Param Order="2" Name="Extension" Text="Extension" Type="HEX" Bits="8" SizeRef="Properties3.ExtensionLength" OptRef="Properties2.Extended"/>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x03"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="71" Name="TRANSFER_ACKNOWLEDGELR" Text="Ack" BaseHeaderKey="2" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
-    <Param Order="0" Name="ReceivedRssi" Text="Received RSSI" Type="HEX" Bits="8" />
-    <Validation ParamName="Properties2.HeaderType" ParamHexValue="0x03"/>
+    <Param Order="0" Name="ReceivedRssi" Text="Received RSSI" Type="HEX" Bits="8"/>
+	<Validation ParamName="Properties2.HeaderType" ParamHexValue="0x03"/>
   </Header>
   <Header Key="22" Name="ROUTED_SINGLECAST" Text="Routed Singlecast" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="false" IsRouted="true">
-    <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NODE_NUMBER" Bits="8" />
+    <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="1" Name="Properties3" Text="Properties3" Type="HEX" Bits="8">
       <Param Order="0" Name="Direction" Text="Direction" Type="BOOLEAN" Bits="1"/>
       <Param Order="1" Name="RoutedAcknowledge" Text="Routed Acknowledge" Type="BOOLEAN" Bits="1"/>
@@ -248,13 +247,13 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties3.RoutedAcknowledge" ParamHexValue="0x00"/>
     <Validation ParamName="Properties3.RoutedError" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
     <Hops Ref="Properties4.Hops"/>
     <Repeaters Ref="Repeater" SizeRef="Properties4.Repeaters" IsBitmask="false" SizeCorrection="0"/>
   </Header>
   <Header Key="23" Name="ROUTED_SINGLECAST24" Text="Routed Singlecast" BaseHeaderKey="1" IsAck="false" IsError="false" IsMulticast="false" IsRouted="true">
-    <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NODE_NUMBER" Bits="8" />
+    <Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="1" Name="Properties3" Text="Properties3" Type="HEX" Bits="8">
       <Param Order="0" Name="Direction" Text="Direction" Type="BOOLEAN" Bits="1"/>
       <Param Order="1" Name="RoutedAcknowledge" Text="Routed Acknowledge" Type="BOOLEAN" Bits="1"/>
@@ -281,7 +280,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties3.RoutedAcknowledge" ParamHexValue="0x00"/>
     <Validation ParamName="Properties3.RoutedError" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
     <Hops Ref="Properties4.Hops"/>
     <Repeaters Ref="Repeater" SizeRef="Properties4.Repeaters" IsBitmask="false" SizeCorrection="0"/>
@@ -312,7 +311,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties3.RoutedAcknowledge" ParamHexValue="0x01"/>
     <Validation ParamName="Properties3.RoutedError" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
     <Hops Ref="Properties4.Hops"/>
     <Repeaters Ref="Repeater" SizeRef="Properties4.Repeaters" IsBitmask="false" SizeCorrection="0"/>
@@ -341,7 +340,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties3.RoutedAcknowledge" ParamHexValue="0x01"/>
     <Validation ParamName="Properties3.RoutedError" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
     <Hops Ref="Properties4.Hops"/>
     <Repeaters Ref="Repeater" SizeRef="Properties4.Repeaters" IsBitmask="false" SizeCorrection="0"/>
@@ -371,7 +370,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties3.RoutedAcknowledge" ParamHexValue="0x00"/>
     <Validation ParamName="Properties3.RoutedError" ParamHexValue="0x01"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
     <Hops Ref="Properties4.Hops"/>
     <Repeaters Ref="Repeater" SizeRef="Properties4.Repeaters" IsBitmask="false" SizeCorrection="0"/>
@@ -401,7 +400,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties3.RoutedAcknowledge" ParamHexValue="0x00"/>
     <Validation ParamName="Properties3.RoutedError" ParamHexValue="0x01"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
     <Hops Ref="Properties4.Hops"/>
     <Repeaters Ref="Repeater" SizeRef="Properties4.Repeaters" IsBitmask="false" SizeCorrection="0"/>
@@ -420,7 +419,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Param Order="7" Name="ZensorFrameID_LSB" Text="Zensor Frame ID (LSB)" Type="HEX" Bits="8"/>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x04"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="32" Name="FLOODED24" Text="Zensor Net" BaseHeaderKey="1" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -437,7 +436,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Param Order="7" Name="ZensorFrameID_LSB" Text="Zensor Frame ID (LSB)" Type="HEX" Bits="8"/>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x04"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="33" Name="EXPLORER_NORMAL" Text="Explorer Normal" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -465,7 +464,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="34" Name="EXPLORER_NORMAL24" Text="Explorer Normal" BaseHeaderKey="1" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -493,7 +492,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x00"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="35" Name="EXPLORER_SEARCH_RESULT" Text="Explorer Search Result" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -531,7 +530,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x02"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="36" Name="EXPLORER_SEARCH_RESULT24" Text="Explorer Search Result" BaseHeaderKey="1" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -569,7 +568,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x02"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="37" Name="EXPLORER_AUTOINCLUSION" Text="Inclusion Request Explore" BaseHeaderKey="0" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -598,7 +597,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x01"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="38" Name="EXPLORER_AUTOINCLUSION24" Text="Inclusion Request Explore" BaseHeaderKey="1" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
@@ -627,38 +626,41 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
     <Validation ParamName="Properties1.HeaderType" ParamHexValue="0x05"/>
     <Validation ParamName="Properties3.ExploreCommandType" ParamHexValue="0x01"/>
     <Destination>
-      <Destination Ref="DestinationNodeID" />
+      <Destination Ref="DestinationNodeID"/>
     </Destination>
   </Header>
   <Header Key="60" Name="WAKE_UP_BEAM" Text="WakeUp Beam" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
     <Param Order="0" Name="WakeUpBeamMarker" Text="Wake Up Beam Marker" Type="HEX" Bits="8"/>
     <Param Order="1" Name="DestinationNodeID" Text="Destination Node ID 1" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="2" Name="HomeIDHash" Text="Home ID Hash" Type="HEX" Bits="8"/>
+    <Validation ParamName="WakeUpBeamMarker" ParamHexValue="0x55"/>
   </Header>
   <Header Key="61" Name="WAKE_UP_BEAM_START" Text="WakeUp Beam Start" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
     <Param Order="0" Name="WakeUpBeamMarker" Text="Wake Up Beam Marker" Type="HEX" Bits="8"/>
     <Param Order="1" Name="DestinationNodeID" Text="Destination Node ID 1" Type="NODE_NUMBER" Bits="8"/>
     <Param Order="2" Name="HomeIDHashIncluded" Text="Home ID Hash Included" Type="BOOLEAN" Bits="8"/>
     <Param Order="3" Name="HomeIDHash" Text="Home ID Hash" Type="HEX" Bits="8"/>
+    <Validation ParamName="WakeUpBeamMarker" ParamHexValue="0x55"/>
   </Header>
   <Header Key="62" Name="WAKE_UP_BEAM_STOP" Text="WakeUp Beam Stop" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
     <Param Order="0" Name="Counter" Text="Counter" Type="NUMBER" Bits="16"/>
   </Header>
   <Header Key="63" Name="WAKE_UP_BEAM_LR" Text="WakeUp Beam" IsAck="false" IsError="false" IsMulticast="false" IsRouted="false">
-    <Param Order="0" Name="WakeUpBeamMarker" Text="Wake Up Beam Marker" Type="HEX" Bits="8"/>
-    <Param Order="1" Name="Properties1" Text="Properties1" Type="HEX" Bits="16" >
-      <Param Order="0" Name="TxPower" Text="TX Power" Type="HEX" Bits="4"/>
-      <Param Order="1" Name="DestinationNodeID" Text="Destination Node ID" Type="NUMBER" Bits="12" />
-    </Param>
-    <Param Order="2" Name="HomeIDHash" Text="Home ID Hash" Type="HEX" Bits="8"/>
+	<Param Order="0" Name="WakeUpBeamMarker" Text="Wake Up Beam Marker" Type="HEX" Bits="8"/>
+	<Param Order="1" Name="Properties1" Text="Properties1" Type="HEX" Bits="16">
+		<Param Order="0" Name="DestinationNodeID" Text="Destination Node ID" Type="NUMBER" Bits="12"/>
+		<Param Order="1" Name="TxPower" Text="TX Power" Type="HEX" Bits="4"/>
+	</Param>
+	<Param Order="2" Name="HomeIDHash" Text="Home ID Hash" Type="HEX" Bits="8"/>
+  <Validation ParamName="WakeUpBeamMarker" ParamHexValue="0x55"/>
   </Header>
   <DefineSet Name="HeaderType">
-    <Define Key="0x01" Name="Singlecast" Text="Singlecast Frame" />
-    <Define Key="0x02" Name="Multicast" Text="Multicast Frame" />
-    <Define Key="0x03" Name="TransferAcknowledge" Text="Transfer Acknowledge" />
-    <Define Key="0x04" Name="Flooded" Text="Flooded Frame" />
-    <Define Key="0x05" Name="Explorer" Text="Explorer Frame" />
-    <Define Key="0x08" Name="Routed" Text="Routed Frame" />
+    <Define Key="0x01" Name="Singlecast" Text="Singlecast Frame"/>
+    <Define Key="0x02" Name="Multicast" Text="Multicast Frame"/>
+    <Define Key="0x03" Name="TransferAcknowledge" Text="Transfer Acknowledge"/>
+    <Define Key="0x04" Name="Flooded" Text="Flooded Frame"/>
+    <Define Key="0x05" Name="Explorer" Text="Explorer Frame"/>
+    <Define Key="0x08" Name="Routed" Text="Routed Frame"/>
   </DefineSet>
   <DefineSet Name="ExploreCommandType">
     <Define Key="0x00" Name="ExploreNormal" Text="Explore Normal"/>
@@ -678,7 +680,7 @@ SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
       <HeaderCode>13</HeaderCode>
       <HeaderCode>14</HeaderCode>
       <HeaderCode>15</HeaderCode>
-      <HeaderCode>70</HeaderCode>
+	    <HeaderCode>70</HeaderCode>
     </HeaderCodes>
   </HeaderFilter>
   <HeaderFilter Order="3" Text="Multicast">

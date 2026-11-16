@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,12 @@ namespace ZWave.Xml.FrameHeader
         [XmlIgnore]
         public BaseHeader BaseHeaderDefinition { get; set; }
 
+        /// <summary>
+        /// True if the header has a BaseHeaderKey. The XML serializer sets it when the attribute is present.
+        /// </summary>
+        [XmlIgnore]
+        public bool BaseHeaderKeySpecified { get; set; }
+
         public Header()
         { }
 
@@ -26,6 +33,7 @@ namespace ZWave.Xml.FrameHeader
             this.Name = name;
             this.Text = text;
             this.BaseHeaderKey = (byte)baseHeaderKey;
+            this.BaseHeaderKeySpecified = true;
             this.IsAck = isAck;
             this.IsError = isError;
             this.IsMulticast = isMulticast;
