@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +86,7 @@ namespace ZWave.Xml.FrameHeader
             }
             foreach (var item in Header)
             {
-                if (item.Validation != null && item.Validation.Count > 0)
+                if (item.BaseHeaderKeySpecified && item.Validation != null && item.Validation.Count > 0)
                 {
                     item.Initialize(BaseHeader.FirstOrDefault(x => x.Key == item.BaseHeaderKey));
                     foreach (var val in item.Validation)

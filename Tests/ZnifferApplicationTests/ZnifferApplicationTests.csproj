@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="CryptoApi.cs" />
     <Compile Include="DataItemTests.cs" />
+    <Compile Include="FrameHeaderTreeTests.cs" />
     <Compile Include="FrameLayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PtiFrameClientTests.cs" />
