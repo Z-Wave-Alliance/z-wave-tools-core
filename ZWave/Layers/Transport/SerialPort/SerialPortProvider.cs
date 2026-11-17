@@ -29,7 +29,8 @@ namespace ZWave.Layers.Transport
             get { return RuntimeInformation.IsOSPlatform(OSPlatform.Windows); }
         }
 
-        private SerialPort _port;
+        // Close() and Dispose() set this to null while the read thread is using the port, so every other member works on a copy.
+        private volatile SerialPort _port;
         // Name this provider holds in _openPortNames, null while it holds none.
         private string _reservedPortName;
 
@@ -46,7 +47,8 @@ namespace ZWave.Layers.Transport
         {
             get
             {
-                return _port != null && _port.IsOpen;
+                SerialPort port = _port;
+                return port != null && port.IsOpen;
             }
         }
 
@@ -104,11 +106,12 @@ namespace ZWave.Layers.Transport
         {
             var ret = false;
             // Only a provider that still holds its port name may (re)open the port.
-            if (_port != null && _reservedPortName != null)
+            SerialPort port = _port;
+            if (port != null && _reservedPortName != null)
             {
                 try
                 {
-                    _port.Open();
+                    port.Open();
                     ret = true;
                 }
                 catch (ArgumentException)
@@ -139,11 +142,17 @@ namespace ZWave.Layers.Transport
             if (IsOpen || TryOpenPort())
             {
                 int ret = -1;
+                SerialPort port = _port;
                 for (int i = 0; i < 2; i++)
                 {
+                    // A read that failed because the port was closed meanwhile is not repeated.
+                    if (port == null || port != _port)
+                    {
+                        break;
+                    }
                     try
                     {
-                        ret = _port.Read(buffer, 0, bufferLen);
+                        ret = port.Read(buffer, 0, bufferLen);
                         break;
                     }
                     catch (UnauthorizedAccessException)
@@ -171,7 +180,8 @@ namespace ZWave.Layers.Transport
 
         public byte[] ReadExisting()
         {
-            if (!IsOpen)
+            SerialPort port = _port;
+            if (port == null || !port.IsOpen)
             {
                 return null;
             }
@@ -179,11 +189,11 @@ namespace ZWave.Layers.Transport
             {
                 // Read the raw bytes. SerialPort.ReadExisting() decodes them as text and would
                 // replace every byte above 0x7F.
-                int available = _port.BytesToRead;
+                int available = port.BytesToRead;
                 if (available > 0)
                 {
                     var buffer = new byte[available];
-                    int readLen = _port.Read(buffer, 0, available);
+                    int readLen = port.Read(buffer, 0, available);
                     if (readLen > 0)
                     {
                         if (readLen < available)
@@ -217,9 +227,14 @@ namespace ZWave.Layers.Transport
             if (IsOpen || TryOpenPort())
             {
                 int ret = -1;
+                SerialPort port = _port;
+                if (port == null)
+                {
+                    return ret;
+                }
                 try
                 {
-                    _port.Write(buffer, 0, bufferLen);
+                    port.Write(buffer, 0, bufferLen);
                     ret = bufferLen;
                 }
                 catch (IOException)
@@ -242,16 +257,20 @@ namespace ZWave.Layers.Transport
 
         public void Close()
         {
-            if (IsOpen)
+            SerialPort port = _port;
+            if (port != null && port.IsOpen)
             {
                 try
                 {
-                    _port.DiscardInBuffer();
-                    _port.DiscardOutBuffer();
+                    port.DiscardInBuffer();
+                    port.DiscardOutBuffer();
                 }
                 catch (IOException)
                 {
 
+                }
+                catch (InvalidOperationException)
+                {
                 }
                 DisposePort();
                 Thread.Sleep(200);

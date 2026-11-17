@@ -25,6 +25,9 @@ namespace ZWave.Layers.Transport
             set { _serialPortProvider = value; }
         }
 
+        // The read of a port whose dispose did not return can stay blocked, so the read task is given up after this time.
+        private const int READ_TASK_TIMEOUT_MS = 3000;
+
         private CancellationTokenSource _readTaskCts;
         private Task _readTask;
         private readonly byte[] _buffer = new byte[Transport.SerialPortProvider.BUFFER_SIZE];
@@ -48,7 +51,8 @@ namespace ZWave.Layers.Transport
                     SerialPortProvider.ReadExisting();
                     Connected?.Invoke(this);
                     _readTaskCts = new CancellationTokenSource();
-                    _readTask = Task.Factory.StartNew(() => ReadLoop());
+                    CancellationToken token = _readTaskCts.Token;
+                    _readTask = Task.Factory.StartNew(() => ReadLoop(token));
                 }
                 "{0:X2} {1} {2}@{3}.{4} {5}"._DLOG(SessionId, ApiType, spds.SourceName, spds.BaudRate, spds.StopBits, ret);
             }
@@ -65,7 +69,11 @@ namespace ZWave.Layers.Transport
             SerialPortProvider.Close();
             if (_readTask != null)
             {
-                _readTask.Wait();
+                if (!_readTask.Wait(READ_TASK_TIMEOUT_MS))
+                {
+                    "{0:X2} {1} The read task did not end within {2} ms, it is given up"._DLOG(SessionId, ApiType, READ_TASK_TIMEOUT_MS);
+                }
+                _readTask = null;
             }
             Disconnected?.Invoke(this);
             var spds = (SerialPortDataSource)DataSource;
@@ -87,9 +95,10 @@ namespace ZWave.Layers.Transport
             return ret;
         }
 
-        private void ReadLoop()
+        // The token is the one of this connection: A read task that was given up does not go on under the token of the next connection.
+        private void ReadLoop(CancellationToken token)
         {
-            while (!_readTaskCts.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
                 var readData = SerialPortProvider.Read(_buffer, (int)Transport.SerialPortProvider.BUFFER_SIZE);
                 if (readData > 0)
