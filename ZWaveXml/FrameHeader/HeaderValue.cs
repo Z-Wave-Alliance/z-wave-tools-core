@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -159,9 +160,9 @@ namespace ZWave.Xml.FrameHeader
                         byte totalbits = 0;
                         foreach (var param in item.Param1)
                         {
-                            var subValue = Tools.GetBytesFromByteArray(ret.ByteValueList.ToArray(), totalbits, param.Bits);
+                            var subValue = GetInnerParamBytes(ret.ByteValueList, totalbits, param.Bits);
                             totalbits += param.Bits;
-                            
+
                             ParamValue sp = ParamValue.CreateParamValue(param);
                             sp.ByteValueList.AddRange(subValue);
                             ret.InnerValues.Add(sp);
@@ -228,6 +229,26 @@ namespace ZWave.Xml.FrameHeader
         private static byte GetParamValueBytes(Param item)
         {
             return (byte)(item.Bits / 8);
+        }
+
+        /// <summary>
+        /// Returns (value >> lowBitOffset) &amp; mask(bits) of the big-endian value in fieldBytes as a big-endian byte array of
+        /// (bits + 7) / 8 bytes. Bit offset 0 is the least significant bit of the last byte.
+        /// </summary>
+        private static byte[] GetInnerParamBytes(IList<byte> fieldBytes, byte lowBitOffset, byte bits)
+        {
+            byte[] ret = new byte[(bits + 7) / 8];
+            for (int i = 0; i < bits; i++)
+            {
+                int bitPosition = lowBitOffset + i;
+                int sourceIndex = fieldBytes.Count - 1 - bitPosition / 8;
+                if (sourceIndex >= 0 && ((fieldBytes[sourceIndex] >> (bitPosition % 8)) & 0x01) != 0)
+                {
+                    ret[ret.Length - 1 - i / 8] |= (byte)(0x01 << (i % 8));
+                }
+            }
+
+            return ret;
         }
 
         private bool IsIncluded(string optRef)
