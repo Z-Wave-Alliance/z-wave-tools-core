@@ -15,6 +15,11 @@ namespace ZWave.Security
         public const ushort NONCE_SIZE = 16;
         public const ushort PERSONALIZATION_SIZE = 32;
 
+        /// <summary>
+        /// ZWAVE_KEY_ID_NONE in libs2: the key is passed as raw bytes rather than as a reference to a key in a PSA key store.
+        /// </summary>
+        private const uint KEY_ID_NONE = 0;
+
         private static readonly object _syncObj = new object();
         private static bool Is64Bit { get { return Environment.Is64BitProcess; } }
 
@@ -112,20 +117,23 @@ namespace ZWave.Security
         * Function: networkkey_expand
         * 
         * Expand network key into ccm key and nonce personalization string (for CTR_DRBG).
+        * \param[in] key_id PSA key ID of the network key, or KEY_ID_NONE to use network_key.
         * \param[in] network_key The network key
         * \param[out] ccm_key 16 byte CCM key.
         * \param[out] nonce_pstring The 32-byte personalization string for instantiation of SPAN NextNonce functions.
         * \param[out] mpan_key 16 byte MPAN key.
         */
         [DllImport("s2crypto32", EntryPoint = "networkkey_expand", CallingConvention = CallingConvention.Cdecl)]
-        private extern static void NetworkKeyExpand_32([In, MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_SIZE)] byte[] network_key,
+        private extern static void NetworkKeyExpand_32([MarshalAs(UnmanagedType.U4)] uint key_id,
+            [In, MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_SIZE)] byte[] network_key,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] ccm_key,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] nonce_pstring,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] mpan_key
             );
 
         [DllImport("s2crypto64", EntryPoint = "networkkey_expand", CallingConvention = CallingConvention.Cdecl)]
-        private extern static void NetworkKeyExpand_64([In, MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_SIZE)] byte[] network_key,
+        private extern static void NetworkKeyExpand_64([MarshalAs(UnmanagedType.U4)] uint key_id,
+            [In, MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_SIZE)] byte[] network_key,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] ccm_key,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] nonce_pstring,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] mpan_key
@@ -137,11 +145,11 @@ namespace ZWave.Security
             {
                 if (Is64Bit)
                 {
-                    NetworkKeyExpand_64(network_key, ccm_key, nonce_pstring, mpan_key);
+                    NetworkKeyExpand_64(KEY_ID_NONE, network_key, ccm_key, nonce_pstring, mpan_key);
                 }
                 else
                 {
-                    NetworkKeyExpand_32(network_key, ccm_key, nonce_pstring, mpan_key);
+                    NetworkKeyExpand_32(KEY_ID_NONE, network_key, ccm_key, nonce_pstring, mpan_key);
                 }
             }
         }
@@ -160,16 +168,20 @@ namespace ZWave.Security
              T2 = Nonce Personalization string 1, K(NONCE) = CMAC(PRK, T1 | Constant TE | Counter 0x02)
              T3 = Nonce Personalization string 2, K(NONCE) = CMAC(PRK, T2 | Constant TE | Counter 0x03)
              T4 = MPAN Key,                       K(MPAN)  = CMAC(PRK, T3 | Constant TE | Counter 0x04)
+
+         key_id is the PSA key ID of the PRK, or KEY_ID_NONE to use prk.
         */
         [DllImport("s2crypto32", EntryPoint = "tempkey_expand", CallingConvention = CallingConvention.Cdecl)]
-        private extern static void TempKeyExpand_32([In, MarshalAs(UnmanagedType.LPArray)] byte[] prk,
+        private extern static void TempKeyExpand_32([MarshalAs(UnmanagedType.U4)] uint key_id,
+            [In, MarshalAs(UnmanagedType.LPArray)] byte[] prk,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] temp_ccm_key,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] temp_nonce_pstring,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] temp_mpan_key
             );
 
         [DllImport("s2crypto64", EntryPoint = "tempkey_expand", CallingConvention = CallingConvention.Cdecl)]
-        private extern static void TempKeyExpand_64([In, MarshalAs(UnmanagedType.LPArray)] byte[] prk,
+        private extern static void TempKeyExpand_64([MarshalAs(UnmanagedType.U4)] uint key_id,
+            [In, MarshalAs(UnmanagedType.LPArray)] byte[] prk,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] temp_ccm_key,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] temp_nonce_pstring,
             [Out, MarshalAs(UnmanagedType.LPArray)] byte[] temp_mpan_key
@@ -181,11 +193,11 @@ namespace ZWave.Security
             {
                 if (Is64Bit)
                 {
-                    TempKeyExpand_64(prk, temp_ccm_key, temp_nonce_pstring, temp_mpan_key);
+                    TempKeyExpand_64(KEY_ID_NONE, prk, temp_ccm_key, temp_nonce_pstring, temp_mpan_key);
                 }
                 else
                 {
-                    TempKeyExpand_32(prk, temp_ccm_key, temp_nonce_pstring, temp_mpan_key);
+                    TempKeyExpand_32(KEY_ID_NONE, prk, temp_ccm_key, temp_nonce_pstring, temp_mpan_key);
                 }
             }
         }
