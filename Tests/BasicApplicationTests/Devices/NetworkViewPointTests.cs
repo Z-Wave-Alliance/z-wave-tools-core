@@ -478,6 +478,44 @@ namespace BasicApplicationTests.Devices
         }
 
         [Test]
+        public void SecureCommandClassesOfOwnNode_WithoutAList_AreAllButTheAlwaysNonSecureOnes()
+        {
+            // User Credential is in no list of the NetworkViewPoint. Security 0 is never in the S0/S2 Commands Supported Report.
+            var network = new NetworkViewPoint(null);
+            network.NodeTag = new NodeTag(1);
+            network.SetCommandClasses(new byte[]
+            {
+                ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_SECURITY.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_SECURITY_2.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_USER_CREDENTIAL.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID
+            });
+            network.SetNifInclusionState(InclusionStates.IncludedSecurely, isAccessEndDevice: false);
+
+            byte[] secureCommandClasses = new byte[]
+            {
+                ZWave.CommandClasses.COMMAND_CLASS_USER_CREDENTIAL.ID,
+                ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID
+            };
+            Assert.AreEqual(secureCommandClasses, network.GetSecureCommandClasses());
+            Assert.AreEqual(
+                new byte[]
+                {
+                    ZWave.CommandClasses.COMMAND_CLASS_ZWAVEPLUS_INFO.ID,
+                    ZWave.CommandClasses.COMMAND_CLASS_SECURITY.ID,
+                    ZWave.CommandClasses.COMMAND_CLASS_SECURITY_2.ID
+                },
+                network.GetNifCommandClasses());
+            Assert.IsTrue(network.HasSecureCommandClass(ZWave.CommandClasses.COMMAND_CLASS_USER_CREDENTIAL.ID));
+            Assert.IsFalse(network.HasSecureCommandClass(ZWave.CommandClasses.COMMAND_CLASS_SECURITY.ID));
+
+            // Security 0 in a list of the application is ignored as well.
+            network.SetSecureCommandClasses(new byte[] { ZWave.CommandClasses.COMMAND_CLASS_SECURITY.ID, ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID });
+            Assert.AreEqual(new byte[] { ZWave.CommandClasses.COMMAND_CLASS_VERSION.ID }, network.GetSecureCommandClasses());
+        }
+
+        [Test]
         public void SecureCommandClassesOfOwnNode_FollowTheListTheApplicationSets()
         {
             var network = CreateIncludedNetwork();
