@@ -38,35 +38,22 @@ namespace ZWave.Devices
 
         public const int MAX_NODES = 0x0FFF;//1024 + 256; // 12 bit LR nodeIds + 8 bit nodeIds
         public const int MAX_ENDPOINTS = 128;
-        private byte[] _secureCommandClasses = new byte[]
-        {
-            COMMAND_CLASS_VERSION.ID,
-            COMMAND_CLASS_MANUFACTURER_SPECIFIC.ID,
-            COMMAND_CLASS_POWERLEVEL.ID,
-            COMMAND_CLASS_ASSOCIATION.ID,
-            COMMAND_CLASS_ASSOCIATION_GRP_INFO.ID,
-            COMMAND_CLASS_DEVICE_RESET_LOCALLY.ID,
-            COMMAND_CLASS_CONFIGURATION_V3.ID,
-            COMMAND_CLASS_FIRMWARE_UPDATE_MD_V5.ID,
-            COMMAND_CLASS_MULTI_CHANNEL_V4.ID,
-            COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V3.ID,
-            COMMAND_CLASS_WAKE_UP_V2.ID,
-
-            // Multi Channel Support only. Not presented in supported CCs.
-            COMMAND_CLASS_SWITCH_BINARY_V2.ID,
-            COMMAND_CLASS_SWITCH_ALL.ID,
-            COMMAND_CLASS_NOTIFICATION_V8.ID,
-        };
-
         private byte[] _ownSecureCommandClasses;
 
         /// <summary>
-        /// The Command Classes the own node supports securely: The list set with <see cref="SetSecureCommandClasses(byte[])"/>,
-        /// or the default list when none is set, in both cases without the <see cref="AlwaysNifCommandClasses"/>.
+        /// Whether the own node supports the Command Class securely. Without a list set with
+        /// <see cref="SetSecureCommandClasses(byte[])"/> that is every Command Class, with one only the ones in the list. The
+        /// <see cref="AlwaysNifCommandClasses"/> and the Security 0 Command Class, which is never in the S0/S2 Commands Supported
+        /// Report, are not supported securely in both cases.
         /// </summary>
-        private byte[] OwnSecureCommandClasses
+        private bool IsOwnSecureCommandClass(byte commandClass)
         {
-            get { return (_ownSecureCommandClasses ?? _secureCommandClasses).Where(x => !AlwaysNifCommandClasses.Contains(x)).ToArray(); }
+            if (AlwaysNifCommandClasses.Contains(commandClass) || commandClass == COMMAND_CLASS_SECURITY.ID)
+            {
+                return false;
+            }
+
+            return _ownSecureCommandClasses == null || _ownSecureCommandClasses.Contains(commandClass);
         }
 
         /// <summary>
@@ -512,7 +499,7 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// The given Command Classes that are in <see cref="OwnSecureCommandClasses"/> if <paramref name="securePart"/> is true,
+        /// The given Command Classes the own node supports securely if <paramref name="securePart"/> is true,
         /// otherwise the ones that are not; null if <paramref name="commandClasses"/> is null.
         /// </summary>
         public byte[] GetSecureFilteredCommandClasses(byte[] commandClasses, bool securePart)
@@ -521,11 +508,13 @@ namespace ZWave.Devices
             {
                 if (securePart)
                 {
-                    return OwnSecureCommandClasses.Where(x => commandClasses.Contains(x)).ToArray();
+                    // A list set by the application keeps its order.
+                    byte[] candidates = _ownSecureCommandClasses?.Where(x => commandClasses.Contains(x)).ToArray() ?? commandClasses;
+                    return candidates.Where(x => IsOwnSecureCommandClass(x)).ToArray();
                 }
                 else
                 {
-                    return commandClasses.Where(x => !OwnSecureCommandClasses.Contains(x)).ToArray();
+                    return commandClasses.Where(x => !IsOwnSecureCommandClass(x)).ToArray();
                 }
             }
             else
@@ -535,8 +524,8 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// The securely supported Command Classes of a node. For the own node they are its configured Command Classes that are
-        /// in <see cref="OwnSecureCommandClasses"/>.
+        /// The securely supported Command Classes of a node. For the own node they are its configured Command Classes that it
+        /// supports securely.
         /// </summary>
         public virtual byte[] GetSecureCommandClasses(NodeTag node)
         {
@@ -660,7 +649,7 @@ namespace ZWave.Devices
             {
                 if (node == NodeTag)
                 {
-                    return OwnSecureCommandClasses.Contains(cmdClass);
+                    return IsOwnSecureCommandClass(cmdClass);
                 }
                 else
                 {
@@ -783,7 +772,7 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// The configured Command Classes of the own node that are not in <see cref="OwnSecureCommandClasses"/>.
+        /// The configured Command Classes of the own node that it does not support securely.
         /// </summary>
         public byte[] GetNonSecureCommandClasses()
         {
@@ -944,8 +933,8 @@ namespace ZWave.Devices
         }
 
         /// <summary>
-        /// Sets the Command Classes the own node supports securely; null restores the default list. The
-        /// <see cref="AlwaysNifCommandClasses"/> in the list are ignored.
+        /// Sets the Command Classes the own node supports securely; null makes every Command Class securely supported.
+        /// The <see cref="AlwaysNifCommandClasses"/> and the Security 0 Command Class in the list are ignored.
         /// </summary>
         public void SetSecureCommandClasses(byte[] cmdClasses)
         {
