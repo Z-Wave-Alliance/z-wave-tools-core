@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +29,12 @@ namespace ZWave.Layers.Transport
             get { return RuntimeInformation.IsOSPlatform(OSPlatform.Windows); }
         }
 
-        private SerialPort _port;
+        // Guards the changes of _port, _portName and _reservedPortName. It is never held while a port is disposed.
+        private readonly object _stateLock = new object();
+
+        // Close() and Dispose() set this to null while the read thread is using the port, so Read(), ReadExisting() and Write()
+        // work on a copy without the lock.
+        private volatile SerialPort _port;
         // Name this provider holds in _openPortNames, null while it holds none.
         private string _reservedPortName;
 
@@ -45,29 +51,33 @@ namespace ZWave.Layers.Transport
         {
             get
             {
-                return _port != null && _port.IsOpen;
+                SerialPort port = _port;
+                return port != null && port.IsOpen;
             }
         }
 
         public bool Open(string portName, int baudRate, PInvokeParity parity, int dataBits, PInvokeStopBits stopBits)
         {
-            if (!IsOpen)
+            lock (_stateLock)
             {
-                ReleasePortName();
-                if (!ReservePortName(portName))
+                if (!IsOpen)
                 {
-                    return false;
+                    ReleasePortName();
+                    if (!ReservePortName(portName))
+                    {
+                        return false;
+                    }
+                    _portName = portName;
+                    _port = new SerialPort(_portName, baudRate, (Parity)(int)parity, dataBits, (StopBits)(int)stopBits);
+                    _port.WriteTimeout = 500;
+                    if (TryOpenPort())
+                    {
+                        return true;
+                    }
+                    ReleasePortName();
                 }
-                _portName = portName;
-                _port = new SerialPort(_portName, baudRate, (Parity)(int)parity, dataBits, (StopBits)(int)stopBits);
-                _port.WriteTimeout = 500;
-                if (TryOpenPort())
-                {
-                    return true;
-                }
-                ReleasePortName();
+                return false;
             }
-            return false;
         }
 
         private bool ReservePortName(string portName)
@@ -89,38 +99,49 @@ namespace ZWave.Layers.Transport
 
         private void ReleasePortName()
         {
-            if (_reservedPortName != null)
+            ReleasePortName(_reservedPortName);
+            _reservedPortName = null;
+        }
+
+        private static void ReleasePortName(string portName)
+        {
+            if (portName != null)
             {
                 lock (_access)
                 {
-                    _openPortNames.Remove(_reservedPortName);
+                    _openPortNames.Remove(portName);
                 }
-                _reservedPortName = null;
             }
         }
 
         private bool TryOpenPort()
         {
             var ret = false;
-            // Only a provider that still holds its port name may (re)open the port.
-            if (_port != null && _reservedPortName != null)
+            // The port is opened under the lock, so that Close() and Dispose() cannot take it away in between and leave an open
+            // port nobody owns.
+            lock (_stateLock)
             {
-                try
+                // Only a provider that still holds its port name may (re)open the port.
+                SerialPort port = _port;
+                if (port != null && _reservedPortName != null)
                 {
-                    _port.Open();
-                    ret = true;
-                }
-                catch (ArgumentException)
-                {
-                }
-                catch (UnauthorizedAccessException)
-                {
-                }
-                catch (IOException)
-                {
-                }
-                catch (InvalidOperationException)
-                {
+                    try
+                    {
+                        port.Open();
+                        ret = true;
+                    }
+                    catch (ArgumentException)
+                    {
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                    }
+                    catch (IOException)
+                    {
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
                 }
             }
 
@@ -138,11 +159,17 @@ namespace ZWave.Layers.Transport
             if (IsOpen || TryOpenPort())
             {
                 int ret = -1;
+                SerialPort port = _port;
                 for (int i = 0; i < 2; i++)
                 {
+                    // A read that failed because the port was closed meanwhile is not repeated.
+                    if (port == null || port != _port)
+                    {
+                        break;
+                    }
                     try
                     {
-                        ret = _port.Read(buffer, 0, bufferLen);
+                        ret = port.Read(buffer, 0, bufferLen);
                         break;
                     }
                     catch (UnauthorizedAccessException)
@@ -170,7 +197,8 @@ namespace ZWave.Layers.Transport
 
         public byte[] ReadExisting()
         {
-            if (!IsOpen)
+            SerialPort port = _port;
+            if (port == null || !port.IsOpen)
             {
                 return null;
             }
@@ -178,11 +206,11 @@ namespace ZWave.Layers.Transport
             {
                 // Read the raw bytes. SerialPort.ReadExisting() decodes them as text and would
                 // replace every byte above 0x7F.
-                int available = _port.BytesToRead;
+                int available = port.BytesToRead;
                 if (available > 0)
                 {
                     var buffer = new byte[available];
-                    int readLen = _port.Read(buffer, 0, available);
+                    int readLen = port.Read(buffer, 0, available);
                     if (readLen > 0)
                     {
                         if (readLen < available)
@@ -216,9 +244,14 @@ namespace ZWave.Layers.Transport
             if (IsOpen || TryOpenPort())
             {
                 int ret = -1;
+                SerialPort port = _port;
+                if (port == null)
+                {
+                    return ret;
+                }
                 try
                 {
-                    _port.Write(buffer, 0, bufferLen);
+                    port.Write(buffer, 0, bufferLen);
                     ret = bufferLen;
                 }
                 catch (IOException)
@@ -241,30 +274,94 @@ namespace ZWave.Layers.Transport
 
         public void Close()
         {
-            if (IsOpen)
+            SerialPort port = null;
+            string portName;
+            string reservedPortName;
+            lock (_stateLock)
+            {
+                portName = _portName;
+                reservedPortName = _reservedPortName;
+                _reservedPortName = null;
+                if (IsOpen)
+                {
+                    port = _port;
+                    _port = null;
+                    _portName = null;
+                }
+            }
+
+            if (port != null)
             {
                 try
                 {
-                    _port.DiscardInBuffer();
-                    _port.DiscardOutBuffer();
-                    _port.Close();
-                    Thread.Sleep(200);
+                    port.DiscardInBuffer();
+                    port.DiscardOutBuffer();
                 }
                 catch (IOException)
                 {
 
                 }
-                _portName = null;
+                catch (InvalidOperationException)
+                {
+                }
+                DisposePort(port, portName);
+                Thread.Sleep(200);
             }
-            ReleasePortName();
+
+            // The name stays in _openPortNames until here, so no provider opens the port while it is being closed.
+            ReleasePortName(reservedPortName);
         }
 
         public void Dispose()
         {
-            ReleasePortName();
-            if (_port as IDisposable != null)
+            SerialPort port;
+            string portName;
+            string reservedPortName;
+            lock (_stateLock)
             {
-                ((IDisposable)_port).Dispose();
+                port = _port;
+                portName = _portName;
+                reservedPortName = _reservedPortName;
+                _port = null;
+                _reservedPortName = null;
+            }
+
+            if (port != null)
+            {
+                DisposePort(port, portName);
+            }
+
+            ReleasePortName(reservedPortName);
+        }
+
+        // The dispose of a System.IO.Ports.SerialPort waits for its event loop thread, which some USB serial drivers never
+        // let end, so the thread doing it is given up after this time.
+        private const int DISPOSE_TIMEOUT_MS = 3000;
+
+        /// <summary>
+        /// Disposes the port on a background thread and waits <see cref="DISPOSE_TIMEOUT_MS"/> for it at most. A port whose
+        /// dispose did not return in time is given up and stays open in this process.
+        /// </summary>
+        private static void DisposePort(SerialPort port, string portName)
+        {
+            var disposeThread = new Thread(() =>
+            {
+                try
+                {
+                    port.Dispose();
+                }
+                catch (IOException)
+                {
+                }
+            })
+            {
+                IsBackground = true,
+                Name = "SerialPortDispose " + portName
+            };
+            disposeThread.Start();
+            if (!disposeThread.Join(DISPOSE_TIMEOUT_MS))
+            {
+                "The dispose of the serial port {0} did not return within {1} ms, the port is given up"._DLOG(portName, DISPOSE_TIMEOUT_MS);
             }
         }
 
