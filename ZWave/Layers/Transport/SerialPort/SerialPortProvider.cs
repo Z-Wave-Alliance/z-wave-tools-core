@@ -29,7 +29,11 @@ namespace ZWave.Layers.Transport
             get { return RuntimeInformation.IsOSPlatform(OSPlatform.Windows); }
         }
 
-        // Close() and Dispose() set this to null while the read thread is using the port, so every other member works on a copy.
+        // Guards the changes of _port, _portName and _reservedPortName. It is never held while a port is disposed.
+        private readonly object _stateLock = new object();
+
+        // Close() and Dispose() set this to null while the read thread is using the port, so Read(), ReadExisting() and Write()
+        // work on a copy without the lock.
         private volatile SerialPort _port;
         // Name this provider holds in _openPortNames, null while it holds none.
         private string _reservedPortName;
@@ -54,23 +58,26 @@ namespace ZWave.Layers.Transport
 
         public bool Open(string portName, int baudRate, PInvokeParity parity, int dataBits, PInvokeStopBits stopBits)
         {
-            if (!IsOpen)
+            lock (_stateLock)
             {
-                ReleasePortName();
-                if (!ReservePortName(portName))
+                if (!IsOpen)
                 {
-                    return false;
+                    ReleasePortName();
+                    if (!ReservePortName(portName))
+                    {
+                        return false;
+                    }
+                    _portName = portName;
+                    _port = new SerialPort(_portName, baudRate, (Parity)(int)parity, dataBits, (StopBits)(int)stopBits);
+                    _port.WriteTimeout = 500;
+                    if (TryOpenPort())
+                    {
+                        return true;
+                    }
+                    ReleasePortName();
                 }
-                _portName = portName;
-                _port = new SerialPort(_portName, baudRate, (Parity)(int)parity, dataBits, (StopBits)(int)stopBits);
-                _port.WriteTimeout = 500;
-                if (TryOpenPort())
-                {
-                    return true;
-                }
-                ReleasePortName();
+                return false;
             }
-            return false;
         }
 
         private bool ReservePortName(string portName)
@@ -92,39 +99,49 @@ namespace ZWave.Layers.Transport
 
         private void ReleasePortName()
         {
-            if (_reservedPortName != null)
+            ReleasePortName(_reservedPortName);
+            _reservedPortName = null;
+        }
+
+        private static void ReleasePortName(string portName)
+        {
+            if (portName != null)
             {
                 lock (_access)
                 {
-                    _openPortNames.Remove(_reservedPortName);
+                    _openPortNames.Remove(portName);
                 }
-                _reservedPortName = null;
             }
         }
 
         private bool TryOpenPort()
         {
             var ret = false;
-            // Only a provider that still holds its port name may (re)open the port.
-            SerialPort port = _port;
-            if (port != null && _reservedPortName != null)
+            // The port is opened under the lock, so that Close() and Dispose() cannot take it away in between and leave an open
+            // port nobody owns.
+            lock (_stateLock)
             {
-                try
+                // Only a provider that still holds its port name may (re)open the port.
+                SerialPort port = _port;
+                if (port != null && _reservedPortName != null)
                 {
-                    port.Open();
-                    ret = true;
-                }
-                catch (ArgumentException)
-                {
-                }
-                catch (UnauthorizedAccessException)
-                {
-                }
-                catch (IOException)
-                {
-                }
-                catch (InvalidOperationException)
-                {
+                    try
+                    {
+                        port.Open();
+                        ret = true;
+                    }
+                    catch (ArgumentException)
+                    {
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                    }
+                    catch (IOException)
+                    {
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
                 }
             }
 
@@ -257,8 +274,23 @@ namespace ZWave.Layers.Transport
 
         public void Close()
         {
-            SerialPort port = _port;
-            if (port != null && port.IsOpen)
+            SerialPort port = null;
+            string portName;
+            string reservedPortName;
+            lock (_stateLock)
+            {
+                portName = _portName;
+                reservedPortName = _reservedPortName;
+                _reservedPortName = null;
+                if (IsOpen)
+                {
+                    port = _port;
+                    _port = null;
+                    _portName = null;
+                }
+            }
+
+            if (port != null)
             {
                 try
                 {
@@ -272,20 +304,34 @@ namespace ZWave.Layers.Transport
                 catch (InvalidOperationException)
                 {
                 }
-                DisposePort();
+                DisposePort(port, portName);
                 Thread.Sleep(200);
-                _portName = null;
             }
-            ReleasePortName();
+
+            // The name stays in _openPortNames until here, so no provider opens the port while it is being closed.
+            ReleasePortName(reservedPortName);
         }
 
         public void Dispose()
         {
-            ReleasePortName();
-            if (_port != null)
+            SerialPort port;
+            string portName;
+            string reservedPortName;
+            lock (_stateLock)
             {
-                DisposePort();
+                port = _port;
+                portName = _portName;
+                reservedPortName = _reservedPortName;
+                _port = null;
+                _reservedPortName = null;
             }
+
+            if (port != null)
+            {
+                DisposePort(port, portName);
+            }
+
+            ReleasePortName(reservedPortName);
         }
 
         // The dispose of a System.IO.Ports.SerialPort waits for its event loop thread, which some USB serial drivers never
@@ -294,13 +340,10 @@ namespace ZWave.Layers.Transport
 
         /// <summary>
         /// Disposes the port on a background thread and waits <see cref="DISPOSE_TIMEOUT_MS"/> for it at most. A port whose
-        /// dispose did not return in time is given up and stays open in this process, the provider is free for a new port.
+        /// dispose did not return in time is given up and stays open in this process.
         /// </summary>
-        private void DisposePort()
+        private static void DisposePort(SerialPort port, string portName)
         {
-            SerialPort port = _port;
-            string portName = _portName;
-            _port = null;
             var disposeThread = new Thread(() =>
             {
                 try
