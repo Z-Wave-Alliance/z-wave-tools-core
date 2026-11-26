@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // SPDX-FileCopyrightText: Silicon Laboratories Inc. <https://www.silabs.com>
+// SPDX-FileCopyrightText: Z-Wave Alliance <https://z-wavealliance.org>
 using System;
 using System.Linq;
 using Utils;
@@ -47,6 +48,10 @@ namespace ZWave.BasicApplication.Tasks
         private IsFailedNodeOperation _isFailedNodeOperation;
         private RemoveFailedNodeIdOperation _removeFailedNodeIdOperation;
         private readonly bool _isSmartStart = false;
+
+        // A SmartStart inclusion runs no request before the Add Node, so it reads the NodeIds for the Lifeline after it.
+        private MemoryGetIdOperation _memoryGetIdAfterAdd;
+        private GetSucNodeIdOperation _getSucNodeIdAfterAdd;
 
         public InclusionTask(NetworkViewPoint network, IAddRemoveNode addRemoveNode, SetupNodeLifelineSettings setupNodeLifelineSettings = SetupNodeLifelineSettings.Default)
             : this(network, addRemoveNode, false, setupNodeLifelineSettings)
@@ -100,10 +105,12 @@ namespace ZWave.BasicApplication.Tasks
 
             _requestInclusionController = new InclusionController.Initiate(_network, NodeTag.Empty, NodeTag.Empty, _txOptions, _network.InclusionControllerInitiateRequestTimeoutMs ?? 240000) { Name = "RequestData (InclusionController)" };
             _serialApiGetInitData = new SerialApiGetInitDataOperation();
+            _memoryGetIdAfterAdd = new MemoryGetIdOperation(_network);
+            _getSucNodeIdAfterAdd = new GetSucNodeIdOperation(_network);
 
             SpecificResult.AddRemoveNode = _addNode.SpecificResult;
-            SpecificResult.MemoryGetId = _memoryGetId.SpecificResult;
-            SpecificResult.GetSucNodeId = _getSucNodeId.SpecificResult;
+            SpecificResult.MemoryGetId = _isSmartStart ? _memoryGetIdAfterAdd.SpecificResult : _memoryGetId.SpecificResult;
+            SpecificResult.GetSucNodeId = _isSmartStart ? _getSucNodeIdAfterAdd.SpecificResult : _getSucNodeId.SpecificResult;
             SpecificResult.NodeInfo = _setupNodeLifelineTask.SpecificResult.NodeInfo;
             SpecificResult.SetWakeUpInterval = _setupNodeLifelineTask.SpecificResult.SetWakeUpInterval;
 
@@ -122,6 +129,8 @@ namespace ZWave.BasicApplication.Tasks
                 _sendNopOperation.SetCancelled();
                 _isFailedNodeOperation.SetCancelled();
                 _removeFailedNodeIdOperation.SetCancelled();
+                _memoryGetIdAfterAdd.SetCancelled();
+                _getSucNodeIdAfterAdd.SetCancelled();
             }
 
             Actions = new ActionBase[]
@@ -135,6 +144,8 @@ namespace ZWave.BasicApplication.Tasks
                 _sendNopOperation,
                 _isFailedNodeOperation,
                 _removeFailedNodeIdOperation,
+                _memoryGetIdAfterAdd,
+                _getSucNodeIdAfterAdd,
                 _requestInclusionController,
                 _setupNodeLifelineTask
                 ) { Name = "Inclusion (Group)" }
@@ -250,7 +261,12 @@ namespace ZWave.BasicApplication.Tasks
         {
             if (result is MemoryGetIdResult && result)
             {
-                _setupNodeLifelineTask.Node = _memoryGetId.SpecificResult.Node;
+                _setupNodeLifelineTask.Node = ((MemoryGetIdResult)result).Node;
+            }
+            else if (result is GetSucNodeIdResult && result)
+            {
+                // Only the request after the Add Node reports here; the one before it reports to its own group.
+                _setupNodeLifelineTask.SucNode = ((GetSucNodeIdResult)result).SucNode;
             }
             else if (result is SerialApiGetInitDataResult && result)
             {
@@ -296,6 +312,8 @@ namespace ZWave.BasicApplication.Tasks
                     _sendNopOperation.SetCancelled();
                     _isFailedNodeOperation.SetCancelled();
                     _removeFailedNodeIdOperation.SetCancelled();
+                    _memoryGetIdAfterAdd.SetCancelled();
+                    _getSucNodeIdAfterAdd.SetCancelled();
                     _requestInclusionController.SetCancelled();
                     _setupNodeLifelineTask.SetCancelled();
                 }
